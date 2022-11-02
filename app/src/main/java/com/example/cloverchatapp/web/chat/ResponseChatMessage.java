@@ -1,4 +1,7 @@
-package com.example.cloverchatapp.web;
+package com.example.cloverchatapp.web.chat;
+
+import com.example.cloverchatapp.web.board.ResponseChatRoom;
+import com.example.cloverchatapp.web.user.ResponseUser;
 
 public class ResponseChatMessage {
 

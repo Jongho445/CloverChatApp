@@ -3,10 +3,10 @@ package com.example.cloverchatapp.client;
 import androidx.core.util.Consumer;
 import androidx.core.util.Supplier;
 
-import com.example.cloverchatapp.web.ChatRoomCreateForm;
-import com.example.cloverchatapp.web.RequestLoginForm;
-import com.example.cloverchatapp.web.ResponseChatRoom;
-import com.example.cloverchatapp.web.ResponseUser;
+import com.example.cloverchatapp.web.board.ChatRoomCreateForm;
+import com.example.cloverchatapp.web.user.RequestLoginForm;
+import com.example.cloverchatapp.web.board.ResponseChatRoom;
+import com.example.cloverchatapp.web.user.ResponseUser;
 
 import java.util.List;
 

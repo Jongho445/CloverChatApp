@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.web;
+package com.example.cloverchatapp.web.board;
 
 public class ChatRoomCreateForm {
 

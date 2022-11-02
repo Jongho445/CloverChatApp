@@ -1,6 +1,5 @@
 package com.example.cloverchatapp.fragment.chat;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +15,8 @@ import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.client.AppClient;
 import com.example.cloverchatapp.fragment.FragmentEnum;
-import com.example.cloverchatapp.web.ChatRoomCreateForm;
-import com.example.cloverchatapp.web.ChatRoomType;
+import com.example.cloverchatapp.web.board.ChatRoomCreateForm;
+import com.example.cloverchatapp.web.board.ChatRoomType;
 
 public class ChatRoomCreateFragment extends Fragment {
 
@@ -28,31 +27,12 @@ public class ChatRoomCreateFragment extends Fragment {
     EditText inputPassword;
     EditText inputTitle;
 
-    AppClient client = new AppClient();
+    AppClient httpClient;
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        activity = (MainActivity) getActivity();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (rootView != null) {
-            clearInputs();
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        httpClient = new AppClient();
+        activity = (MainActivity) getActivity();
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_create, container, false);
 
         initEditTexts();
@@ -61,6 +41,14 @@ public class ChatRoomCreateFragment extends Fragment {
         setCreateBtn();
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (rootView != null) {
+            clearInputs();
+        }
     }
 
     private void initEditTexts() {
@@ -92,7 +80,7 @@ public class ChatRoomCreateFragment extends Fragment {
                     ChatRoomType.PUBLIC
             );
 
-            client.createChatRoom(
+            httpClient.createChatRoom(
                     chatRoomCreateForm,
                     res -> activity.navigate(FragmentEnum.INDEX),
                     t -> {}

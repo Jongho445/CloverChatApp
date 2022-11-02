@@ -1,6 +1,5 @@
 package com.example.cloverchatapp.fragment.user;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,20 +19,9 @@ public class SignUpFragment extends Fragment {
     MainActivity activity;
 
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        activity = (MainActivity) getActivity();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Nullable
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        activity = (MainActivity) getActivity();
+
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         Button signUpToIndexBtn = rootView.findViewById(R.id.signUpToIndexBtn);

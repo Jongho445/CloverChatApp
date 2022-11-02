@@ -1,6 +1,5 @@
 package com.example.cloverchatapp.fragment.chat;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +17,15 @@ import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.component.ChatMessage;
 import com.example.cloverchatapp.component.ChatMessageAdapter;
-import com.example.cloverchatapp.web.ResponseChatRoom;
+import com.example.cloverchatapp.web.board.ResponseChatRoom;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
 
 public class ChatRoomDetailFragment extends Fragment {
 
@@ -32,28 +36,47 @@ public class ChatRoomDetailFragment extends Fragment {
     List<ChatMessage> chatMessageList;
 
     ResponseChatRoom chatRoom;
+    WebSocket session;
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        activity = (MainActivity) getActivity();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        activity = (MainActivity) getActivity();
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_detail, container, false);
         init(rootView);
 
         setSendBtnListener(rootView);
 
+        initWebSocket();
+
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        System.out.println("destroy");
+        session.cancel();
+        session.close(1000, "session closed");
+    }
+
+    private void initWebSocket() {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("ws://10.0.2.2:11730/ws/chat")
+                .build();
+
+        WebSocketListener listener = new WebSocketListener() {
+            @Override
+            public void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
+                System.out.println(text);
+                chatMessageList.add(new ChatMessage("user2", "haha", "123"));
+                adapter.notifyDataSetChanged();
+            }
+        };
+
+        session = okHttpClient.newWebSocket(request, listener);
+        okHttpClient.dispatcher().executorService().shutdown();
     }
 
     private void setSendBtnListener(View rootView) {
@@ -62,6 +85,8 @@ public class ChatRoomDetailFragment extends Fragment {
         sendBtn.setOnClickListener(view -> {
             chatMessageList.add(new ChatMessage("user2", editText.getText().toString(), "123"));
             adapter.notifyDataSetChanged();
+
+            session.send("hahaha");
         });
     }
 

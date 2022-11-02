@@ -1,6 +1,5 @@
 package com.example.cloverchatapp.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,29 +13,16 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.client.AppClient;
 
 public class TestFragment extends Fragment {
 
     MainActivity activity;
     TextView textView;
-    AppClient client = new AppClient();
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        activity = (MainActivity) getActivity();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        activity = (MainActivity) getActivity();
+
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_test, container, false);
 
         textView = rootView.findViewById(R.id.testResult);

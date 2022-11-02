@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.example.cloverchatapp.MainActivity;
-import com.example.cloverchatapp.web.ResponseChatRoom;
+import com.example.cloverchatapp.web.board.ResponseChatRoom;
 import com.example.cloverchatapp.R;
 
 import java.util.List;
@@ -52,7 +52,7 @@ public class ChatRoomAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         convertView = inflater.inflate(R.layout.chat_room_list_item, parent, false);
 
-        ChatRoomListItem chatRoomListItem = new ChatRoomListItem(list.get(position), position, this);
+        ChatRoomListItem chatRoomListItem = new ChatRoomListItem(list.get(position), position, this, list);
 
         chatRoomListItem.initFields(convertView);
         chatRoomListItem.setView();

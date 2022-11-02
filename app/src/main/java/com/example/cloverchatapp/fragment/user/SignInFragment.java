@@ -1,6 +1,5 @@
 package com.example.cloverchatapp.fragment.user;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,35 +14,24 @@ import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.client.AppClient;
 import com.example.cloverchatapp.fragment.FragmentEnum;
-import com.example.cloverchatapp.web.RequestLoginForm;
-import com.example.cloverchatapp.web.ResponseUser;
+import com.example.cloverchatapp.web.user.RequestLoginForm;
+import com.example.cloverchatapp.web.user.ResponseUser;
 
 public class SignInFragment extends Fragment {
 
     MainActivity activity;
-    AppClient client;
+    AppClient httpClient;
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        activity = (MainActivity) getActivity();
-        client = new AppClient();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        activity = (MainActivity) getActivity();
+        httpClient = new AppClient();
+
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_sign_in, container, false);
 
         Button signInBtn = rootView.findViewById(R.id.signInBtn);
         signInBtn.setOnClickListener(view -> {
-            client.login(
+            httpClient.login(
                     new RequestLoginForm("user1@gmail.com", "1234"),
                     res -> {
                         ResponseUser responseUser = res.body();

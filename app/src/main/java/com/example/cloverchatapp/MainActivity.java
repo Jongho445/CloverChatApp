@@ -1,6 +1,5 @@
 package com.example.cloverchatapp;
 
-import androidx.annotation.MainThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -15,7 +14,7 @@ import com.example.cloverchatapp.fragment.chat.ChatRoomCreateFragment;
 import com.example.cloverchatapp.fragment.user.SignInFragment;
 import com.example.cloverchatapp.fragment.user.SignUpFragment;
 import com.example.cloverchatapp.util.AuthStorage;
-import com.example.cloverchatapp.web.ResponseChatRoom;
+import com.example.cloverchatapp.web.board.ResponseChatRoom;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    @MainThread
     public void onBackPressed() {
         switch (mainFragment) {
             case INDEX:

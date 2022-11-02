@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.web;
+package com.example.cloverchatapp.web.user;
 
 public class RequestLoginForm {
 

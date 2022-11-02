@@ -8,7 +8,9 @@ import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.client.AppClient;
 import com.example.cloverchatapp.fragment.FragmentEnum;
-import com.example.cloverchatapp.web.ResponseChatRoom;
+import com.example.cloverchatapp.web.board.ResponseChatRoom;
+
+import java.util.List;
 
 public class ChatRoomListItem {
 
@@ -18,14 +20,16 @@ public class ChatRoomListItem {
     private ResponseChatRoom chatRoom;
     private Integer idx;
     private ChatRoomAdapter adapter;
+    List<ResponseChatRoom> list;
     private AppClient client = new AppClient();
 
     private static String PASSWORD = "1234";
 
-    public ChatRoomListItem(ResponseChatRoom chatRoom, Integer idx, ChatRoomAdapter adapter) {
+    public ChatRoomListItem(ResponseChatRoom chatRoom, Integer idx, ChatRoomAdapter adapter, List<ResponseChatRoom> list) {
         this.chatRoom = chatRoom;
         this.idx = idx;
         this.adapter = adapter;
+        this.list = list;
     }
 
     public void initFields(View convertView) {
@@ -41,6 +45,7 @@ public class ChatRoomListItem {
 
     public void setOnClickListener(MainActivity activity, View convertView) {
         convertView.setOnClickListener(view -> {
+            list.clear();
             activity.navigate(FragmentEnum.CHAT_ROOM_DETAIL, chatRoom);
         });
     }
