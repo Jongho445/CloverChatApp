@@ -1,7 +1,9 @@
 package com.example.cloverchatapp.client;
 
-import com.example.cloverchatapp.web.RequestChatRoom;
+import com.example.cloverchatapp.web.ChatRoomCreateForm;
+import com.example.cloverchatapp.web.RequestLoginForm;
 import com.example.cloverchatapp.web.ResponseChatRoom;
+import com.example.cloverchatapp.web.ResponseUser;
 
 import java.util.List;
 
@@ -14,13 +16,16 @@ import retrofit2.http.Query;
 
 public interface RetrofitService {
 
-    @GET("/list")
-    Call<List<ResponseChatRoom>> getPosts();
+    @POST("/user/login")
+    Call<ResponseUser> login(@Body RequestLoginForm requestLoginForm);
 
-    @POST("/create")
-    Call<String> create(@Body RequestChatRoom requestChatRoom);
+    @GET("/board/list")
+    Call<List<ResponseChatRoom>> getChatRoomList();
 
-    @DELETE("/delete")
-    Call<String> delete(@Query("postId") Long postId, @Query("password") String password);
+    @POST("/board/create")
+    Call<String> createChatRoom(@Body ChatRoomCreateForm chatRoomCreateForm);
+
+    @DELETE("/board/delete")
+    Call<String> deleteChatRoom(@Query("chatRoomId") Long chatRoomId, @Query("password") String password);
 
 }

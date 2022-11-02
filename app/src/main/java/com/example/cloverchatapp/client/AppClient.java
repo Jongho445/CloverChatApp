@@ -3,8 +3,10 @@ package com.example.cloverchatapp.client;
 import androidx.core.util.Consumer;
 import androidx.core.util.Supplier;
 
-import com.example.cloverchatapp.web.RequestChatRoom;
+import com.example.cloverchatapp.web.ChatRoomCreateForm;
+import com.example.cloverchatapp.web.RequestLoginForm;
 import com.example.cloverchatapp.web.ResponseChatRoom;
+import com.example.cloverchatapp.web.ResponseUser;
 
 import java.util.List;
 
@@ -14,29 +16,24 @@ import retrofit2.Response;
 
 public class AppClient {
 
-    public void getPosts(Consumer<Response<List<ResponseChatRoom>>> onResponse, Consumer<Throwable> onFailure) {
-        callback(
-                () -> RetrofitClient.getApiService().getPosts(),
-                onResponse, onFailure
-        );
+    public void login(RequestLoginForm requestLoginForm, Consumer<Response<ResponseUser>> onResponse, Consumer<Throwable> onFailure) {
+        callback(() -> RetrofitClient.getApiService().login(requestLoginForm), onResponse, onFailure);
     }
 
-    public void upload(RequestChatRoom requestChatRoom, Consumer<Response<String>> onResponse, Consumer<Throwable> onFailure) {
-        callback(
-                () -> RetrofitClient.getApiService().create(requestChatRoom),
-                onResponse, onFailure
-        );
+    public void getChatRoomList(Consumer<Response<List<ResponseChatRoom>>> onResponse, Consumer<Throwable> onFailure) {
+        callback(() -> RetrofitClient.getApiService().getChatRoomList(), onResponse, onFailure);
     }
 
-    public void delete(
-            Long postId, String password,
+    public void createChatRoom(ChatRoomCreateForm chatRoomCreateForm, Consumer<Response<String>> onResponse, Consumer<Throwable> onFailure) {
+        callback(() -> RetrofitClient.getApiService().createChatRoom(chatRoomCreateForm), onResponse, onFailure);
+    }
+
+    public void deleteChatRoom(
+            Long chatRoomId, String password,
             Consumer<Response<String>> onResponse,
-            Consumer<Throwable> onFailure) {
-
-        callback(
-                () -> RetrofitClient.getApiService().delete(postId, password),
-                onResponse, onFailure
-        );
+            Consumer<Throwable> onFailure
+    ) {
+        callback(() -> RetrofitClient.getApiService().deleteChatRoom(chatRoomId, password), onResponse, onFailure);
     }
 
     public <T> void callback(

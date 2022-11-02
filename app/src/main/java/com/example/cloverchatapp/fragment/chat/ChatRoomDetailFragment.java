@@ -68,7 +68,7 @@ public class ChatRoomDetailFragment extends Fragment {
     private void init(View rootView) {
         rvList = rootView.findViewById(R.id.rv_list);
         chatMessageList = new ArrayList<>();
-        adapter = new ChatMessageAdapter(chatRoom.getTitle(), chatMessageList);
+        adapter = new ChatMessageAdapter(chatRoom.title, chatMessageList);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvList.setLayoutManager(layoutManager);

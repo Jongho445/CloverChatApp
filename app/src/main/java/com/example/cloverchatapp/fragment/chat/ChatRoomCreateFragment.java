@@ -16,7 +16,8 @@ import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.client.AppClient;
 import com.example.cloverchatapp.fragment.FragmentEnum;
-import com.example.cloverchatapp.web.RequestChatRoom;
+import com.example.cloverchatapp.web.ChatRoomCreateForm;
+import com.example.cloverchatapp.web.ChatRoomType;
 
 public class ChatRoomCreateFragment extends Fragment {
 
@@ -84,14 +85,15 @@ public class ChatRoomCreateFragment extends Fragment {
     private void setCreateBtn() {
         Button createBtn = rootView.findViewById(R.id.createChatRoomBtn);
         createBtn.setOnClickListener((View v) -> {
-            RequestChatRoom requestChatRoom = new RequestChatRoom(
+            ChatRoomCreateForm chatRoomCreateForm = new ChatRoomCreateForm(
                     inputCreateBy.getText().toString(),
                     inputPassword.getText().toString(),
-                    inputTitle.getText().toString()
+                    inputTitle.getText().toString(),
+                    ChatRoomType.PUBLIC
             );
 
-            client.upload(
-                    requestChatRoom,
+            client.createChatRoom(
+                    chatRoomCreateForm,
                     res -> activity.navigate(FragmentEnum.INDEX),
                     t -> {}
             );

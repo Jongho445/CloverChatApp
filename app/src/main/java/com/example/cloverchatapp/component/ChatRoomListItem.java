@@ -35,8 +35,8 @@ public class ChatRoomListItem {
     }
 
     public void setView() {
-        chatRoomTitle.setText(chatRoom.getTitle());
-        chatRoomCreateBy.setText(chatRoom.getCreateBy());
+        chatRoomTitle.setText(chatRoom.title);
+        chatRoomCreateBy.setText(chatRoom.createUser.nickname);
     }
 
     public void setOnClickListener(MainActivity activity, View convertView) {
@@ -47,8 +47,8 @@ public class ChatRoomListItem {
 
     public void setRemoveListener() {
         removeBtn.setOnClickListener(view -> {
-            client.delete(
-                    chatRoom.getId(), PASSWORD,
+            client.deleteChatRoom(
+                    chatRoom.id, PASSWORD,
                     res -> {
                         System.out.println(idx);
                         adapter.remove(idx);

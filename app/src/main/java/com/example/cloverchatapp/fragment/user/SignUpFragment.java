@@ -34,7 +34,7 @@ public class SignUpFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_detail, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         Button signUpToIndexBtn = rootView.findViewById(R.id.signUpToIndexBtn);
         signUpToIndexBtn.setOnClickListener((View v) -> {

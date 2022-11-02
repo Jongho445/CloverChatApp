@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.client.AppClient;
-import com.example.cloverchatapp.web.RequestChatRoom;
 
 public class TestFragment extends Fragment {
 
@@ -49,23 +48,10 @@ public class TestFragment extends Fragment {
 
         Button RetTestBtn = rootView.findViewById(R.id.RetTestBtn);
         RetTestBtn.setOnClickListener((View v) -> {
-            testRequest();
+
         });
 
         return rootView;
     }
 
-    private void testRequest() {
-        RequestChatRoom requestChatRoom = new RequestChatRoom("testUser", "1234", "testTitle");
-        client.upload(
-                requestChatRoom,
-                res -> {
-                    System.out.println("end");
-                },
-                t -> {
-                    System.out.println(t.getMessage());
-                    t.printStackTrace();
-                }
-        );
-    }
 }

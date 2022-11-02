@@ -14,6 +14,7 @@ import com.example.cloverchatapp.fragment.TestFragment;
 import com.example.cloverchatapp.fragment.chat.ChatRoomCreateFragment;
 import com.example.cloverchatapp.fragment.user.SignInFragment;
 import com.example.cloverchatapp.fragment.user.SignUpFragment;
+import com.example.cloverchatapp.util.AuthStorage;
 import com.example.cloverchatapp.web.ResponseChatRoom;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,12 +27,14 @@ public class MainActivity extends AppCompatActivity {
     TestFragment testFragment;
 
     FragmentEnum mainFragment;
+    public AuthStorage authStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        authStorage = new AuthStorage();
         initFragments();
     }
 
@@ -86,9 +89,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         indexFragment = (IndexFragment) fm.findFragmentById(R.id.mainFragment);
 
+        signInFragment = new SignInFragment();
         chatRoomCreateFragment = new ChatRoomCreateFragment();
         chatRoomDetailFragment = new ChatRoomDetailFragment();
-        signInFragment = new SignInFragment();
         signUpFragment = new SignUpFragment();
         testFragment = new TestFragment();
     }

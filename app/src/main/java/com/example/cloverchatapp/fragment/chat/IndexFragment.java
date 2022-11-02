@@ -9,6 +9,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -51,6 +53,7 @@ public class IndexFragment extends Fragment {
         //메인에 직접 들어가면 True, 프래그먼트에 있으면 False
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_index, container, false);
 
+        setIndexToSignInBtn();
         setIndexToTestBtn();
         setIndexToWriteBtn();
         setPostListView();
@@ -60,8 +63,19 @@ public class IndexFragment extends Fragment {
         return rootView;
     }
 
+    @MainThread
+    @CallSuper
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (activity.authStorage.me == null) {
+            Button indexToSignInBtn = rootView.findViewById(R.id.indexToSignInBtn);
+            indexToSignInBtn.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void requestAndRender() {
-        client.getPosts(res -> {
+        client.getChatRoomList(res -> {
             List<ResponseChatRoom> chatRooms = res.body();
 
             if (chatRooms == null) {
@@ -72,6 +86,15 @@ public class IndexFragment extends Fragment {
         }, t -> {
             System.out.println(t.getMessage());
             t.printStackTrace();
+        });
+    }
+
+    private void setIndexToSignInBtn() {
+        Button indexToSignInBtn = rootView.findViewById(R.id.indexToSignInBtn);
+
+        indexToSignInBtn.setOnClickListener(view -> {
+            list.clear();
+            activity.navigate(FragmentEnum.SIGN_IN);
         });
     }
 
@@ -99,7 +122,7 @@ public class IndexFragment extends Fragment {
 
         chatRoomListView.setOnItemClickListener((AdapterView<?> adapterView, View view, int i, long l) -> {
             ResponseChatRoom chatRoom = list.get(i);
-            System.out.println(chatRoom.getTitle());
+            System.out.println(chatRoom.title);
             list.clear();
             activity.navigate(FragmentEnum.CHAT_ROOM_DETAIL);
         });
@@ -109,7 +132,7 @@ public class IndexFragment extends Fragment {
         ChatRoomAdapter adapter = new ChatRoomAdapter(activity, super.getContext(), list);
 
         for (ResponseChatRoom chatRoom : chatRooms) {
-            System.out.println(chatRoom.getTitle());
+            System.out.println(chatRoom.title);
             list.add(chatRoom);
         }
 
