@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment;
+package com.example.cloverchatapp.fragment.user;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,8 +13,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
+import com.example.cloverchatapp.fragment.FragmentEnum;
 
-public class ChatRoomDetailFragment extends Fragment {
+public class SignInFragment extends Fragment {
 
     MainActivity activity;
 
@@ -35,9 +36,9 @@ public class ChatRoomDetailFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_detail, container, false);
 
-        Button detailToIndexBtn = rootView.findViewById(R.id.detailToIndexBtn);
-        detailToIndexBtn.setOnClickListener((View v) -> {
-            activity.navigate(MainFragment.INDEX);
+        Button signInToIndexBtn = rootView.findViewById(R.id.signInToIndexBtn);
+        signInToIndexBtn.setOnClickListener((View v) -> {
+            activity.navigate(FragmentEnum.INDEX);
         });
 
         return rootView;

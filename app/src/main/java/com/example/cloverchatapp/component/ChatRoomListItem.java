@@ -4,8 +4,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.client.AppClient;
+import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.web.ResponseChatRoom;
 
 public class ChatRoomListItem {
@@ -35,6 +37,12 @@ public class ChatRoomListItem {
     public void setView() {
         chatRoomTitle.setText(chatRoom.getTitle());
         chatRoomCreateBy.setText(chatRoom.getCreateBy());
+    }
+
+    public void setOnClickListener(MainActivity activity, View convertView) {
+        convertView.setOnClickListener(view -> {
+            activity.navigate(FragmentEnum.CHAT_ROOM_DETAIL, chatRoom);
+        });
     }
 
     public void setRemoveListener() {

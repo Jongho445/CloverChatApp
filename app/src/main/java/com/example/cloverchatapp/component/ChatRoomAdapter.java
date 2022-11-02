@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.web.ResponseChatRoom;
 import com.example.cloverchatapp.R;
 
@@ -13,12 +14,14 @@ import java.util.List;
 
 public class ChatRoomAdapter extends BaseAdapter {
 
+    MainActivity activity;
     Context context;
     List<ResponseChatRoom> list;
 
     LayoutInflater inflater;
 
-    public ChatRoomAdapter(Context context, List<ResponseChatRoom> list) {
+    public ChatRoomAdapter(MainActivity activity, Context context, List<ResponseChatRoom> list) {
+        this.activity = activity;
         this.context = context;
         this.list = list;
 
@@ -54,6 +57,7 @@ public class ChatRoomAdapter extends BaseAdapter {
         chatRoomListItem.initFields(convertView);
         chatRoomListItem.setView();
         chatRoomListItem.setRemoveListener();
+        chatRoomListItem.setOnClickListener(activity, convertView);
 
         return convertView;
     }

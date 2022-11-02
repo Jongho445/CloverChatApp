@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment;
+package com.example.cloverchatapp.fragment.chat;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.client.AppClient;
+import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.web.RequestChatRoom;
 
 public class ChatRoomCreateFragment extends Fragment {
@@ -76,7 +77,7 @@ public class ChatRoomCreateFragment extends Fragment {
     private void setToIndexBtn() {
         Button createToIndexBtn = rootView.findViewById(R.id.createToIndexBtn);
         createToIndexBtn.setOnClickListener((View v) -> {
-            activity.navigate(MainFragment.INDEX);
+            activity.navigate(FragmentEnum.INDEX);
         });
     }
 
@@ -91,7 +92,7 @@ public class ChatRoomCreateFragment extends Fragment {
 
             client.upload(
                     requestChatRoom,
-                    res -> activity.navigate(MainFragment.INDEX),
+                    res -> activity.navigate(FragmentEnum.INDEX),
                     t -> {}
             );
         });

@@ -7,37 +7,37 @@
     android:padding="20dp">
 
     <EditText
-        android:id="@+id/inputCreateBy"
+        android:id="@+id/signUpId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:hint="닉네임"/>
+        android:hint="아이디"/>
     <EditText
-        android:id="@+id/inputPassword"
+        android:id="@+id/signUpPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:hint="비밀번호"/>
     <EditText
-        android:id="@+id/inputTitle"
+        android:id="@+id/signUpNickname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:hint="제목"/>
+        android:hint="닉네임"/>
 
     <Button
-        android:id="@+id/createChatRoomBtn"
+        android:id="@+id/signUpBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="채팅방 생성"
+        android:text="회원가입"
         android:textSize="24sp"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="10dp"/>
     <Button
-        android:id="@+id/createToIndexBtn"
+        android:id="@+id/signUpToIndexBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Index로 돌아가기"
+        android:text="메인화면으로 돌아가기"
         android:textSize="24sp" />
 
 </LinearLayout>

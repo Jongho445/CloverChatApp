@@ -44,7 +44,7 @@ public class TestFragment extends Fragment {
 
         Button testToIndexBtn = rootView.findViewById(R.id.testToIndexBtn);
         testToIndexBtn.setOnClickListener((View v) -> {
-            activity.navigate(MainFragment.INDEX);
+            activity.navigate(FragmentEnum.INDEX);
         });
 
         Button RetTestBtn = rootView.findViewById(R.id.RetTestBtn);

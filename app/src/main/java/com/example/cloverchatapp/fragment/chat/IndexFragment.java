@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment;
+package com.example.cloverchatapp.fragment.chat;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.client.AppClient;
 import com.example.cloverchatapp.component.ChatRoomAdapter;
+import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.web.ResponseChatRoom;
 
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ public class IndexFragment extends Fragment {
 
         indexToCreateBtn.setOnClickListener(view -> {
             list.clear();
-            activity.navigate(MainFragment.CHAT_ROOM_CREATE);
+            activity.navigate(FragmentEnum.CHAT_ROOM_CREATE);
         });
     }
 
@@ -89,7 +90,7 @@ public class IndexFragment extends Fragment {
 
         indexToTestBtn.setOnClickListener(view -> {
             list.clear();
-            activity.navigate(MainFragment.TEST);
+            activity.navigate(FragmentEnum.TEST);
         });
     }
 
@@ -100,12 +101,12 @@ public class IndexFragment extends Fragment {
             ResponseChatRoom chatRoom = list.get(i);
             System.out.println(chatRoom.getTitle());
             list.clear();
-            activity.navigate(MainFragment.CHAT_ROOM_DETAIL);
+            activity.navigate(FragmentEnum.CHAT_ROOM_DETAIL);
         });
     }
 
     private void setPostAdapter(List<ResponseChatRoom> chatRooms) {
-        ChatRoomAdapter adapter = new ChatRoomAdapter(super.getContext(), list);
+        ChatRoomAdapter adapter = new ChatRoomAdapter(activity, super.getContext(), list);
 
         for (ResponseChatRoom chatRoom : chatRooms) {
             System.out.println(chatRoom.getTitle());
