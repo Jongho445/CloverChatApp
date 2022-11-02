@@ -10,37 +10,37 @@ import com.example.cloverchatapp.web.ResponseChatRoom;
 
 public class ChatRoomListItem {
 
-    private TextView postTitle, postUsername;
+    private TextView chatRoomTitle, chatRoomCreateBy;
     private Button removeBtn;
 
-    private ResponseChatRoom post;
+    private ResponseChatRoom chatRoom;
     private Integer idx;
     private ChatRoomAdapter adapter;
     private AppClient client = new AppClient();
 
     private static String PASSWORD = "1234";
 
-    public ChatRoomListItem(ResponseChatRoom post, Integer idx, ChatRoomAdapter adapter) {
-        this.post = post;
+    public ChatRoomListItem(ResponseChatRoom chatRoom, Integer idx, ChatRoomAdapter adapter) {
+        this.chatRoom = chatRoom;
         this.idx = idx;
         this.adapter = adapter;
     }
 
     public void initFields(View convertView) {
-        postTitle = convertView.findViewById(R.id.postTitle);
-        postUsername = convertView.findViewById(R.id.postUsername);
+        chatRoomTitle = convertView.findViewById(R.id.chatRoomTitle);
+        chatRoomCreateBy = convertView.findViewById(R.id.chatRoomCreateBy);
         removeBtn = convertView.findViewById(R.id.removeBtn);
     }
 
     public void setView() {
-        postTitle.setText(post.getTitle());
-        postUsername.setText(post.getCreateBy());
+        chatRoomTitle.setText(chatRoom.getTitle());
+        chatRoomCreateBy.setText(chatRoom.getCreateBy());
     }
 
     public void setRemoveListener() {
         removeBtn.setOnClickListener(view -> {
             client.delete(
-                    post.getId(), PASSWORD,
+                    chatRoom.getId(), PASSWORD,
                     res -> {
                         System.out.println(idx);
                         adapter.remove(idx);

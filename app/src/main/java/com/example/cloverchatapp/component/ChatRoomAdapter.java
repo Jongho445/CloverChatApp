@@ -47,7 +47,7 @@ public class ChatRoomAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        convertView = inflater.inflate(R.layout.postview, parent, false);
+        convertView = inflater.inflate(R.layout.chat_room_list_item, parent, false);
 
         ChatRoomListItem chatRoomListItem = new ChatRoomListItem(list.get(position), position, this);
 

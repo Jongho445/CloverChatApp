@@ -26,7 +26,7 @@ public class IndexFragment extends Fragment {
 
     MainActivity activity;
     ViewGroup rootView;
-    ListView postListView;
+    ListView chatRoomListView;
     List<ResponseChatRoom> list = new ArrayList<>();
     AppClient client = new AppClient();
 
@@ -61,13 +61,13 @@ public class IndexFragment extends Fragment {
 
     private void requestAndRender() {
         client.getPosts(res -> {
-            List<ResponseChatRoom> posts = res.body();
+            List<ResponseChatRoom> chatRooms = res.body();
 
-            if (posts == null) {
+            if (chatRooms == null) {
                 throw new RuntimeException("null");
             }
 
-            setPostAdapter(posts);
+            setPostAdapter(chatRooms);
         }, t -> {
             System.out.println(t.getMessage());
             t.printStackTrace();
@@ -76,9 +76,9 @@ public class IndexFragment extends Fragment {
 
     private void setIndexToWriteBtn() {
         //fragment_main.xml에 접근하기위해서는 rootView. 으로 접근해야한다
-        Button indexToWriteBtn = rootView.findViewById(R.id.indexToWriteBtn);
+        Button indexToCreateBtn = rootView.findViewById(R.id.indexToCreateBtn);
 
-        indexToWriteBtn.setOnClickListener(view -> {
+        indexToCreateBtn.setOnClickListener(view -> {
             list.clear();
             activity.navigate(MainFragment.CHAT_ROOM_CREATE);
         });
@@ -94,24 +94,24 @@ public class IndexFragment extends Fragment {
     }
 
     private void setPostListView() {
-        postListView = rootView.findViewById(R.id.postListView);
+        chatRoomListView = rootView.findViewById(R.id.chatRoomListView);
 
-        postListView.setOnItemClickListener((AdapterView<?> adapterView, View view, int i, long l) -> {
-            ResponseChatRoom post = (ResponseChatRoom) list.get(i);
-            System.out.println(post.getTitle());
+        chatRoomListView.setOnItemClickListener((AdapterView<?> adapterView, View view, int i, long l) -> {
+            ResponseChatRoom chatRoom = list.get(i);
+            System.out.println(chatRoom.getTitle());
             list.clear();
             activity.navigate(MainFragment.CHAT_ROOM_DETAIL);
         });
     }
 
-    private void setPostAdapter(List<ResponseChatRoom> posts) {
+    private void setPostAdapter(List<ResponseChatRoom> chatRooms) {
         ChatRoomAdapter adapter = new ChatRoomAdapter(super.getContext(), list);
 
-        for (ResponseChatRoom post : posts) {
-            System.out.println(post.getTitle());
-            list.add(post);
+        for (ResponseChatRoom chatRoom : chatRooms) {
+            System.out.println(chatRoom.getTitle());
+            list.add(chatRoom);
         }
 
-        postListView.setAdapter(adapter);
+        chatRoomListView.setAdapter(adapter);
     }
 }

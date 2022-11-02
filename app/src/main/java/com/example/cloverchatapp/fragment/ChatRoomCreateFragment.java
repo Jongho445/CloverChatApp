@@ -22,7 +22,7 @@ public class ChatRoomCreateFragment extends Fragment {
     MainActivity activity;
 
     ViewGroup rootView;
-    EditText inputUsername;
+    EditText inputCreateBy;
     EditText inputPassword;
     EditText inputTitle;
 
@@ -56,35 +56,35 @@ public class ChatRoomCreateFragment extends Fragment {
         initEditTexts();
 
         setToIndexBtn();
-        setUploadBtn();
+        setCreateBtn();
 
         return rootView;
     }
 
     private void initEditTexts() {
-        inputUsername = rootView.findViewById(R.id.inputUsername);
+        inputCreateBy = rootView.findViewById(R.id.inputCreateBy);
         inputPassword = rootView.findViewById(R.id.inputPassword);
         inputTitle = rootView.findViewById(R.id.inputTitle);
     }
 
     private void clearInputs() {
-        inputUsername.setText(null);
+        inputCreateBy.setText(null);
         inputPassword.setText(null);
         inputTitle.setText(null);
     }
 
     private void setToIndexBtn() {
-        Button writeToIndexBtn = rootView.findViewById(R.id.writeToIndexBtn);
-        writeToIndexBtn.setOnClickListener((View v) -> {
+        Button createToIndexBtn = rootView.findViewById(R.id.createToIndexBtn);
+        createToIndexBtn.setOnClickListener((View v) -> {
             activity.navigate(MainFragment.INDEX);
         });
     }
 
-    private void setUploadBtn() {
-        Button uploadBtn = rootView.findViewById(R.id.uploadBtn);
-        uploadBtn.setOnClickListener((View v) -> {
+    private void setCreateBtn() {
+        Button createBtn = rootView.findViewById(R.id.createChatRoomBtn);
+        createBtn.setOnClickListener((View v) -> {
             RequestChatRoom requestChatRoom = new RequestChatRoom(
-                    inputUsername.getText().toString(),
+                    inputCreateBy.getText().toString(),
                     inputPassword.getText().toString(),
                     inputTitle.getText().toString()
             );

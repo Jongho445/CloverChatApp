@@ -35,7 +35,7 @@ public class ChatRoomDetailFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_detail, container, false);
 
-        Button detailToIndexBtn = rootView.findViewById(R.id.detailToIdexBtn);
+        Button detailToIndexBtn = rootView.findViewById(R.id.detailToIndexBtn);
         detailToIndexBtn.setOnClickListener((View v) -> {
             activity.navigate(MainFragment.INDEX);
         });

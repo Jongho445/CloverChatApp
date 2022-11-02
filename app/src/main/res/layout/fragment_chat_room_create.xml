@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/writeToIndexBtn"
+        android:id="@+id/createToIndexBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Index로 돌아가기"
@@ -15,7 +15,7 @@
 
 
     <EditText
-        android:id="@+id/inputUsername"
+        android:id="@+id/inputCreateBy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="닉네임"/>
@@ -31,10 +31,10 @@
         android:hint="제목"/>
 
     <Button
-        android:id="@+id/uploadBtn"
+        android:id="@+id/createChatRoomBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="업로드"
+        android:text="채팅방 생성"
         android:textSize="24sp" />
 
 </LinearLayout>

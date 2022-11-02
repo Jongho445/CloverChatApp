@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/detailToIdexBtn"
+        android:id="@+id/detailToIndexBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="index로 돌아가기"
@@ -16,6 +16,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="post 상세보기 페이지"/>
+        android:text="chat_room 상세보기 페이지"/>
 
 </LinearLayout>

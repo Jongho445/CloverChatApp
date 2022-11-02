@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/postTitle"
+            android:id="@+id/chatRoomTitle"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:gravity="center_vertical"
@@ -22,11 +22,11 @@
             android:textSize="35sp" />
 
         <TextView
-            android:id="@+id/postUsername"
+            android:id="@+id/chatRoomCreateBy"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:gravity="center_vertical"
-            android:text="PhoneNum"
+            android:text="CreateBy"
             android:textColor="@android:color/holo_orange_light"
             android:textSize="25sp" />
 
