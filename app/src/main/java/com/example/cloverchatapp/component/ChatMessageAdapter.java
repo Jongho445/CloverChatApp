@@ -8,41 +8,41 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
+import com.example.cloverchatapp.web.chat.ResponseChatMessage;
 
 import java.util.List;
 
-public class ChatMessageAdapter extends RecyclerView.Adapter {
+public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageViewHolder> {
 
-    String currentUser;
-    List<ChatMessage> itemList;
+    private final List<ResponseChatMessage> itemList;
+    private final MainActivity activity;
 
-    public ChatMessageAdapter(String currentUser, List<ChatMessage> itemList) {
-        this.currentUser = currentUser;
+    public ChatMessageAdapter(List<ResponseChatMessage> itemList, MainActivity activity) {
         this.itemList = itemList;
+        this.activity = activity;
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.chat_message, parent, false);
+    public ChatMessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        View itemView = layoutInflater.inflate(R.layout.chat_message, parent, false);
 
-        return new ChatMessageViewHolder(view);
+        return new ChatMessageViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder originHolder, int position) {
-        ChatMessageViewHolder holder = (ChatMessageViewHolder) originHolder;
-
+    public void onBindViewHolder(@NonNull ChatMessageViewHolder holder, int position) {
         // 현재 닉네임과 글쓴이의 닉네임이 같을 경우 배경을 노란색으로 변경
-        if (currentUser.equals(itemList.get(position).getNickname())) {
-            holder.getCard().setCardBackgroundColor(Color.parseColor("#FFF176"));
+        if (activity.authStorage.me.nickname.equals(itemList.get(position).createUser.nickname)) {
+            holder.card.setCardBackgroundColor(Color.parseColor("#FFF176"));
         }
 
-        holder.getNickname().setText(itemList.get(position).getNickname());
-        holder.getContents().setText(itemList.get(position).getContents());
-        holder.getTime().setText(itemList.get(position).getTime());
+        holder.nickname.setText(itemList.get(position).createUser.nickname);
+        holder.contents.setText(itemList.get(position).content);
+        holder.time.setText(itemList.get(position).createAt);
     }
 
     @Override

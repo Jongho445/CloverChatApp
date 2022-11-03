@@ -5,11 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
@@ -25,8 +26,11 @@ public class IndexFragment extends Fragment {
 
     MainActivity activity;
     ViewGroup rootView;
-    ListView chatRoomListView;
-    List<ResponseChatRoom> list = new ArrayList<>();
+
+    RecyclerView chatRoomListView;
+    ChatRoomAdapter adapter;
+    List<ResponseChatRoom> itemList;
+
     AppClient httpClient;
 
     @Override
@@ -54,11 +58,25 @@ public class IndexFragment extends Fragment {
                 throw new RuntimeException("null");
             }
 
-            setListView(chatRooms);
+            setRecyclerView(chatRooms);
         }, t -> {
             System.out.println(t.getMessage());
             t.printStackTrace();
         });
+    }
+
+    private void setRecyclerView(List<ResponseChatRoom> chatRooms) {
+        chatRoomListView = rootView.findViewById(R.id.chatRoomListView);
+        itemList = new ArrayList<>();
+        adapter = new ChatRoomAdapter(itemList, activity);
+
+        for (ResponseChatRoom chatRoom : chatRooms) {
+            itemList.add(chatRoom);
+        }
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
+        chatRoomListView.setLayoutManager(layoutManager);
+        chatRoomListView.setAdapter(adapter);
     }
 
     private void setIndexToWriteBtn() {
@@ -66,7 +84,7 @@ public class IndexFragment extends Fragment {
         Button indexToCreateBtn = rootView.findViewById(R.id.indexToCreateBtn);
 
         indexToCreateBtn.setOnClickListener(view -> {
-            list.clear();
+            itemList.clear();
             activity.navigate(FragmentEnum.CHAT_ROOM_CREATE);
         });
     }
@@ -75,20 +93,8 @@ public class IndexFragment extends Fragment {
         Button indexToTestBtn = rootView.findViewById(R.id.indexToTestBtn);
 
         indexToTestBtn.setOnClickListener(view -> {
-            list.clear();
+            itemList.clear();
             activity.navigate(FragmentEnum.TEST);
         });
-    }
-
-    private void setListView(List<ResponseChatRoom> chatRooms) {
-        chatRoomListView = rootView.findViewById(R.id.chatRoomListView);
-
-        ChatRoomAdapter adapter = new ChatRoomAdapter(activity, super.getContext(), list);
-
-        for (ResponseChatRoom chatRoom : chatRooms) {
-            list.add(chatRoom);
-        }
-
-        chatRoomListView.setAdapter(adapter);
     }
 }

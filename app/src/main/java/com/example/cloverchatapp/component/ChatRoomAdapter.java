@@ -1,64 +1,81 @@
 package com.example.cloverchatapp.component;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
-import com.example.cloverchatapp.web.board.ResponseChatRoom;
 import com.example.cloverchatapp.R;
+import com.example.cloverchatapp.client.AppClient;
+import com.example.cloverchatapp.fragment.FragmentEnum;
+import com.example.cloverchatapp.web.board.ResponseChatRoom;
 
 import java.util.List;
 
-public class ChatRoomAdapter extends BaseAdapter {
+public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomViewHolder>  {
 
-    MainActivity activity;
-    Context context;
-    List<ResponseChatRoom> list;
+    private final List<ResponseChatRoom> itemList;
+    private final MainActivity activity;
+    private final AppClient httpClient;
 
-    LayoutInflater inflater;
+    private static String PASSWORD = "1234";
 
-    public ChatRoomAdapter(MainActivity activity, Context context, List<ResponseChatRoom> list) {
+    public ChatRoomAdapter(List<ResponseChatRoom> itemList, MainActivity activity) {
+        this.itemList = itemList;
         this.activity = activity;
-        this.context = context;
-        this.list = list;
-
-        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.httpClient = new AppClient();
     }
 
-    public void add(ResponseChatRoom post) {
-        list.add(post);
-    }
-    public void remove(int position) {
-        list.remove(position);
-    }
-    public void removeAll() {
-        list.clear();
-    }
+    @NonNull
+    @Override
+    public ChatRoomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        View itemView = layoutInflater.inflate(R.layout.chat_room_list_item, parent, false);
 
-    @Override public int getCount() {
-        return list.size();
-    }
-    @Override public Object getItem(int position) {
-        return list.get(position);
-    }
-    @Override public long getItemId(int position) {
-        return position;
+        return new ChatRoomViewHolder(itemView);
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        convertView = inflater.inflate(R.layout.chat_room_list_item, parent, false);
+    public void onBindViewHolder(@NonNull ChatRoomViewHolder holder, int position) {
+        ResponseChatRoom chatRoom = itemList.get(position);
 
-        ChatRoomListItem chatRoomListItem = new ChatRoomListItem(list.get(position), position, this, list);
+        setOnClickListener(holder, chatRoom);
+        setRemoveListener(holder, chatRoom, position);
 
-        chatRoomListItem.initFields(convertView);
-        chatRoomListItem.setView();
-        chatRoomListItem.setRemoveListener();
-        chatRoomListItem.setOnClickListener(activity, convertView);
+        setViewText(holder, chatRoom);
+    }
+    private void setOnClickListener(ChatRoomViewHolder holder, ResponseChatRoom chatRoom) {
+        holder.itemView.setOnClickListener(view -> {
+            itemList.clear();
+            activity.navigate(FragmentEnum.CHAT_ROOM_DETAIL, chatRoom);
+        });
+    }
 
-        return convertView;
+    private void setRemoveListener(ChatRoomViewHolder holder, ResponseChatRoom chatRoom, int position) {
+        holder.removeBtn.setOnClickListener(view -> {
+            httpClient.deleteChatRoom(
+                    chatRoom.id, PASSWORD,
+                    res -> {
+                        itemList.remove(position);
+                        this.notifyDataSetChanged();
+                    }, t -> {
+                        System.out.println(t.getMessage());
+                        t.printStackTrace();
+                    }
+            );
+        });
+    }
+
+    private void setViewText(ChatRoomViewHolder holder, ResponseChatRoom chatRoom) {
+        holder.chatRoomTitle.setText(chatRoom.title);
+        holder.chatRoomCreateBy.setText(chatRoom.createUser.nickname);
+    }
+
+    @Override
+    public int getItemCount() {
+        return itemList.size();
     }
 }
