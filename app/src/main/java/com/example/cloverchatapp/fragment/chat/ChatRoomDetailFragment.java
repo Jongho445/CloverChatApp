@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
+import com.example.cloverchatapp.client.AppClient;
 import com.example.cloverchatapp.component.ChatMessageAdapter;
 import com.example.cloverchatapp.util.Constants;
 import com.example.cloverchatapp.web.board.ResponseChatRoom;
@@ -34,39 +35,61 @@ import ua.naiksoftware.stomp.dto.StompMessage;
 public class ChatRoomDetailFragment extends Fragment {
 
     MainActivity activity;
+    ViewGroup rootView;
 
     RecyclerView rvList;
     ChatMessageAdapter adapter;
-    List<ResponseChatMessage> chatMessageList;
+    List<ResponseChatMessage> itemList;
 
     ResponseChatRoom chatRoom;
 
+    AppClient httpClient;
     StompClient stompClient;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) getActivity();
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_detail, container, false);
+        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_detail, container, false);
+        httpClient = new AppClient(activity.authStorage);
 
-        setRecyclerView(rootView);
-        setSendBtnListener(rootView);
-        
-        initStomp();
+        httpClient.getChatMessagesByChatRoomId(
+                chatRoom.id,
+                res -> {
+                    setRecyclerView(res.body());
+                    setSendBtnListener();
+
+                    connectStomp();
+                },
+                e -> {
+                    System.out.println(e.getMessage());
+                    e.printStackTrace();
+                }
+        );
 
         return rootView;
     }
 
-    private void setRecyclerView(View rootView) {
+    @Override
+    public void onPause() {
+        super.onPause();
+        itemList.clear();
+        stompClient.disconnect();
+    }
+
+    private void setRecyclerView(List<ResponseChatMessage> chatMessages) {
         rvList = rootView.findViewById(R.id.rv_list);
-        chatMessageList = new ArrayList<>();
-        adapter = new ChatMessageAdapter(chatMessageList, activity);
+
+        itemList = new ArrayList<>();
+        itemList.addAll(chatMessages);
+
+        adapter = new ChatMessageAdapter(itemList, activity);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
         rvList.setLayoutManager(layoutManager);
         rvList.setAdapter(adapter);
     }
 
-    private void initStomp() {
+    private void connectStomp() {
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, Constants.SERVER_URL + "/sub/websocket");
 
         stompClient.lifecycle().subscribe(lifecycleHandle());
@@ -98,14 +121,14 @@ public class ChatRoomDetailFragment extends Fragment {
             Gson gson = new Gson();
             ResponseChatMessage chatMsg = gson.fromJson(topicMessage.getPayload(), ResponseChatMessage.class);
 
-            chatMessageList.add(chatMsg);
+            itemList.add(chatMsg);
             activity.runOnUiThread(() -> {
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemInserted(adapter.getItemCount());
             });
         };
     }
 
-    private void setSendBtnListener(View rootView) {
+    private void setSendBtnListener() {
         EditText editText = rootView.findViewById(R.id.et_chatting);
         Button sendBtn = rootView.findViewById(R.id.btn_send);
 

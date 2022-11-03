@@ -26,7 +26,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomViewHolder>  {
     public ChatRoomAdapter(List<ResponseChatRoom> itemList, MainActivity activity) {
         this.itemList = itemList;
         this.activity = activity;
-        this.httpClient = new AppClient();
+        this.httpClient = new AppClient(activity.authStorage);
     }
 
     @NonNull

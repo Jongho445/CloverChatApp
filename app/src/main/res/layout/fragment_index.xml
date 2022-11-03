@@ -5,23 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/indexToTestBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="테스트 페이지로"
-        android:textSize="24sp" />
-    <Button
-        android:id="@+id/indexToCreateBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="채팅방 만들기"
-        android:textSize="24sp" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRoomListView"
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:listSelector="@android:color/holo_blue_bright" />
+
+    <Button
+        android:id="@+id/indexToCreateBtn"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_margin="3dp"
+        android:text="채팅방 만들기"
+        android:textSize="24sp" />
+    <Button
+        android:id="@+id/indexToTestBtn"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_margin="3dp"
+        android:visibility="gone"
+        android:text="테스트 페이지로"
+        android:textSize="24sp" />
 
 </LinearLayout>

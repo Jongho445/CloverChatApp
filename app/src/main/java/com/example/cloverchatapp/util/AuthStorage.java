@@ -6,7 +6,7 @@ import okhttp3.Headers;
 
 public class AuthStorage {
 
-    public String sessionKey;
+    public String sessionId;
     public ResponseUser me;
 
     public AuthStorage() {}

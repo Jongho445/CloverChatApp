@@ -35,14 +35,16 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ChatMessageViewHolder holder, int position) {
-        // 현재 닉네임과 글쓴이의 닉네임이 같을 경우 배경을 노란색으로 변경
-        if (activity.authStorage.me.nickname.equals(itemList.get(position).createUser.nickname)) {
+        ResponseChatMessage chatMessage = itemList.get(position);
+        String myNickname = activity.authStorage.me.nickname;
+
+        if (myNickname.equals(chatMessage.createUser.nickname)) {
             holder.card.setCardBackgroundColor(Color.parseColor("#FFF176"));
         }
 
-        holder.nickname.setText(itemList.get(position).createUser.nickname);
-        holder.contents.setText(itemList.get(position).content);
-        holder.time.setText(itemList.get(position).createAt);
+        holder.nickname.setText(chatMessage.createUser.nickname);
+        holder.contents.setText(chatMessage.content);
+        holder.time.setText(chatMessage.createAt);
     }
 
     @Override

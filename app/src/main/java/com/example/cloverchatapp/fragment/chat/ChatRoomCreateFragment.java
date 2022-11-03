@@ -21,9 +21,8 @@ import com.example.cloverchatapp.web.board.ChatRoomType;
 public class ChatRoomCreateFragment extends Fragment {
 
     MainActivity activity;
-
     ViewGroup rootView;
-    EditText inputCreateBy;
+
     EditText inputPassword;
     EditText inputTitle;
 
@@ -31,13 +30,13 @@ public class ChatRoomCreateFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        httpClient = new AppClient();
         activity = (MainActivity) getActivity();
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_create, container, false);
+        httpClient = new AppClient(activity.authStorage);
 
         initEditTexts();
 
-        setToIndexBtn();
+        setCreateToIndexBtn();
         setCreateBtn();
 
         return rootView;
@@ -52,18 +51,16 @@ public class ChatRoomCreateFragment extends Fragment {
     }
 
     private void initEditTexts() {
-        inputCreateBy = rootView.findViewById(R.id.inputCreateBy);
         inputPassword = rootView.findViewById(R.id.inputPassword);
         inputTitle = rootView.findViewById(R.id.inputTitle);
     }
 
     private void clearInputs() {
-        inputCreateBy.setText(null);
         inputPassword.setText(null);
         inputTitle.setText(null);
     }
 
-    private void setToIndexBtn() {
+    private void setCreateToIndexBtn() {
         Button createToIndexBtn = rootView.findViewById(R.id.createToIndexBtn);
         createToIndexBtn.setOnClickListener((View v) -> {
             activity.navigate(FragmentEnum.INDEX);
@@ -74,7 +71,7 @@ public class ChatRoomCreateFragment extends Fragment {
         Button createBtn = rootView.findViewById(R.id.createChatRoomBtn);
         createBtn.setOnClickListener((View v) -> {
             ChatRoomCreateForm chatRoomCreateForm = new ChatRoomCreateForm(
-                    inputCreateBy.getText().toString(),
+                    activity.authStorage.me.id,
                     inputPassword.getText().toString(),
                     inputTitle.getText().toString(),
                     ChatRoomType.PUBLIC
@@ -83,7 +80,7 @@ public class ChatRoomCreateFragment extends Fragment {
             httpClient.createChatRoom(
                     chatRoomCreateForm,
                     res -> activity.navigate(FragmentEnum.INDEX),
-                    t -> {}
+                    e -> {}
             );
         });
     }

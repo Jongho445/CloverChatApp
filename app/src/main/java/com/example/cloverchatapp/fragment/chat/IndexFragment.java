@@ -35,12 +35,12 @@ public class IndexFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        httpClient = new AppClient();
         activity = (MainActivity) getActivity();
         //fragment_xml를 MainFragment.java와 묶어주는 역할을 하는 메서드
         //(사용할 자원, 자원을 담을 곳, T/F)
         //메인에 직접 들어가면 True, 프래그먼트에 있으면 False
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_index, container, false);
+        httpClient = new AppClient(activity.authStorage);
 
         setIndexToTestBtn();
         setIndexToWriteBtn();
@@ -59,9 +59,9 @@ public class IndexFragment extends Fragment {
             }
 
             setRecyclerView(chatRooms);
-        }, t -> {
-            System.out.println(t.getMessage());
-            t.printStackTrace();
+        }, e -> {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         });
     }
 

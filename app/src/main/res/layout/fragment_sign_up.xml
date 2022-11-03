@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:hint="아이디"/>
+        android:hint="이메일"/>
     <EditText
         android:id="@+id/signUpPassword"
         android:layout_width="match_parent"
@@ -34,10 +34,10 @@
         android:layout_marginTop="30dp"
         android:layout_marginBottom="10dp"/>
     <Button
-        android:id="@+id/signUpToIndexBtn"
+        android:id="@+id/signUpToSignInBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="메인화면으로 돌아가기"
+        android:text="로그인 화면으로 돌아가기"
         android:textSize="24sp" />
 
 </LinearLayout>

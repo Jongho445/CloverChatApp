@@ -14,6 +14,7 @@ import com.example.cloverchatapp.fragment.chat.ChatRoomCreateFragment;
 import com.example.cloverchatapp.fragment.user.SignInFragment;
 import com.example.cloverchatapp.fragment.user.SignUpFragment;
 import com.example.cloverchatapp.util.AuthStorage;
+import com.example.cloverchatapp.util.TestHelper;
 import com.example.cloverchatapp.web.board.ResponseChatRoom;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,7 +35,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         authStorage = new AuthStorage();
-        initFragments();
+
+        if (BuildConfig.BUILD_TYPE == "debug") {
+            TestHelper testHelper = new TestHelper(this);
+            testHelper.login(authStorage, this::init);
+        } else {
+            init();
+        }
     }
 
     @Override
@@ -48,6 +55,27 @@ public class MainActivity extends AppCompatActivity {
             case SIGN_UP:
             case TEST:
                 navigate(indexFragment, FragmentEnum.INDEX); break;
+        }
+    }
+
+    private void init() {
+        FragmentManager fm = getSupportFragmentManager();
+
+        indexFragment = new IndexFragment();
+        signInFragment = new SignInFragment();
+        chatRoomCreateFragment = new ChatRoomCreateFragment();
+        chatRoomDetailFragment = new ChatRoomDetailFragment();
+        signUpFragment = new SignUpFragment();
+        testFragment = new TestFragment();
+
+        if (authStorage.me == null) {
+            fm.beginTransaction()
+                    .add(R.id.action_container, signInFragment)
+                    .commit();
+        } else {
+            fm.beginTransaction()
+                    .add(R.id.action_container, indexFragment)
+                    .commit();
         }
     }
 
@@ -81,26 +109,5 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.action_container, fragment)
                 .commit();
-    }
-
-    private void initFragments() {
-        FragmentManager fm = getSupportFragmentManager();
-
-        indexFragment = new IndexFragment();
-        signInFragment = new SignInFragment();
-        chatRoomCreateFragment = new ChatRoomCreateFragment();
-        chatRoomDetailFragment = new ChatRoomDetailFragment();
-        signUpFragment = new SignUpFragment();
-        testFragment = new TestFragment();
-
-        if (authStorage.me == null) {
-            fm.beginTransaction()
-                    .add(R.id.action_container, signInFragment)
-                    .commit();
-        } else {
-            fm.beginTransaction()
-                    .add(R.id.action_container, indexFragment)
-                    .commit();
-        }
     }
 }
