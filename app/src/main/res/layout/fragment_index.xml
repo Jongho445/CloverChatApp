@@ -6,13 +6,6 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/indexToSignInBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="로그인"
-        android:visibility="gone"
-        android:textSize="24sp" />
-    <Button
         android:id="@+id/indexToTestBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

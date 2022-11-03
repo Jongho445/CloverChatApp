@@ -85,12 +85,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFragments() {
         FragmentManager fm = getSupportFragmentManager();
-        indexFragment = (IndexFragment) fm.findFragmentById(R.id.mainFragment);
 
+        indexFragment = new IndexFragment();
         signInFragment = new SignInFragment();
         chatRoomCreateFragment = new ChatRoomCreateFragment();
         chatRoomDetailFragment = new ChatRoomDetailFragment();
         signUpFragment = new SignUpFragment();
         testFragment = new TestFragment();
+
+        if (authStorage.me == null) {
+            fm.beginTransaction()
+                    .add(R.id.action_container, signInFragment)
+                    .commit();
+        } else {
+            fm.beginTransaction()
+                    .add(R.id.action_container, indexFragment)
+                    .commit();
+        }
     }
 }

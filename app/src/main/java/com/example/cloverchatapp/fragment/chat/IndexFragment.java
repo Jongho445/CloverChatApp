@@ -38,22 +38,12 @@ public class IndexFragment extends Fragment {
         //메인에 직접 들어가면 True, 프래그먼트에 있으면 False
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_index, container, false);
 
-        setIndexToSignInBtn();
         setIndexToTestBtn();
         setIndexToWriteBtn();
 
         requestAndRender();
 
         return rootView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (activity.authStorage.me == null) {
-            Button indexToSignInBtn = rootView.findViewById(R.id.indexToSignInBtn);
-            indexToSignInBtn.setVisibility(View.VISIBLE);
-        }
     }
 
     private void requestAndRender() {
@@ -68,15 +58,6 @@ public class IndexFragment extends Fragment {
         }, t -> {
             System.out.println(t.getMessage());
             t.printStackTrace();
-        });
-    }
-
-    private void setIndexToSignInBtn() {
-        Button indexToSignInBtn = rootView.findViewById(R.id.indexToSignInBtn);
-
-        indexToSignInBtn.setOnClickListener(view -> {
-            list.clear();
-            activity.navigate(FragmentEnum.SIGN_IN);
         });
     }
 
