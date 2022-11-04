@@ -36,7 +36,6 @@ public class IndexFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) getActivity();
-        //fragment_xml를 MainFragment.java와 묶어주는 역할을 하는 메서드
         //(사용할 자원, 자원을 담을 곳, T/F)
         //메인에 직접 들어가면 True, 프래그먼트에 있으면 False
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_index, container, false);
@@ -54,33 +53,22 @@ public class IndexFragment extends Fragment {
         httpClient.getChatRoomList(res -> {
             List<ResponseChatRoom> chatRooms = res.body();
 
-            if (chatRooms == null) {
-                throw new RuntimeException("null");
-            }
-
             setRecyclerView(chatRooms);
-        }, e -> {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
         });
     }
 
     private void setRecyclerView(List<ResponseChatRoom> chatRooms) {
         chatRoomListView = rootView.findViewById(R.id.chatRoomListView);
         itemList = new ArrayList<>();
+        itemList.addAll(chatRooms);
+
         adapter = new ChatRoomAdapter(itemList, activity);
 
-        for (ResponseChatRoom chatRoom : chatRooms) {
-            itemList.add(chatRoom);
-        }
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
-        chatRoomListView.setLayoutManager(layoutManager);
+        chatRoomListView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         chatRoomListView.setAdapter(adapter);
     }
 
     private void setIndexToWriteBtn() {
-        //fragment_main.xml에 접근하기위해서는 rootView. 으로 접근해야한다
         Button indexToCreateBtn = rootView.findViewById(R.id.indexToCreateBtn);
 
         indexToCreateBtn.setOnClickListener(view -> {

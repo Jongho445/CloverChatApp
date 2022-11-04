@@ -24,6 +24,7 @@ import com.example.cloverchatapp.web.chat.ResponseChatMessage;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.functions.Consumer;
@@ -52,19 +53,12 @@ public class ChatRoomDetailFragment extends Fragment {
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_detail, container, false);
         httpClient = new AppClient(activity.authStorage);
 
-        httpClient.getChatMessagesByChatRoomId(
-                chatRoom.id,
-                res -> {
-                    setRecyclerView(res.body());
-                    setSendBtnListener();
+        httpClient.getChatMessagesByChatRoomId(chatRoom.id, res -> {
+            setRecyclerView(res.body());
+            setSendBtnListener();
 
-                    connectStomp();
-                },
-                e -> {
-                    System.out.println(e.getMessage());
-                    e.printStackTrace();
-                }
-        );
+            connectStomp();
+        });
 
         return rootView;
     }
@@ -87,15 +81,24 @@ public class ChatRoomDetailFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
         rvList.setLayoutManager(layoutManager);
         rvList.setAdapter(adapter);
+
+        rvList.scrollToPosition(adapter.getItemCount() - 1);
     }
 
     private void connectStomp() {
-        stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, Constants.SERVER_URL + "/sub/websocket");
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Cookie", "JSESSIONID=" + activity.authStorage.sessionId);
+
+        stompClient = Stomp.over(
+                Stomp.ConnectionProvider.OKHTTP,
+                Constants.SERVER_URL + "/stomp/websocket",
+                headers
+        );
 
         stompClient.lifecycle().subscribe(lifecycleHandle());
         stompClient.connect();
 
-        stompClient.topic("/topic/" + chatRoom.id).subscribe(subscribeHandle());
+        stompClient.topic("/sub/" + chatRoom.id).subscribe(subscribeHandle());
     }
 
     private Consumer<LifecycleEvent> lifecycleHandle() {
@@ -123,7 +126,7 @@ public class ChatRoomDetailFragment extends Fragment {
 
             itemList.add(chatMsg);
             activity.runOnUiThread(() -> {
-                adapter.notifyItemInserted(adapter.getItemCount());
+                rvList.scrollToPosition(adapter.getItemCount() - 1);
             });
         };
     }

@@ -3,6 +3,7 @@ package com.example.cloverchatapp.util;
 import com.example.cloverchatapp.web.user.ResponseUser;
 
 import okhttp3.Headers;
+import retrofit2.Response;
 
 public class AuthStorage {
 
@@ -11,7 +12,15 @@ public class AuthStorage {
 
     public AuthStorage() {}
 
-    public String getJSessionId(Headers headers) {
+    public void storeData(Response<ResponseUser> response) {
+        ResponseUser responseUser = response.body();
+        String jSessionId = getJSessionId(response.headers());
+
+        sessionId = jSessionId;
+        me = responseUser;
+    }
+
+    private String getJSessionId(Headers headers) {
         String cookieStr = headers.get("Set-Cookie");
 
         if (cookieStr == null) {

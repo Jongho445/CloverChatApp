@@ -25,35 +25,31 @@ public class AppClient {
         this.retrofitClient = new RetrofitClient(authStorage);
     }
 
-    public void login(RequestLoginForm requestLoginForm, Consumer<Response<ResponseUser>> onResponse, Consumer<Throwable> onFailure) {
-        callback(() -> retrofitClient.getApiService().login(requestLoginForm), onResponse, onFailure);
+    public void login(RequestLoginForm requestLoginForm, Consumer<Response<ResponseUser>> onResponse) {
+        callback(() -> retrofitClient.getApiService().login(requestLoginForm), onResponse);
     }
 
-    public void register(UserCreateForm userCreateForm, Consumer<Response<ResponseUser>> onResponse, Consumer<Throwable> onFailure) {
-        callback(() -> retrofitClient.getApiService().register(userCreateForm), onResponse, onFailure);
+    public void register(UserCreateForm userCreateForm, Consumer<Response<ResponseUser>> onResponse) {
+        callback(() -> retrofitClient.getApiService().register(userCreateForm), onResponse);
     }
 
-    public void getChatRoomList(Consumer<Response<List<ResponseChatRoom>>> onResponse, Consumer<Throwable> onFailure) {
-        callback(() -> retrofitClient.getApiService().getChatRoomList(), onResponse, onFailure);
+    public void getChatRoomList(Consumer<Response<List<ResponseChatRoom>>> onResponse) {
+        callback(() -> retrofitClient.getApiService().getChatRoomList(), onResponse);
     }
 
-    public void createChatRoom(ChatRoomCreateForm chatRoomCreateForm, Consumer<Response<String>> onResponse, Consumer<Throwable> onFailure) {
-        callback(() -> retrofitClient.getApiService().createChatRoom(chatRoomCreateForm), onResponse, onFailure);
+    public void createChatRoom(ChatRoomCreateForm chatRoomCreateForm, Consumer<Response<String>> onResponse) {
+        callback(() -> retrofitClient.getApiService().createChatRoom(chatRoomCreateForm), onResponse);
     }
 
-    public void deleteChatRoom(Long chatRoomId, String password, Consumer<Response<String>> onResponse, Consumer<Throwable> onFailure) {
-        callback(() -> retrofitClient.getApiService().deleteChatRoom(chatRoomId, password), onResponse, onFailure);
+    public void deleteChatRoom(Long chatRoomId, Consumer<Response<String>> onResponse) {
+        callback(() -> retrofitClient.getApiService().deleteChatRoom(chatRoomId), onResponse);
     }
 
-    public void getChatMessagesByChatRoomId(Long chatRoomId, Consumer<Response<List<ResponseChatMessage>>> onResponse, Consumer<Throwable> onFailure) {
-        callback(() -> retrofitClient.getApiService().getChatMessagesByChatRoomId(chatRoomId), onResponse, onFailure);
+    public void getChatMessagesByChatRoomId(Long chatRoomId, Consumer<Response<List<ResponseChatMessage>>> onResponse) {
+        callback(() -> retrofitClient.getApiService().getChatMessagesByChatRoomId(chatRoomId), onResponse);
     }
 
-    private <T> void callback(
-            Supplier<Call<T>> requestFx,
-            Consumer<Response<T>> onResponse,
-            Consumer<Throwable> onFailure
-    ) {
+    private <T> void callback(Supplier<Call<T>> requestFx, Consumer<Response<T>> onResponse) {
         Call<T> call = requestFx.get();
 
         call.enqueue(new Callback<T>() {
@@ -64,7 +60,8 @@ public class AppClient {
 
             @Override
             public void onFailure(Call<T> call, Throwable t) {
-                onFailure.accept(t);
+                System.out.println(t.getMessage());
+                t.printStackTrace();
             }
         });
     }

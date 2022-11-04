@@ -32,7 +32,7 @@ public interface RetrofitService {
     Call<String> createChatRoom(@Body ChatRoomCreateForm chatRoomCreateForm);
 
     @DELETE("/board/delete")
-    Call<String> deleteChatRoom(@Query("chatRoomId") Long chatRoomId, @Query("password") String password);
+    Call<String> deleteChatRoom(@Query("chatRoomId") Long chatRoomId);
 
     @GET("/chat/{chatRoomId}")
     Call<List<ResponseChatMessage>> getChatMessagesByChatRoomId(@Path("chatRoomId") Long chatRoomId);

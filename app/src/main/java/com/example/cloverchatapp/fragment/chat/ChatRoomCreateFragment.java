@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -25,6 +27,7 @@ public class ChatRoomCreateFragment extends Fragment {
 
     EditText inputPassword;
     EditText inputTitle;
+    CheckBox isPrivateChkBox;
 
     AppClient httpClient;
 
@@ -37,6 +40,7 @@ public class ChatRoomCreateFragment extends Fragment {
         initEditTexts();
 
         setCreateToIndexBtn();
+        setIsPrivateChkBox();
         setCreateBtn();
 
         return rootView;
@@ -67,6 +71,13 @@ public class ChatRoomCreateFragment extends Fragment {
         });
     }
 
+    private void setIsPrivateChkBox() {
+        isPrivateChkBox = rootView.findViewById(R.id.isPrivateChkBox);
+        isPrivateChkBox.setOnCheckedChangeListener((CompoundButton compoundButton, boolean isChecked) -> {
+            inputPassword.setEnabled(isChecked);
+        });
+    }
+
     private void setCreateBtn() {
         Button createBtn = rootView.findViewById(R.id.createChatRoomBtn);
         createBtn.setOnClickListener((View v) -> {
@@ -74,14 +85,20 @@ public class ChatRoomCreateFragment extends Fragment {
                     activity.authStorage.me.id,
                     inputPassword.getText().toString(),
                     inputTitle.getText().toString(),
-                    ChatRoomType.PUBLIC
+                    getCurChatRoomType()
             );
 
-            httpClient.createChatRoom(
-                    chatRoomCreateForm,
-                    res -> activity.navigate(FragmentEnum.INDEX),
-                    e -> {}
-            );
+            httpClient.createChatRoom(chatRoomCreateForm, res -> {
+                activity.navigate(FragmentEnum.INDEX);
+            });
         });
+    }
+
+    private ChatRoomType getCurChatRoomType() {
+        if (isPrivateChkBox.isChecked()) {
+            return ChatRoomType.PRIVATE;
+        }
+
+        return ChatRoomType.PUBLIC;
     }
 }

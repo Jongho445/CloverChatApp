@@ -50,18 +50,12 @@ public class SignUpFragment extends Fragment {
     }
 
     private void setSignUpBtnListener() {
-        Button signUpBtn = (Button) rootView.findViewById(R.id.signUpBtn);
+        Button signUpBtn = rootView.findViewById(R.id.signUpBtn);
         signUpBtn.setOnClickListener(view -> {
-            httpClient.register(
-                    new UserCreateForm(editId.getText().toString(), editPassword.getText().toString(), editNickname.getText().toString()),
-                    res -> {
-                        activity.navigate(FragmentEnum.SIGN_IN);
-                    },
-                    e -> {
-                        System.out.println(e.getMessage());
-                        e.printStackTrace();
-                    }
-            );
+            UserCreateForm userCreateForm = new UserCreateForm(editId.getText().toString(), editPassword.getText().toString(), editNickname.getText().toString());
+            httpClient.register(userCreateForm, res -> {
+                activity.navigate(FragmentEnum.SIGN_IN);
+            });
         });
     }
 

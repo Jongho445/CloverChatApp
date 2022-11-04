@@ -3,7 +3,6 @@ package com.example.cloverchatapp.util;
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.client.AppClient;
 import com.example.cloverchatapp.web.user.RequestLoginForm;
-import com.example.cloverchatapp.web.user.ResponseUser;
 
 public class TestHelper {
 
@@ -15,22 +14,16 @@ public class TestHelper {
         this.httpClient = new AppClient(activity.authStorage);
     }
 
-    public void login(AuthStorage authStorage, Runnable callback) {
-        httpClient.login(
-                new RequestLoginForm("user1@gmail.com", "1234"),
-                res -> {
-                    ResponseUser responseUser = res.body();
-                    String jSessionId = authStorage.getJSessionId(res.headers());
+    public void login(Runnable callback) {
+        RequestLoginForm requestLoginForm = new RequestLoginForm("user2@gmail.com", "1234");
+        httpClient.login(requestLoginForm, res -> {
+            if (!res.isSuccessful()) {
+                callback.run();
+                return;
+            }
 
-                    authStorage.sessionId = jSessionId;
-                    authStorage.me = responseUser;
-
-                    callback.run();
-                },
-                e -> {
-                    System.out.println(e.getMessage());
-                    e.printStackTrace();
-                }
-        );
+            activity.authStorage.storeData(res);
+            callback.run();
+        });
     }
 }

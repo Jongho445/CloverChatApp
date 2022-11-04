@@ -39,10 +39,11 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageViewHold
         String myNickname = activity.authStorage.me.nickname;
 
         if (myNickname.equals(chatMessage.createUser.nickname)) {
-            holder.card.setCardBackgroundColor(Color.parseColor("#FFF176"));
+            holder.nickname.setText("나");
+        } else {
+            holder.nickname.setText(chatMessage.createUser.nickname);
         }
 
-        holder.nickname.setText(chatMessage.createUser.nickname);
         holder.contents.setText(chatMessage.content);
         holder.time.setText(chatMessage.createAt);
     }

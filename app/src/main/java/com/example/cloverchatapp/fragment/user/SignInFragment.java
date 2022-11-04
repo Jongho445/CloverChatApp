@@ -1,5 +1,6 @@
 package com.example.cloverchatapp.fragment.user;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,6 @@ import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.client.AppClient;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.web.user.RequestLoginForm;
-import com.example.cloverchatapp.web.user.ResponseUser;
 
 public class SignInFragment extends Fragment {
 
@@ -52,22 +52,20 @@ public class SignInFragment extends Fragment {
     private void setSignInBtnListener() {
         Button signInBtn = rootView.findViewById(R.id.signInBtn);
         signInBtn.setOnClickListener(view -> {
-            httpClient.login(
-                    new RequestLoginForm(editId.getText().toString(), editPassword.getText().toString()),
-                    res -> {
-                        ResponseUser responseUser = res.body();
-                        String jSessionId = activity.authStorage.getJSessionId(res.headers());
+            login();
+        });
+    }
 
-                        activity.authStorage.sessionId = jSessionId;
-                        activity.authStorage.me = responseUser;
+    private void login() {
+        RequestLoginForm requestLoginForm = new RequestLoginForm(editId.getText().toString(), editPassword.getText().toString());
+        httpClient.login(requestLoginForm, res -> {
+            if (!res.isSuccessful()) {
+                showAlertDialog("회원 정보가 잘못되었습니다.");
+                return;
+            }
 
-                        activity.navigate(FragmentEnum.INDEX);
-                    },
-                    e -> {
-                        System.out.println(e.getMessage());
-                        e.printStackTrace();
-                    }
-            );
+            activity.authStorage.storeData(res);
+            activity.navigate(FragmentEnum.INDEX);
         });
     }
 
@@ -78,9 +76,17 @@ public class SignInFragment extends Fragment {
         });
     }
 
+    private void showAlertDialog(String msg) {
+        new AlertDialog.Builder(activity)
+                .setTitle("알림")
+                .setMessage(msg)
+                .setPositiveButton("확인", null)
+                .show();
+    }
+
     private void initEditTexts() {
-        editId = (EditText) rootView.findViewById(R.id.signInId);
-        editPassword = (EditText) rootView.findViewById(R.id.signInPassword);
+        editId = rootView.findViewById(R.id.signInId);
+        editPassword = rootView.findViewById(R.id.signInPassword);
     }
 
     private void clearInputs() {

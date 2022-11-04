@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (BuildConfig.BUILD_TYPE == "debug") {
             TestHelper testHelper = new TestHelper(this);
-            testHelper.login(authStorage, this::init);
+            testHelper.login(this::init);
         } else {
             init();
         }
@@ -69,10 +69,12 @@ public class MainActivity extends AppCompatActivity {
         testFragment = new TestFragment();
 
         if (authStorage.me == null) {
+            setTitle("로그인");
             fm.beginTransaction()
                     .add(R.id.action_container, signInFragment)
                     .commit();
         } else {
+            setTitle("채팅방 리스트");
             fm.beginTransaction()
                     .add(R.id.action_container, indexFragment)
                     .commit();
@@ -104,10 +106,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void navigate(Fragment fragment, FragmentEnum fragmentEnum) {
         mainFragment = fragmentEnum;
+        setTitle(fragmentEnum);
 
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.action_container, fragment)
                 .commit();
+    }
+
+    private void setTitle(FragmentEnum fragment) {
+        switch (fragment) {
+            case INDEX:
+                setTitle("채팅방 리스트"); break;
+            case CHAT_ROOM_CREATE:
+                setTitle("채팅방 만들기"); break;
+            case SIGN_IN:
+                setTitle("로그인"); break;
+            case SIGN_UP:
+                setTitle("회원가입"); break;
+            case TEST:
+                setTitle("테스트 페이지"); break;
+        }
     }
 }
