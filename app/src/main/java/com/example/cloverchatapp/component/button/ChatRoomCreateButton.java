@@ -16,13 +16,12 @@ import com.example.cloverchatapp.web.domain.board.ChatRoomType;
 public class ChatRoomCreateButton {
 
     private final MainActivity activity;
+
     private final EditText inputPassword;
     private final EditText inputTitle;
     private final CheckBox isPrivateChkBox;
 
     private final Button targetButton;
-
-    public final HttpClient httpClient;
 
     public ChatRoomCreateButton(MainActivity activity, ViewGroup rootView, EditText inputPassword, EditText inputTitle, CheckBox isPrivateChkBox) {
         this.activity = activity;
@@ -30,7 +29,6 @@ public class ChatRoomCreateButton {
         this.inputTitle = inputTitle;
         this.isPrivateChkBox = isPrivateChkBox;
 
-        this.httpClient = new HttpClient(activity.authStorage);
         this.targetButton = rootView.findViewById(R.id.createChatRoomBtn);
 
         setOnClickListener();
@@ -45,7 +43,7 @@ public class ChatRoomCreateButton {
                     getCurChatRoomType()
             );
 
-            httpClient.createChatRoom(requestChatRoomCreateForm, res -> {
+            activity.httpClient.createChatRoom(requestChatRoomCreateForm, res -> {
                 activity.navigate(FragmentEnum.INDEX);
             });
         });

@@ -18,6 +18,7 @@ import com.example.cloverchatapp.fragment.user.SignInFragment;
 import com.example.cloverchatapp.fragment.user.SignUpFragment;
 import com.example.cloverchatapp.util.AuthStorage;
 import com.example.cloverchatapp.util.TestHelper;
+import com.example.cloverchatapp.web.client.HttpClient;
 import com.example.cloverchatapp.web.client.WebSocketClient;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
 
@@ -31,11 +32,13 @@ public class MainActivity extends AppCompatActivity {
     private SignUpFragment signUpFragment;
     private TestFragment testFragment;
 
+    public HttpClient httpClient;
+    public WebSocketClient webSocketClient = null;
+
+    public AuthStorage authStorage;
+    public ResponseChatRoom curChatRoom;
     private FragmentEnum mainFragment;
     public Menu menu;
-
-    public WebSocketClient webSocketClient = null;
-    public AuthStorage authStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         authStorage = new AuthStorage();
+        httpClient = new HttpClient(authStorage);
 
         if (BuildConfig.BUILD_TYPE == "debug") {
             TestHelper testHelper = new TestHelper(this);
@@ -68,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Status");
                 break;
             case R.id.chatUsersBtn:
-                navigate(FragmentEnum.CHAT_USER_LIST, chatRoomDetailFragment.getChatRoom());
+                navigate(FragmentEnum.CHAT_USER_LIST, curChatRoom);
                 break;
         }
 
@@ -119,10 +123,10 @@ public class MainActivity extends AppCompatActivity {
     public void navigate(FragmentEnum fragment, ResponseChatRoom responseChatRoom) {
         switch (fragment) {
             case CHAT_ROOM_DETAIL:
-                chatRoomDetailFragment.setChatRoom(responseChatRoom);
+                curChatRoom = responseChatRoom;
                 navigate(chatRoomDetailFragment, FragmentEnum.CHAT_ROOM_DETAIL); break;
             case CHAT_USER_LIST:
-                chatUserListFragment.setChatRoom(responseChatRoom);
+                curChatRoom = responseChatRoom;
                 navigate(chatUserListFragment, FragmentEnum.CHAT_USER_LIST); break;
         }
     }

@@ -21,9 +21,6 @@ public class WebSocketClient {
     private final MainActivity activity;
     private final ChatMessageList chatMessageList;
 
-    private final ResponseChatRoom chatRoom;
-
-    public HttpClient httpClient;
     public StompClient stompClient;
 
     private final String wsRequestUrl;
@@ -31,16 +28,13 @@ public class WebSocketClient {
     private final String sendPath;
     private final String jSessionValue;
 
-    public WebSocketClient(MainActivity activity, ChatMessageList chatMessageList, ResponseChatRoom chatRoom) {
+    public WebSocketClient(MainActivity activity, ChatMessageList chatMessageList) {
         this.activity = activity;
         this.chatMessageList = chatMessageList;
-        this.chatRoom = chatRoom;
-
-        this.httpClient = new HttpClient(activity.authStorage);
 
         this.wsRequestUrl = Constants.SERVER_URL + "/stomp/websocket";
-        this.subPath = "/sub/" + chatRoom.id;
-        this.sendPath = "/pub/" + chatRoom.id;
+        this.subPath = "/sub/" + activity.curChatRoom.id;
+        this.sendPath = "/pub/" + activity.curChatRoom.id;
         this.jSessionValue = "JSESSIONID=" + activity.authStorage.sessionId;
     }
 
@@ -62,7 +56,7 @@ public class WebSocketClient {
 
     public void send(String content) {
         RequestStompChatMessage requestStompChatMessage = new RequestStompChatMessage(
-                chatRoom.id,
+                activity.curChatRoom.id,
                 activity.authStorage.me.id,
                 content
         );
@@ -81,17 +75,17 @@ public class WebSocketClient {
             switch (lifecycleEvent.getType()) {
                 case OPENED:
                     System.out.println("opened");
-                    httpClient.createChatUser(chatRoom.id, res -> {});
+                    activity.httpClient.createChatUser(activity.curChatRoom.id, res -> {});
                     break;
                 case ERROR:
                     Exception ex = lifecycleEvent.getException();
                     System.out.println(ex.getMessage());
                     ex.printStackTrace();
-                    httpClient.deleteChatUser(chatRoom.id, res -> {});
+                    activity.httpClient.deleteChatUser(res -> {});
                     break;
                 case CLOSED:
                     System.out.println("closed");
-                    httpClient.deleteChatUser(chatRoom.id, res -> {});
+                    activity.httpClient.deleteChatUser(res -> {});
                     break;
             }
         };

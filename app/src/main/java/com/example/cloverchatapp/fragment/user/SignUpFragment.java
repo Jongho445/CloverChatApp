@@ -26,13 +26,10 @@ public class SignUpFragment extends Fragment {
     EditText editPassword;
     EditText editNickname;
 
-    HttpClient httpClient;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) getActivity();
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_sign_up, container, false);
-        httpClient = new HttpClient(activity.authStorage);
 
         initEditTexts();
         setSignUpBtnListener();
@@ -53,7 +50,7 @@ public class SignUpFragment extends Fragment {
         Button signUpBtn = rootView.findViewById(R.id.signUpBtn);
         signUpBtn.setOnClickListener(view -> {
             RequestUserCreateForm requestUserCreateForm = new RequestUserCreateForm(editId.getText().toString(), editPassword.getText().toString(), editNickname.getText().toString());
-            httpClient.register(requestUserCreateForm, res -> {
+            activity.httpClient.register(requestUserCreateForm, res -> {
                 activity.navigate(FragmentEnum.SIGN_IN);
             });
         });

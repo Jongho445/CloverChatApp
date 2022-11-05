@@ -19,14 +19,13 @@ import java.util.List;
 
 public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomViewHolder>  {
 
-    private final List<ResponseChatRoom> itemList;
     private final MainActivity activity;
-    private final HttpClient httpClient;
 
-    public ChatRoomAdapter(List<ResponseChatRoom> itemList, MainActivity activity) {
-        this.itemList = itemList;
+    private final List<ResponseChatRoom> itemList;
+
+    public ChatRoomAdapter(MainActivity activity, List<ResponseChatRoom> itemList) {
         this.activity = activity;
-        this.httpClient = new HttpClient(activity.authStorage);
+        this.itemList = itemList;
     }
 
     @NonNull
@@ -64,7 +63,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomViewHolder>  {
     }
 
     private void requestDelete(ResponseChatRoom chatRoom, int position) {
-        httpClient.deleteChatRoom(chatRoom.id, res -> {
+        activity.httpClient.deleteChatRoom(chatRoom.id, res -> {
             if (!res.isSuccessful()) {
                 showAlertDialog("채팅방 생성자가 아닙니다");
                 return;

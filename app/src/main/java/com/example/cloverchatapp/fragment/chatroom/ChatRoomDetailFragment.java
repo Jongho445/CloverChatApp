@@ -26,30 +26,23 @@ public class ChatRoomDetailFragment extends Fragment {
 
     private ChatMessageList chatMessageList;
 
-    private ResponseChatRoom chatRoom;
-
-    private HttpClient httpClient;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) getActivity();
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_detail, container, false);
 
-        httpClient = new HttpClient(activity.authStorage);
         activity.menu.findItem(R.id.chatUsersBtn).setVisible(true);
 
-        RequestChatMessagesReadForm form = new RequestChatMessagesReadForm(chatRoom.id, chatRoom.type, "1234");
+        RequestChatMessagesReadForm form = new RequestChatMessagesReadForm(activity.curChatRoom.id, activity.curChatRoom.type, "1234");
 
-        httpClient.getChatMessageList(form, res -> {
+        activity.httpClient.getChatMessageList(form, res -> {
             chatMessageList = new ChatMessageList(activity, rootView, res.body());
             setSendBtnListener();
 
-            if (activity.webSocketClient != null) {
-                activity.webSocketClient.disconnect();
+            if (activity.webSocketClient == null) {
+                activity.webSocketClient = new WebSocketClient(activity, chatMessageList);
+                activity.webSocketClient.connect();
             }
-
-            activity.webSocketClient = new WebSocketClient(activity, chatMessageList, chatRoom);
-            activity.webSocketClient.connect();
         });
 
         return rootView;
@@ -68,13 +61,5 @@ public class ChatRoomDetailFragment extends Fragment {
         sendBtn.setOnClickListener(view -> {
             activity.webSocketClient.send(editText.getText().toString());
         });
-    }
-
-    public ResponseChatRoom getChatRoom() {
-        return chatRoom;
-    }
-
-    public void setChatRoom(ResponseChatRoom chatRoom) {
-        this.chatRoom = chatRoom;
     }
 }

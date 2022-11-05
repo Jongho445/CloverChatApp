@@ -26,22 +26,19 @@ public class IndexFragment extends Fragment {
 
     ChatRoomList chatRoomList;
 
-    HttpClient httpClient;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) getActivity();
         //(사용할 자원, 자원을 담을 곳, T/F)
         //메인에 직접 들어가면 True, 프래그먼트에 있으면 False
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_index, container, false);
-        httpClient = new HttpClient(activity.authStorage);
 
         activity.menu.findItem(R.id.chatUsersBtn).setVisible(false);
 
         setIndexToTestBtn();
         setIndexToWriteBtn();
 
-        httpClient.getChatRoomList(res -> {
+        activity.httpClient.getChatRoomList(res -> {
             List<ResponseChatRoom> chatRooms = res.body();
 
             chatRoomList = new ChatRoomList(activity, rootView, chatRooms);

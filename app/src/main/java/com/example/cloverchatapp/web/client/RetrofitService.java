@@ -33,10 +33,10 @@ public interface RetrofitService {
     Call<List<ResponseChatRoom>> getChatRoomList();
 
     @POST("/board/chatroom/create")
-    Call<String> createChatRoom(@Body RequestChatRoomCreateForm requestChatRoomCreateForm);
+    Call<ResponseChatRoom> createChatRoom(@Body RequestChatRoomCreateForm requestChatRoomCreateForm);
 
     @DELETE("/board/chatroom/delete")
-    Call<String> deleteChatRoom(@Query("chatRoomId") Long chatRoomId);
+    Call<ResponseChatRoom> deleteChatRoom(@Query("chatRoomId") Long chatRoomId);
 
     // /chat/message/**
     @POST("/chat/message/list")
@@ -49,7 +49,6 @@ public interface RetrofitService {
     @POST("/chat/user/create/{chatRoomId}")
     Call<ResponseChatUser> createChatUser(@Path("chatRoomId") Long chatRoomId);
 
-    @DELETE("/chat/user/delete/{chatRoomId}")
-    Call<ResponseChatUser> deleteChatUser(@Path("chatRoomId") Long chatRoomId);
-
+    @DELETE("/chat/user/delete")
+    Call<List<ResponseChatUser>> deleteChatUser();
 }

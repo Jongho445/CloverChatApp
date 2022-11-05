@@ -39,11 +39,11 @@ public class HttpClient {
         callback(() -> retrofitClient.getApiService().getChatRoomList(), onResponse);
     }
 
-    public void createChatRoom(RequestChatRoomCreateForm requestChatRoomCreateForm, Consumer<Response<String>> onResponse) {
+    public void createChatRoom(RequestChatRoomCreateForm requestChatRoomCreateForm, Consumer<Response<ResponseChatRoom>> onResponse) {
         callback(() -> retrofitClient.getApiService().createChatRoom(requestChatRoomCreateForm), onResponse);
     }
 
-    public void deleteChatRoom(Long chatRoomId, Consumer<Response<String>> onResponse) {
+    public void deleteChatRoom(Long chatRoomId, Consumer<Response<ResponseChatRoom>> onResponse) {
         callback(() -> retrofitClient.getApiService().deleteChatRoom(chatRoomId), onResponse);
     }
 
@@ -59,8 +59,8 @@ public class HttpClient {
         callback(() -> retrofitClient.getApiService().createChatUser(chatRoomId), onResponse);
     }
 
-    public void deleteChatUser(Long chatRoomId, Consumer<Response<ResponseChatUser>> onResponse) {
-        callback(() -> retrofitClient.getApiService().deleteChatUser(chatRoomId), onResponse);
+    public void deleteChatUser(Consumer<Response<List<ResponseChatUser>>> onResponse) {
+        callback(() -> retrofitClient.getApiService().deleteChatUser(), onResponse);
     }
 
     private <T> void callback(Supplier<Call<T>> requestFx, Consumer<Response<T>> onResponse) {

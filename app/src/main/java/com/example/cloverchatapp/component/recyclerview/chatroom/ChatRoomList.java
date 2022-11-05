@@ -34,7 +34,7 @@ public class ChatRoomList {
         itemList = new ArrayList<>();
         itemList.addAll(chatRooms);
 
-        adapter = new ChatRoomAdapter(itemList, activity);
+        adapter = new ChatRoomAdapter(activity, itemList);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
         chatRoomListView.setLayoutManager(layoutManager);

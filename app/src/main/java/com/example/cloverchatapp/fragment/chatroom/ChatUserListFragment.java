@@ -23,10 +23,6 @@ public class ChatUserListFragment extends Fragment {
     MainActivity activity;
     ViewGroup rootView;
 
-    HttpClient httpClient;
-
-    ResponseChatRoom chatRoom;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) getActivity();
@@ -34,16 +30,13 @@ public class ChatUserListFragment extends Fragment {
 
         activity.menu.findItem(R.id.chatUsersBtn).setVisible(false);
 
-        httpClient = new HttpClient(activity.authStorage);
-
         getChatUserList();
 
         return rootView;
     }
 
     public void getChatUserList() {
-        System.out.println(chatRoom.id);
-        httpClient.getChatUserList(chatRoom.id, res -> {
+        activity.httpClient.getChatUserList(activity.curChatRoom.id, res -> {
             if (!res.isSuccessful()) {
                 try {
                     String string = res.errorBody().string();
@@ -60,9 +53,4 @@ public class ChatUserListFragment extends Fragment {
             }
         });
     }
-
-    public void setChatRoom(ResponseChatRoom chatRoom) {
-        this.chatRoom = chatRoom;
-    }
-
 }

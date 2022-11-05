@@ -17,8 +17,6 @@ public class SignInButton {
     private final EditText editId;
     private final EditText editPassword;
 
-    private final HttpClient httpClient;
-
     public final Button targetButton;
 
     public SignInButton(MainActivity activity, ViewGroup rootView, EditText editId, EditText editPassword) {
@@ -26,7 +24,6 @@ public class SignInButton {
         this.editId = editId;
         this.editPassword = editPassword;
 
-        this.httpClient = new HttpClient(activity.authStorage);
         this.targetButton = rootView.findViewById(R.id.signInBtn);
 
         setOnClickListener();
@@ -40,7 +37,7 @@ public class SignInButton {
 
     private void login() {
         RequestLoginForm requestLoginForm = new RequestLoginForm(editId.getText().toString(), editPassword.getText().toString());
-        httpClient.login(requestLoginForm, res -> {
+        activity.httpClient.login(requestLoginForm, res -> {
             if (!res.isSuccessful()) {
                 showAlertDialog("회원 정보가 잘못되었습니다.");
                 return;
