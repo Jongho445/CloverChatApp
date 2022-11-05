@@ -8,5 +8,6 @@
         app:showAsAction="ifRoom"/>
     <item android:id="@+id/myStatusBtn"
         android:title="my page"
+        android:visible="false"
         app:showAsAction="ifRoom"/>
 </menu>

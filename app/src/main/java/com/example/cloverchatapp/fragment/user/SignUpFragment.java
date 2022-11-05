@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.web.client.HttpClient;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.web.domain.user.RequestUserCreateForm;
 
@@ -51,7 +50,7 @@ public class SignUpFragment extends Fragment {
         signUpBtn.setOnClickListener(view -> {
             RequestUserCreateForm requestUserCreateForm = new RequestUserCreateForm(editId.getText().toString(), editPassword.getText().toString(), editNickname.getText().toString());
             activity.httpClient.register(requestUserCreateForm, res -> {
-                activity.navigate(FragmentEnum.SIGN_IN);
+                activity.navigator.navigate(FragmentEnum.SIGN_IN);
             });
         });
     }
@@ -59,7 +58,7 @@ public class SignUpFragment extends Fragment {
     private void setNavBtnListeners() {
         Button signUpToSignInBtn = rootView.findViewById(R.id.signUpToSignInBtn);
         signUpToSignInBtn.setOnClickListener((View v) -> {
-            activity.navigate(FragmentEnum.SIGN_IN);
+            activity.navigator.navigate(FragmentEnum.SIGN_IN);
         });
     }
 

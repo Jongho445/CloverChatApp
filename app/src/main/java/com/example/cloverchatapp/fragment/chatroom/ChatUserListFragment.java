@@ -11,8 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.web.client.HttpClient;
-import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
+import com.example.cloverchatapp.component.recyclerview.chatuser.ChatUserList;
 import com.example.cloverchatapp.web.domain.chat.ResponseChatUser;
 
 import java.io.IOException;
@@ -22,6 +21,8 @@ public class ChatUserListFragment extends Fragment {
 
     MainActivity activity;
     ViewGroup rootView;
+
+    ChatUserList chatUserList;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -33,6 +34,12 @@ public class ChatUserListFragment extends Fragment {
         getChatUserList();
 
         return rootView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        chatUserList.clearList();
     }
 
     public void getChatUserList() {
@@ -47,10 +54,9 @@ public class ChatUserListFragment extends Fragment {
                 return;
             }
 
-            List<ResponseChatUser> chatUserList = res.body();
-            for (ResponseChatUser chatUser : chatUserList) {
-                System.out.println(chatUser.user.nickname);
-            }
+            List<ResponseChatUser> chatUsers = res.body();
+            chatUserList = new ChatUserList(activity, rootView, chatUsers);
+
         });
     }
 }

@@ -50,7 +50,7 @@ public class SignInFragment extends Fragment {
     private void setNavBtnListeners() {
         Button signInToSignUpBtn = rootView.findViewById(R.id.signInToSignUpBtn);
         signInToSignUpBtn.setOnClickListener((View v) -> {
-            activity.navigate(FragmentEnum.SIGN_UP);
+            activity.navigator.navigate(FragmentEnum.SIGN_UP);
         });
     }
 

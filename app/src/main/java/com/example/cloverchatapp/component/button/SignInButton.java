@@ -7,7 +7,6 @@ import android.widget.EditText;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.web.client.HttpClient;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.web.domain.user.RequestLoginForm;
 
@@ -26,13 +25,7 @@ public class SignInButton {
 
         this.targetButton = rootView.findViewById(R.id.signInBtn);
 
-        setOnClickListener();
-    }
-
-    private void setOnClickListener() {
-        targetButton.setOnClickListener(view -> {
-            login();
-        });
+        targetButton.setOnClickListener(view -> login());
     }
 
     private void login() {
@@ -44,7 +37,7 @@ public class SignInButton {
             }
 
             activity.authStorage.storeData(res);
-            activity.navigate(FragmentEnum.INDEX);
+            activity.navigator.navigate(FragmentEnum.INDEX);
         });
     }
 

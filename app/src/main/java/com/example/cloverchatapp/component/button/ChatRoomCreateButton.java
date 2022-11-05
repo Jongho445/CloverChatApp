@@ -8,7 +8,6 @@ import android.widget.EditText;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.web.client.HttpClient;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.web.domain.board.RequestChatRoomCreateForm;
 import com.example.cloverchatapp.web.domain.board.ChatRoomType;
@@ -38,15 +37,23 @@ public class ChatRoomCreateButton {
         targetButton.setOnClickListener((View v) -> {
             RequestChatRoomCreateForm requestChatRoomCreateForm = new RequestChatRoomCreateForm(
                     activity.authStorage.me.id,
-                    inputPassword.getText().toString(),
+                    getPassword(),
                     inputTitle.getText().toString(),
                     getCurChatRoomType()
             );
 
             activity.httpClient.createChatRoom(requestChatRoomCreateForm, res -> {
-                activity.navigate(FragmentEnum.INDEX);
+                activity.navigator.navigate(FragmentEnum.INDEX);
             });
         });
+    }
+
+    private String getPassword() {
+        if (isPrivateChkBox.isChecked()) {
+            return inputPassword.getText().toString();
+        }
+
+        return null;
     }
 
     private ChatRoomType getCurChatRoomType() {

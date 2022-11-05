@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.web.client.HttpClient;
 import com.example.cloverchatapp.component.recyclerview.chatroom.ChatRoomList;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
@@ -35,7 +34,6 @@ public class IndexFragment extends Fragment {
 
         activity.menu.findItem(R.id.chatUsersBtn).setVisible(false);
 
-        setIndexToTestBtn();
         setIndexToWriteBtn();
 
         activity.httpClient.getChatRoomList(res -> {
@@ -56,15 +54,7 @@ public class IndexFragment extends Fragment {
         Button indexToCreateBtn = rootView.findViewById(R.id.indexToCreateBtn);
         indexToCreateBtn.setOnClickListener(view -> {
             chatRoomList.clearList();
-            activity.navigate(FragmentEnum.CHAT_ROOM_CREATE);
-        });
-    }
-
-    private void setIndexToTestBtn() {
-        Button indexToTestBtn = rootView.findViewById(R.id.indexToTestBtn);
-        indexToTestBtn.setOnClickListener(view -> {
-            chatRoomList.clearList();
-            activity.navigate(FragmentEnum.TEST);
+            activity.navigator.navigate(FragmentEnum.CHAT_ROOM_CREATE);
         });
     }
 }

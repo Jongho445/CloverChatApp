@@ -1,50 +1,41 @@
 package com.example.cloverchatapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.cloverchatapp.fragment.board.IndexFragment;
-import com.example.cloverchatapp.fragment.chatroom.ChatRoomDetailFragment;
 import com.example.cloverchatapp.fragment.FragmentEnum;
-import com.example.cloverchatapp.fragment.TestFragment;
-import com.example.cloverchatapp.fragment.board.ChatRoomCreateFragment;
-import com.example.cloverchatapp.fragment.chatroom.ChatUserListFragment;
-import com.example.cloverchatapp.fragment.user.SignInFragment;
-import com.example.cloverchatapp.fragment.user.SignUpFragment;
 import com.example.cloverchatapp.util.AuthStorage;
+import com.example.cloverchatapp.util.Navigator;
 import com.example.cloverchatapp.util.TestHelper;
 import com.example.cloverchatapp.web.client.HttpClient;
 import com.example.cloverchatapp.web.client.WebSocketClient;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
+import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-    private IndexFragment indexFragment;
-    private ChatRoomCreateFragment chatRoomCreateFragment;
-    private ChatRoomDetailFragment chatRoomDetailFragment;
-    private ChatUserListFragment chatUserListFragment;
-    private SignInFragment signInFragment;
-    private SignUpFragment signUpFragment;
-    private TestFragment testFragment;
 
     public HttpClient httpClient;
     public WebSocketClient webSocketClient = null;
 
     public AuthStorage authStorage;
-    public ResponseChatRoom curChatRoom;
-    private FragmentEnum mainFragment;
+    public FragmentEnum mainFragment;
+    public Navigator navigator;
     public Menu menu;
+
+    public ResponseChatRoom curChatRoom;
+    public List<ResponseStompChatMessage> curChatMessages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        navigator = new Navigator(this);
         authStorage = new AuthStorage();
         httpClient = new HttpClient(authStorage);
 
@@ -72,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Status");
                 break;
             case R.id.chatUsersBtn:
-                navigate(FragmentEnum.CHAT_USER_LIST, curChatRoom);
+                navigator.navigate(FragmentEnum.CHAT_USER_LIST);
                 break;
         }
 
@@ -86,92 +77,39 @@ public class MainActivity extends AppCompatActivity {
             case SIGN_IN:
                 super.onBackPressed(); break;
             case SIGN_UP:
-                navigate(FragmentEnum.SIGN_IN); break;
+                navigator.navigate(FragmentEnum.SIGN_IN); break;
             case CHAT_USER_LIST:
-                navigate(FragmentEnum.CHAT_ROOM_DETAIL); break;
+                navigator.navigate(FragmentEnum.CHAT_ROOM_DETAIL); break;
             case CHAT_ROOM_CREATE:
             case CHAT_ROOM_DETAIL:
-            case TEST:
-                navigate(FragmentEnum.INDEX); break;
+                navigator.navigate(FragmentEnum.INDEX); break;
         }
     }
 
     private void init() {
-        FragmentManager fm = getSupportFragmentManager();
-
-        indexFragment = new IndexFragment();
-        signInFragment = new SignInFragment();
-        chatRoomCreateFragment = new ChatRoomCreateFragment();
-        chatRoomDetailFragment = new ChatRoomDetailFragment();
-        chatUserListFragment = new ChatUserListFragment();
-        signUpFragment = new SignUpFragment();
-        testFragment = new TestFragment();
-
         if (authStorage.me == null) {
             setTitle("로그인");
-            fm.beginTransaction()
-                    .add(R.id.action_container, signInFragment)
-                    .commit();
+            navigator.goToLogin();
         } else {
             setTitle("채팅방 리스트");
-            fm.beginTransaction()
-                    .add(R.id.action_container, indexFragment)
-                    .commit();
+            navigator.goToIndex();
         }
     }
 
-    public void navigate(FragmentEnum fragment, ResponseChatRoom responseChatRoom) {
-        switch (fragment) {
-            case CHAT_ROOM_DETAIL:
-                curChatRoom = responseChatRoom;
-                navigate(chatRoomDetailFragment, FragmentEnum.CHAT_ROOM_DETAIL); break;
-            case CHAT_USER_LIST:
-                curChatRoom = responseChatRoom;
-                navigate(chatUserListFragment, FragmentEnum.CHAT_USER_LIST); break;
-        }
-    }
-
-    public void navigate(FragmentEnum fragment) {
-        switch (fragment) {
-            case INDEX:
-                navigate(indexFragment, FragmentEnum.INDEX); break;
-            case CHAT_ROOM_CREATE:
-                navigate(chatRoomCreateFragment, FragmentEnum.CHAT_ROOM_CREATE); break;
-            case CHAT_ROOM_DETAIL:
-                navigate(chatRoomDetailFragment, FragmentEnum.CHAT_ROOM_DETAIL); break;
-            case CHAT_USER_LIST:
-                navigate(chatUserListFragment, FragmentEnum.CHAT_USER_LIST); break;
-            case SIGN_IN:
-                navigate(signInFragment, FragmentEnum.SIGN_IN); break;
-            case SIGN_UP:
-                navigate(signUpFragment, FragmentEnum.SIGN_UP); break;
-            case TEST:
-                navigate(testFragment, FragmentEnum.TEST); break;
-        }
-    }
-
-    private void navigate(Fragment fragment, FragmentEnum fragmentEnum) {
-        mainFragment = fragmentEnum;
-        setTitle(fragmentEnum);
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.action_container, fragment)
-                .commit();
-    }
-
-    private void setTitle(FragmentEnum fragment) {
+    public void setTitle(FragmentEnum fragment) {
         switch (fragment) {
             case INDEX:
                 setTitle("채팅방 리스트"); break;
             case CHAT_ROOM_CREATE:
                 setTitle("채팅방 만들기"); break;
+            case CHAT_ROOM_DETAIL:
+                setTitle("채팅방: " + curChatRoom.title); break;
+            case CHAT_USER_LIST:
+                setTitle("유저 목록: " + curChatRoom.title); break;
             case SIGN_IN:
                 setTitle("로그인"); break;
             case SIGN_UP:
                 setTitle("회원가입"); break;
-            case TEST:
-                setTitle("테스트 페이지"); break;
         }
     }
 }

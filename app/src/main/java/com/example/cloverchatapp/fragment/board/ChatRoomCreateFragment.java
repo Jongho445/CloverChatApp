@@ -45,8 +45,8 @@ public class ChatRoomCreateFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onPause() {
+        super.onPause();
         if (rootView != null) {
             clearInputs();
         }
@@ -60,12 +60,13 @@ public class ChatRoomCreateFragment extends Fragment {
     private void clearInputs() {
         inputPassword.setText(null);
         inputTitle.setText(null);
+        isPrivateChkBox.setChecked(false);
     }
 
     private void setCreateToIndexBtn() {
         Button createToIndexBtn = rootView.findViewById(R.id.createToIndexBtn);
         createToIndexBtn.setOnClickListener((View v) -> {
-            activity.navigate(FragmentEnum.INDEX);
+            activity.navigator.navigate(FragmentEnum.INDEX);
         });
     }
 
