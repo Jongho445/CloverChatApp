@@ -5,28 +5,36 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import com.example.cloverchatapp.fragment.chat.IndexFragment;
-import com.example.cloverchatapp.fragment.chat.ChatRoomDetailFragment;
+import com.example.cloverchatapp.fragment.board.IndexFragment;
+import com.example.cloverchatapp.fragment.chatroom.ChatRoomDetailFragment;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.fragment.TestFragment;
-import com.example.cloverchatapp.fragment.chat.ChatRoomCreateFragment;
+import com.example.cloverchatapp.fragment.board.ChatRoomCreateFragment;
+import com.example.cloverchatapp.fragment.chatroom.ChatUserListFragment;
 import com.example.cloverchatapp.fragment.user.SignInFragment;
 import com.example.cloverchatapp.fragment.user.SignUpFragment;
 import com.example.cloverchatapp.util.AuthStorage;
 import com.example.cloverchatapp.util.TestHelper;
+import com.example.cloverchatapp.web.client.WebSocketClient;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
 
 public class MainActivity extends AppCompatActivity {
 
-    IndexFragment indexFragment;
-    ChatRoomCreateFragment chatRoomCreateFragment;
-    ChatRoomDetailFragment chatRoomDetailFragment;
-    SignInFragment signInFragment;
-    SignUpFragment signUpFragment;
-    TestFragment testFragment;
+    private IndexFragment indexFragment;
+    private ChatRoomCreateFragment chatRoomCreateFragment;
+    private ChatRoomDetailFragment chatRoomDetailFragment;
+    private ChatUserListFragment chatUserListFragment;
+    private SignInFragment signInFragment;
+    private SignUpFragment signUpFragment;
+    private TestFragment testFragment;
 
-    FragmentEnum mainFragment;
+    private FragmentEnum mainFragment;
+    public Menu menu;
+
+    public WebSocketClient webSocketClient = null;
     public AuthStorage authStorage;
 
     @Override
@@ -45,16 +53,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        menu.findItem(R.id.chatUsersBtn).setVisible(false);
+        this.menu = menu;
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.myStatusBtn:
+                System.out.println("Status");
+                break;
+            case R.id.chatUsersBtn:
+                navigate(FragmentEnum.CHAT_USER_LIST, chatRoomDetailFragment.getChatRoom());
+                break;
+        }
+
+        return true;
+    }
+
+    @Override
     public void onBackPressed() {
         switch (mainFragment) {
             case INDEX:
+            case SIGN_IN:
                 super.onBackPressed(); break;
+            case SIGN_UP:
+                navigate(FragmentEnum.SIGN_IN); break;
+            case CHAT_USER_LIST:
+                navigate(FragmentEnum.CHAT_ROOM_DETAIL); break;
             case CHAT_ROOM_CREATE:
             case CHAT_ROOM_DETAIL:
-            case SIGN_IN:
-            case SIGN_UP:
             case TEST:
-                navigate(indexFragment, FragmentEnum.INDEX); break;
+                navigate(FragmentEnum.INDEX); break;
         }
     }
 
@@ -65,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         signInFragment = new SignInFragment();
         chatRoomCreateFragment = new ChatRoomCreateFragment();
         chatRoomDetailFragment = new ChatRoomDetailFragment();
+        chatUserListFragment = new ChatUserListFragment();
         signUpFragment = new SignUpFragment();
         testFragment = new TestFragment();
 
@@ -86,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
             case CHAT_ROOM_DETAIL:
                 chatRoomDetailFragment.setChatRoom(responseChatRoom);
                 navigate(chatRoomDetailFragment, FragmentEnum.CHAT_ROOM_DETAIL); break;
+            case CHAT_USER_LIST:
+                chatUserListFragment.setChatRoom(responseChatRoom);
+                navigate(chatUserListFragment, FragmentEnum.CHAT_USER_LIST); break;
         }
     }
 
@@ -95,6 +133,10 @@ public class MainActivity extends AppCompatActivity {
                 navigate(indexFragment, FragmentEnum.INDEX); break;
             case CHAT_ROOM_CREATE:
                 navigate(chatRoomCreateFragment, FragmentEnum.CHAT_ROOM_CREATE); break;
+            case CHAT_ROOM_DETAIL:
+                navigate(chatRoomDetailFragment, FragmentEnum.CHAT_ROOM_DETAIL); break;
+            case CHAT_USER_LIST:
+                navigate(chatUserListFragment, FragmentEnum.CHAT_USER_LIST); break;
             case SIGN_IN:
                 navigate(signInFragment, FragmentEnum.SIGN_IN); break;
             case SIGN_UP:

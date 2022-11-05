@@ -1,11 +1,13 @@
 package com.example.cloverchatapp.web.client;
 
-import com.example.cloverchatapp.web.domain.board.ChatRoomCreateForm;
-import com.example.cloverchatapp.web.domain.chat.ResponseChatMessage;
+import com.example.cloverchatapp.web.domain.board.RequestChatRoomCreateForm;
+import com.example.cloverchatapp.web.domain.chat.RequestChatMessagesReadForm;
+import com.example.cloverchatapp.web.domain.chat.ResponseChatUser;
+import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 import com.example.cloverchatapp.web.domain.user.RequestLoginForm;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
 import com.example.cloverchatapp.web.domain.user.ResponseUser;
-import com.example.cloverchatapp.web.domain.user.UserCreateForm;
+import com.example.cloverchatapp.web.domain.user.RequestUserCreateForm;
 
 import java.util.List;
 
@@ -19,21 +21,35 @@ import retrofit2.http.Query;
 
 public interface RetrofitService {
 
+    // /user/**
     @POST("/user/login")
     Call<ResponseUser> login(@Body RequestLoginForm requestLoginForm);
 
     @POST("/user/register")
-    Call<ResponseUser> register(@Body UserCreateForm userCreateForm);
+    Call<ResponseUser> register(@Body RequestUserCreateForm requestUserCreateForm);
 
-    @GET("/board/list")
+    // /board/chatroom/**
+    @GET("/board/chatroom/list")
     Call<List<ResponseChatRoom>> getChatRoomList();
 
-    @POST("/board/create")
-    Call<String> createChatRoom(@Body ChatRoomCreateForm chatRoomCreateForm);
+    @POST("/board/chatroom/create")
+    Call<String> createChatRoom(@Body RequestChatRoomCreateForm requestChatRoomCreateForm);
 
-    @DELETE("/board/delete")
+    @DELETE("/board/chatroom/delete")
     Call<String> deleteChatRoom(@Query("chatRoomId") Long chatRoomId);
 
-    @GET("/chat/{chatRoomId}")
-    Call<List<ResponseChatMessage>> getChatMessagesByChatRoomId(@Path("chatRoomId") Long chatRoomId);
+    // /chat/message/**
+    @POST("/chat/message/list")
+    Call<List<ResponseStompChatMessage>> getChatMessageList(@Body RequestChatMessagesReadForm form);
+
+    // /chat/user/**
+    @GET("/chat/user/list/{chatRoomId}")
+    Call<List<ResponseChatUser>> getChatUserList(@Path("chatRoomId") Long chatRoomId);
+
+    @POST("/chat/user/create/{chatRoomId}")
+    Call<ResponseChatUser> createChatUser(@Path("chatRoomId") Long chatRoomId);
+
+    @DELETE("/chat/user/delete/{chatRoomId}")
+    Call<ResponseChatUser> deleteChatUser(@Path("chatRoomId") Long chatRoomId);
+
 }

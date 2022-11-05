@@ -4,12 +4,14 @@ import androidx.core.util.Consumer;
 import androidx.core.util.Supplier;
 
 import com.example.cloverchatapp.util.AuthStorage;
-import com.example.cloverchatapp.web.domain.board.ChatRoomCreateForm;
-import com.example.cloverchatapp.web.domain.chat.ResponseChatMessage;
+import com.example.cloverchatapp.web.domain.board.RequestChatRoomCreateForm;
+import com.example.cloverchatapp.web.domain.chat.RequestChatMessagesReadForm;
+import com.example.cloverchatapp.web.domain.chat.ResponseChatUser;
+import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 import com.example.cloverchatapp.web.domain.user.RequestLoginForm;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
 import com.example.cloverchatapp.web.domain.user.ResponseUser;
-import com.example.cloverchatapp.web.domain.user.UserCreateForm;
+import com.example.cloverchatapp.web.domain.user.RequestUserCreateForm;
 
 import java.util.List;
 
@@ -29,24 +31,36 @@ public class HttpClient {
         callback(() -> retrofitClient.getApiService().login(requestLoginForm), onResponse);
     }
 
-    public void register(UserCreateForm userCreateForm, Consumer<Response<ResponseUser>> onResponse) {
-        callback(() -> retrofitClient.getApiService().register(userCreateForm), onResponse);
+    public void register(RequestUserCreateForm requestUserCreateForm, Consumer<Response<ResponseUser>> onResponse) {
+        callback(() -> retrofitClient.getApiService().register(requestUserCreateForm), onResponse);
     }
 
     public void getChatRoomList(Consumer<Response<List<ResponseChatRoom>>> onResponse) {
         callback(() -> retrofitClient.getApiService().getChatRoomList(), onResponse);
     }
 
-    public void createChatRoom(ChatRoomCreateForm chatRoomCreateForm, Consumer<Response<String>> onResponse) {
-        callback(() -> retrofitClient.getApiService().createChatRoom(chatRoomCreateForm), onResponse);
+    public void createChatRoom(RequestChatRoomCreateForm requestChatRoomCreateForm, Consumer<Response<String>> onResponse) {
+        callback(() -> retrofitClient.getApiService().createChatRoom(requestChatRoomCreateForm), onResponse);
     }
 
     public void deleteChatRoom(Long chatRoomId, Consumer<Response<String>> onResponse) {
         callback(() -> retrofitClient.getApiService().deleteChatRoom(chatRoomId), onResponse);
     }
 
-    public void getChatMessagesByChatRoomId(Long chatRoomId, Consumer<Response<List<ResponseChatMessage>>> onResponse) {
-        callback(() -> retrofitClient.getApiService().getChatMessagesByChatRoomId(chatRoomId), onResponse);
+    public void getChatMessageList(RequestChatMessagesReadForm form, Consumer<Response<List<ResponseStompChatMessage>>> onResponse) {
+        callback(() -> retrofitClient.getApiService().getChatMessageList(form), onResponse);
+    }
+
+    public void getChatUserList(Long chatRoomId, Consumer<Response<List<ResponseChatUser>>> onResponse) {
+        callback(() -> retrofitClient.getApiService().getChatUserList(chatRoomId), onResponse);
+    }
+
+    public void createChatUser(Long chatRoomId, Consumer<Response<ResponseChatUser>> onResponse) {
+        callback(() -> retrofitClient.getApiService().createChatUser(chatRoomId), onResponse);
+    }
+
+    public void deleteChatUser(Long chatRoomId, Consumer<Response<ResponseChatUser>> onResponse) {
+        callback(() -> retrofitClient.getApiService().deleteChatUser(chatRoomId), onResponse);
     }
 
     private <T> void callback(Supplier<Call<T>> requestFx, Consumer<Response<T>> onResponse) {

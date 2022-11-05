@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.chat;
+package com.example.cloverchatapp.fragment.board;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,6 +36,8 @@ public class IndexFragment extends Fragment {
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_index, container, false);
         httpClient = new HttpClient(activity.authStorage);
 
+        activity.menu.findItem(R.id.chatUsersBtn).setVisible(false);
+
         setIndexToTestBtn();
         setIndexToWriteBtn();
 
@@ -43,6 +45,11 @@ public class IndexFragment extends Fragment {
             List<ResponseChatRoom> chatRooms = res.body();
 
             chatRoomList = new ChatRoomList(activity, rootView, chatRooms);
+
+            if (activity.webSocketClient != null) {
+                activity.webSocketClient.disconnect();
+                activity.webSocketClient = null;
+            }
         });
 
         return rootView;

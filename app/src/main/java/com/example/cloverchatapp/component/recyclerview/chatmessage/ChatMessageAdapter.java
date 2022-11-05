@@ -10,16 +10,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.web.domain.chat.ResponseChatMessage;
+import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 
 import java.util.List;
 
 public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageViewHolder> {
 
-    private final List<ResponseChatMessage> itemList;
+    private final List<ResponseStompChatMessage> itemList;
     private final MainActivity activity;
 
-    public ChatMessageAdapter(List<ResponseChatMessage> itemList, MainActivity activity) {
+    public ChatMessageAdapter(List<ResponseStompChatMessage> itemList, MainActivity activity) {
         this.itemList = itemList;
         this.activity = activity;
     }
@@ -35,7 +35,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ChatMessageViewHolder holder, int position) {
-        ResponseChatMessage chatMessage = itemList.get(position);
+        ResponseStompChatMessage chatMessage = itemList.get(position);
         String myNickname = activity.authStorage.me.nickname;
 
         if (myNickname.equals(chatMessage.createUser.nickname)) {

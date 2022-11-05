@@ -10,7 +10,7 @@ import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.web.client.HttpClient;
 import com.example.cloverchatapp.fragment.FragmentEnum;
-import com.example.cloverchatapp.web.domain.board.ChatRoomCreateForm;
+import com.example.cloverchatapp.web.domain.board.RequestChatRoomCreateForm;
 import com.example.cloverchatapp.web.domain.board.ChatRoomType;
 
 public class ChatRoomCreateButton {
@@ -38,14 +38,14 @@ public class ChatRoomCreateButton {
 
     private void setOnClickListener() {
         targetButton.setOnClickListener((View v) -> {
-            ChatRoomCreateForm chatRoomCreateForm = new ChatRoomCreateForm(
+            RequestChatRoomCreateForm requestChatRoomCreateForm = new RequestChatRoomCreateForm(
                     activity.authStorage.me.id,
                     inputPassword.getText().toString(),
                     inputTitle.getText().toString(),
                     getCurChatRoomType()
             );
 
-            httpClient.createChatRoom(chatRoomCreateForm, res -> {
+            httpClient.createChatRoom(requestChatRoomCreateForm, res -> {
                 activity.navigate(FragmentEnum.INDEX);
             });
         });

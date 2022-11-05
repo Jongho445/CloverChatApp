@@ -15,7 +15,7 @@ import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.web.client.HttpClient;
 import com.example.cloverchatapp.fragment.FragmentEnum;
-import com.example.cloverchatapp.web.domain.user.UserCreateForm;
+import com.example.cloverchatapp.web.domain.user.RequestUserCreateForm;
 
 public class SignUpFragment extends Fragment {
 
@@ -52,8 +52,8 @@ public class SignUpFragment extends Fragment {
     private void setSignUpBtnListener() {
         Button signUpBtn = rootView.findViewById(R.id.signUpBtn);
         signUpBtn.setOnClickListener(view -> {
-            UserCreateForm userCreateForm = new UserCreateForm(editId.getText().toString(), editPassword.getText().toString(), editNickname.getText().toString());
-            httpClient.register(userCreateForm, res -> {
+            RequestUserCreateForm requestUserCreateForm = new RequestUserCreateForm(editId.getText().toString(), editPassword.getText().toString(), editNickname.getText().toString());
+            httpClient.register(requestUserCreateForm, res -> {
                 activity.navigate(FragmentEnum.SIGN_IN);
             });
         });

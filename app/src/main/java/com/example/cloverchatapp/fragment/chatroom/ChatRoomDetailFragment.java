@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.chat;
+package com.example.cloverchatapp.fragment.chatroom;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,18 +17,18 @@ import com.example.cloverchatapp.web.client.HttpClient;
 import com.example.cloverchatapp.web.client.WebSocketClient;
 import com.example.cloverchatapp.component.recyclerview.chatmessage.ChatMessageList;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
+import com.example.cloverchatapp.web.domain.chat.RequestChatMessagesReadForm;
 
 public class ChatRoomDetailFragment extends Fragment {
 
-    MainActivity activity;
-    ViewGroup rootView;
+    private MainActivity activity;
+    private ViewGroup rootView;
 
-    ChatMessageList chatMessageList;
+    private ChatMessageList chatMessageList;
 
-    ResponseChatRoom chatRoom;
+    private ResponseChatRoom chatRoom;
 
-    HttpClient httpClient;
-    WebSocketClient webSocketClient;
+    private HttpClient httpClient;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -36,13 +36,20 @@ public class ChatRoomDetailFragment extends Fragment {
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_detail, container, false);
 
         httpClient = new HttpClient(activity.authStorage);
+        activity.menu.findItem(R.id.chatUsersBtn).setVisible(true);
 
-        httpClient.getChatMessagesByChatRoomId(chatRoom.id, res -> {
+        RequestChatMessagesReadForm form = new RequestChatMessagesReadForm(chatRoom.id, chatRoom.type, "1234");
+
+        httpClient.getChatMessageList(form, res -> {
             chatMessageList = new ChatMessageList(activity, rootView, res.body());
             setSendBtnListener();
 
-            webSocketClient = new WebSocketClient(activity, chatMessageList, chatRoom);
-            webSocketClient.connect();
+            if (activity.webSocketClient != null) {
+                activity.webSocketClient.disconnect();
+            }
+
+            activity.webSocketClient = new WebSocketClient(activity, chatMessageList, chatRoom);
+            activity.webSocketClient.connect();
         });
 
         return rootView;
@@ -52,7 +59,6 @@ public class ChatRoomDetailFragment extends Fragment {
     public void onPause() {
         super.onPause();
         chatMessageList.clearList();
-        webSocketClient.disconnect();
     }
 
     private void setSendBtnListener() {
@@ -60,8 +66,12 @@ public class ChatRoomDetailFragment extends Fragment {
         Button sendBtn = rootView.findViewById(R.id.btn_send);
 
         sendBtn.setOnClickListener(view -> {
-            webSocketClient.send(editText.getText().toString());
+            activity.webSocketClient.send(editText.getText().toString());
         });
+    }
+
+    public ResponseChatRoom getChatRoom() {
+        return chatRoom;
     }
 
     public void setChatRoom(ResponseChatRoom chatRoom) {

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.web.domain.chat.ResponseChatMessage;
+import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +19,16 @@ public class ChatMessageList {
 
     RecyclerView recyclerView;
     ChatMessageAdapter adapter;
-    List<ResponseChatMessage> itemList;
+    List<ResponseStompChatMessage> itemList;
 
-    public ChatMessageList(MainActivity activity, ViewGroup rootView, List<ResponseChatMessage> chatMessages) {
+    public ChatMessageList(MainActivity activity, ViewGroup rootView, List<ResponseStompChatMessage> chatMessages) {
         this.activity = activity;
         this.rootView = rootView;
 
         init(chatMessages);
     }
 
-    private void init(List<ResponseChatMessage> chatMessages) {
+    private void init(List<ResponseStompChatMessage> chatMessages) {
         recyclerView = rootView.findViewById(R.id.rv_list);
 
         itemList = new ArrayList<>();
@@ -43,7 +43,7 @@ public class ChatMessageList {
         recyclerView.scrollToPosition(adapter.getItemCount() - 1);
     }
 
-    public void addItem(ResponseChatMessage chatMsg) {
+    public void addItem(ResponseStompChatMessage chatMsg) {
         activity.runOnUiThread(() -> {
             itemList.add(chatMsg);
             recyclerView.scrollToPosition(adapter.getItemCount() - 1);

@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.chat;
+package com.example.cloverchatapp.fragment.board;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -4,8 +4,8 @@ import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.component.recyclerview.chatmessage.ChatMessageList;
 import com.example.cloverchatapp.util.Constants;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
-import com.example.cloverchatapp.web.domain.chat.RequestChatMessage;
-import com.example.cloverchatapp.web.domain.chat.ResponseChatMessage;
+import com.example.cloverchatapp.web.domain.chat.RequestStompChatMessage;
+import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -20,12 +20,14 @@ public class WebSocketClient {
 
     private final MainActivity activity;
     private final ChatMessageList chatMessageList;
+
     private final ResponseChatRoom chatRoom;
 
+    public HttpClient httpClient;
     public StompClient stompClient;
 
     private final String wsRequestUrl;
-    private final String subPath;
+    public final String subPath;
     private final String sendPath;
     private final String jSessionValue;
 
@@ -33,6 +35,8 @@ public class WebSocketClient {
         this.activity = activity;
         this.chatMessageList = chatMessageList;
         this.chatRoom = chatRoom;
+
+        this.httpClient = new HttpClient(activity.authStorage);
 
         this.wsRequestUrl = Constants.SERVER_URL + "/stomp/websocket";
         this.subPath = "/sub/" + chatRoom.id;
@@ -57,13 +61,13 @@ public class WebSocketClient {
     }
 
     public void send(String content) {
-        RequestChatMessage requestChatMessage = new RequestChatMessage(
+        RequestStompChatMessage requestStompChatMessage = new RequestStompChatMessage(
                 chatRoom.id,
                 activity.authStorage.me.id,
                 content
         );
 
-        String json = new Gson().toJson(requestChatMessage);
+        String json = new Gson().toJson(requestStompChatMessage);
         stompClient.send(sendPath, json).subscribe();
     }
 
@@ -76,15 +80,18 @@ public class WebSocketClient {
         return (LifecycleEvent lifecycleEvent) -> {
             switch (lifecycleEvent.getType()) {
                 case OPENED:
-                    System.out.println("Stomp connection opened");
+                    System.out.println("opened");
+                    httpClient.createChatUser(chatRoom.id, res -> {});
                     break;
                 case ERROR:
                     Exception ex = lifecycleEvent.getException();
                     System.out.println(ex.getMessage());
                     ex.printStackTrace();
+                    httpClient.deleteChatUser(chatRoom.id, res -> {});
                     break;
                 case CLOSED:
                     System.out.println("closed");
+                    httpClient.deleteChatUser(chatRoom.id, res -> {});
                     break;
             }
         };
@@ -97,7 +104,7 @@ public class WebSocketClient {
 
     private Consumer<StompMessage> subscribeHandle() {
         return (StompMessage topicMessage) -> {
-            ResponseChatMessage chatMsg = new Gson().fromJson(topicMessage.getPayload(), ResponseChatMessage.class);
+            ResponseStompChatMessage chatMsg = new Gson().fromJson(topicMessage.getPayload(), ResponseStompChatMessage.class);
 
             chatMessageList.addItem(chatMsg);
         };

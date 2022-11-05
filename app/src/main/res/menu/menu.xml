@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu  xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/chatUsersBtn"
+        android:title="user list"
+        android:icon="@drawable/outline_people_alt_white_20"
+        app:showAsAction="ifRoom"/>
+    <item android:id="@+id/myStatusBtn"
+        android:title="my page"
+        app:showAsAction="ifRoom"/>
+</menu>
