@@ -15,10 +15,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.client.AppClient;
+import com.example.cloverchatapp.component.button.ChatRoomCreateButton;
 import com.example.cloverchatapp.fragment.FragmentEnum;
-import com.example.cloverchatapp.web.board.ChatRoomCreateForm;
-import com.example.cloverchatapp.web.board.ChatRoomType;
 
 public class ChatRoomCreateFragment extends Fragment {
 
@@ -29,19 +27,19 @@ public class ChatRoomCreateFragment extends Fragment {
     EditText inputTitle;
     CheckBox isPrivateChkBox;
 
-    AppClient httpClient;
+    ChatRoomCreateButton chatRoomCreateButton;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) getActivity();
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_create, container, false);
-        httpClient = new AppClient(activity.authStorage);
 
         initEditTexts();
 
         setCreateToIndexBtn();
         setIsPrivateChkBox();
-        setCreateBtn();
+
+        chatRoomCreateButton = new ChatRoomCreateButton(activity, rootView, inputPassword, inputTitle, isPrivateChkBox);
 
         return rootView;
     }
@@ -76,29 +74,5 @@ public class ChatRoomCreateFragment extends Fragment {
         isPrivateChkBox.setOnCheckedChangeListener((CompoundButton compoundButton, boolean isChecked) -> {
             inputPassword.setEnabled(isChecked);
         });
-    }
-
-    private void setCreateBtn() {
-        Button createBtn = rootView.findViewById(R.id.createChatRoomBtn);
-        createBtn.setOnClickListener((View v) -> {
-            ChatRoomCreateForm chatRoomCreateForm = new ChatRoomCreateForm(
-                    activity.authStorage.me.id,
-                    inputPassword.getText().toString(),
-                    inputTitle.getText().toString(),
-                    getCurChatRoomType()
-            );
-
-            httpClient.createChatRoom(chatRoomCreateForm, res -> {
-                activity.navigate(FragmentEnum.INDEX);
-            });
-        });
-    }
-
-    private ChatRoomType getCurChatRoomType() {
-        if (isPrivateChkBox.isChecked()) {
-            return ChatRoomType.PRIVATE;
-        }
-
-        return ChatRoomType.PUBLIC;
     }
 }

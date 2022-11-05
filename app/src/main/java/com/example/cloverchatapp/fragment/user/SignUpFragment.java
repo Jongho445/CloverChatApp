@@ -13,9 +13,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.client.AppClient;
+import com.example.cloverchatapp.web.client.HttpClient;
 import com.example.cloverchatapp.fragment.FragmentEnum;
-import com.example.cloverchatapp.web.user.UserCreateForm;
+import com.example.cloverchatapp.web.domain.user.UserCreateForm;
 
 public class SignUpFragment extends Fragment {
 
@@ -26,13 +26,13 @@ public class SignUpFragment extends Fragment {
     EditText editPassword;
     EditText editNickname;
 
-    AppClient httpClient;
+    HttpClient httpClient;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) getActivity();
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_sign_up, container, false);
-        httpClient = new AppClient(activity.authStorage);
+        httpClient = new HttpClient(activity.authStorage);
 
         initEditTexts();
         setSignUpBtnListener();
@@ -67,9 +67,9 @@ public class SignUpFragment extends Fragment {
     }
 
     private void initEditTexts() {
-        editId = (EditText) rootView.findViewById(R.id.signUpId);
-        editPassword = (EditText) rootView.findViewById(R.id.signUpPassword);
-        editNickname = (EditText) rootView.findViewById(R.id.signUpNickname);
+        editId = rootView.findViewById(R.id.signUpId);
+        editPassword = rootView.findViewById(R.id.signUpPassword);
+        editNickname = rootView.findViewById(R.id.signUpNickname);
     }
 
     private void clearInputs() {

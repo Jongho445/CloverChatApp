@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.client;
+package com.example.cloverchatapp.web.client;
 
 import com.example.cloverchatapp.util.AuthStorage;
 import com.example.cloverchatapp.util.Constants;
@@ -33,7 +33,7 @@ public class RetrofitClient {
 
     private OkHttpClient provideOkHttpClient() {
         return new OkHttpClient.Builder()
-                .addInterceptor(new AppInterceptor(authStorage))
+                .addInterceptor(new HttpInterceptor(authStorage))
                 .build();
     }
 }

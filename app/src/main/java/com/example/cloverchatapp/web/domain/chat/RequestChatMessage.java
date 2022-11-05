@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.web.chat;
+package com.example.cloverchatapp.web.domain.chat;
 
 public class RequestChatMessage {
     public final Long chatRoomId;

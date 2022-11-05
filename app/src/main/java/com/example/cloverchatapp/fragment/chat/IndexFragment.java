@@ -9,17 +9,14 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.client.AppClient;
-import com.example.cloverchatapp.component.ChatRoomAdapter;
+import com.example.cloverchatapp.web.client.HttpClient;
+import com.example.cloverchatapp.component.recyclerview.chatroom.ChatRoomList;
 import com.example.cloverchatapp.fragment.FragmentEnum;
-import com.example.cloverchatapp.web.board.ResponseChatRoom;
+import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class IndexFragment extends Fragment {
@@ -27,11 +24,9 @@ public class IndexFragment extends Fragment {
     MainActivity activity;
     ViewGroup rootView;
 
-    RecyclerView chatRoomListView;
-    ChatRoomAdapter adapter;
-    List<ResponseChatRoom> itemList;
+    ChatRoomList chatRoomList;
 
-    AppClient httpClient;
+    HttpClient httpClient;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,49 +34,32 @@ public class IndexFragment extends Fragment {
         //(사용할 자원, 자원을 담을 곳, T/F)
         //메인에 직접 들어가면 True, 프래그먼트에 있으면 False
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_index, container, false);
-        httpClient = new AppClient(activity.authStorage);
+        httpClient = new HttpClient(activity.authStorage);
 
         setIndexToTestBtn();
         setIndexToWriteBtn();
 
-        requestAndRender();
+        httpClient.getChatRoomList(res -> {
+            List<ResponseChatRoom> chatRooms = res.body();
+
+            chatRoomList = new ChatRoomList(activity, rootView, chatRooms);
+        });
 
         return rootView;
     }
 
-    private void requestAndRender() {
-        httpClient.getChatRoomList(res -> {
-            List<ResponseChatRoom> chatRooms = res.body();
-
-            setRecyclerView(chatRooms);
-        });
-    }
-
-    private void setRecyclerView(List<ResponseChatRoom> chatRooms) {
-        chatRoomListView = rootView.findViewById(R.id.chatRoomListView);
-        itemList = new ArrayList<>();
-        itemList.addAll(chatRooms);
-
-        adapter = new ChatRoomAdapter(itemList, activity);
-
-        chatRoomListView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
-        chatRoomListView.setAdapter(adapter);
-    }
-
     private void setIndexToWriteBtn() {
         Button indexToCreateBtn = rootView.findViewById(R.id.indexToCreateBtn);
-
         indexToCreateBtn.setOnClickListener(view -> {
-            itemList.clear();
+            chatRoomList.clearList();
             activity.navigate(FragmentEnum.CHAT_ROOM_CREATE);
         });
     }
 
     private void setIndexToTestBtn() {
         Button indexToTestBtn = rootView.findViewById(R.id.indexToTestBtn);
-
         indexToTestBtn.setOnClickListener(view -> {
-            itemList.clear();
+            chatRoomList.clearList();
             activity.navigate(FragmentEnum.TEST);
         });
     }

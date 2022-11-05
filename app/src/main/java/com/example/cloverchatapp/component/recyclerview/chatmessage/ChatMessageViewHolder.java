@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.component;
+package com.example.cloverchatapp.component.recyclerview.chatmessage;
 
 import android.view.View;
 import android.widget.TextView;

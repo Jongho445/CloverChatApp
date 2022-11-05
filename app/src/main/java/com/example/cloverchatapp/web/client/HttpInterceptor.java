@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.client;
+package com.example.cloverchatapp.web.client;
 
 import androidx.annotation.NonNull;
 
@@ -10,11 +10,11 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class AppInterceptor implements Interceptor {
+public class HttpInterceptor implements Interceptor {
 
     private final AuthStorage authStorage;
 
-    public AppInterceptor(AuthStorage authStorage) {
+    public HttpInterceptor(AuthStorage authStorage) {
         this.authStorage = authStorage;
     }
 

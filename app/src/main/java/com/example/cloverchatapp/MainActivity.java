@@ -15,7 +15,7 @@ import com.example.cloverchatapp.fragment.user.SignInFragment;
 import com.example.cloverchatapp.fragment.user.SignUpFragment;
 import com.example.cloverchatapp.util.AuthStorage;
 import com.example.cloverchatapp.util.TestHelper;
-import com.example.cloverchatapp.web.board.ResponseChatRoom;
+import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
 
 public class MainActivity extends AppCompatActivity {
 

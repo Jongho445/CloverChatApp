@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.web.user;
+package com.example.cloverchatapp.web.domain.user;
 
 public class ResponseUser {
 

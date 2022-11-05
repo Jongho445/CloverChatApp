@@ -1,6 +1,6 @@
 package com.example.cloverchatapp.util;
 
-import com.example.cloverchatapp.web.user.ResponseUser;
+import com.example.cloverchatapp.web.domain.user.ResponseUser;
 
 import okhttp3.Headers;
 import retrofit2.Response;

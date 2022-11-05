@@ -1,11 +1,11 @@
-package com.example.cloverchatapp.client;
+package com.example.cloverchatapp.web.client;
 
-import com.example.cloverchatapp.web.board.ChatRoomCreateForm;
-import com.example.cloverchatapp.web.chat.ResponseChatMessage;
-import com.example.cloverchatapp.web.user.RequestLoginForm;
-import com.example.cloverchatapp.web.board.ResponseChatRoom;
-import com.example.cloverchatapp.web.user.ResponseUser;
-import com.example.cloverchatapp.web.user.UserCreateForm;
+import com.example.cloverchatapp.web.domain.board.ChatRoomCreateForm;
+import com.example.cloverchatapp.web.domain.chat.ResponseChatMessage;
+import com.example.cloverchatapp.web.domain.user.RequestLoginForm;
+import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
+import com.example.cloverchatapp.web.domain.user.ResponseUser;
+import com.example.cloverchatapp.web.domain.user.UserCreateForm;
 
 import java.util.List;
 

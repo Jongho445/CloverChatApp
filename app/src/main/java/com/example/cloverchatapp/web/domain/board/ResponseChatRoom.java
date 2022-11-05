@@ -1,6 +1,6 @@
-package com.example.cloverchatapp.web.board;
+package com.example.cloverchatapp.web.domain.board;
 
-import com.example.cloverchatapp.web.user.ResponseUser;
+import com.example.cloverchatapp.web.domain.user.ResponseUser;
 
 public class ResponseChatRoom {
 

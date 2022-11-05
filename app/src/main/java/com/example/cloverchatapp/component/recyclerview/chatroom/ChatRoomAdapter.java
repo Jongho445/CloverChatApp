@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.component;
+package com.example.cloverchatapp.component.recyclerview.chatroom;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.client.AppClient;
+import com.example.cloverchatapp.web.client.HttpClient;
 import com.example.cloverchatapp.fragment.FragmentEnum;
-import com.example.cloverchatapp.web.board.ResponseChatRoom;
+import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
 
 import java.util.List;
 
@@ -21,12 +21,12 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomViewHolder>  {
 
     private final List<ResponseChatRoom> itemList;
     private final MainActivity activity;
-    private final AppClient httpClient;
+    private final HttpClient httpClient;
 
     public ChatRoomAdapter(List<ResponseChatRoom> itemList, MainActivity activity) {
         this.itemList = itemList;
         this.activity = activity;
-        this.httpClient = new AppClient(activity.authStorage);
+        this.httpClient = new HttpClient(activity.authStorage);
     }
 
     @NonNull
@@ -102,5 +102,15 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomViewHolder>  {
     @Override
     public int getItemCount() {
         return itemList.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 }

@@ -1,15 +1,15 @@
-package com.example.cloverchatapp.client;
+package com.example.cloverchatapp.web.client;
 
 import androidx.core.util.Consumer;
 import androidx.core.util.Supplier;
 
 import com.example.cloverchatapp.util.AuthStorage;
-import com.example.cloverchatapp.web.board.ChatRoomCreateForm;
-import com.example.cloverchatapp.web.chat.ResponseChatMessage;
-import com.example.cloverchatapp.web.user.RequestLoginForm;
-import com.example.cloverchatapp.web.board.ResponseChatRoom;
-import com.example.cloverchatapp.web.user.ResponseUser;
-import com.example.cloverchatapp.web.user.UserCreateForm;
+import com.example.cloverchatapp.web.domain.board.ChatRoomCreateForm;
+import com.example.cloverchatapp.web.domain.chat.ResponseChatMessage;
+import com.example.cloverchatapp.web.domain.user.RequestLoginForm;
+import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
+import com.example.cloverchatapp.web.domain.user.ResponseUser;
+import com.example.cloverchatapp.web.domain.user.UserCreateForm;
 
 import java.util.List;
 
@@ -17,11 +17,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AppClient {
+public class HttpClient {
 
     private final RetrofitClient retrofitClient;
 
-    public AppClient(AuthStorage authStorage) {
+    public HttpClient(AuthStorage authStorage) {
         this.retrofitClient = new RetrofitClient(authStorage);
     }
 

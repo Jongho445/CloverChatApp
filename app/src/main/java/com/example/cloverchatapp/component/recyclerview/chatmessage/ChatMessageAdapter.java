@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.component;
+package com.example.cloverchatapp.component.recyclerview.chatmessage;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.web.chat.ResponseChatMessage;
+import com.example.cloverchatapp.web.domain.chat.ResponseChatMessage;
 
 import java.util.List;
 
@@ -39,11 +39,10 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageViewHold
         String myNickname = activity.authStorage.me.nickname;
 
         if (myNickname.equals(chatMessage.createUser.nickname)) {
-            holder.nickname.setText("나");
-        } else {
-            holder.nickname.setText(chatMessage.createUser.nickname);
+            holder.card.setCardBackgroundColor(Color.parseColor("#FFf176"));
         }
 
+        holder.nickname.setText(chatMessage.createUser.nickname);
         holder.contents.setText(chatMessage.content);
         holder.time.setText(chatMessage.createAt);
     }
@@ -51,5 +50,15 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageViewHold
     @Override
     public int getItemCount() {
         return itemList.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 }
