@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.user;
+package com.example.cloverchatapp.fragment.user.signin;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.component.button.SignInButton;
+import com.example.cloverchatapp.fragment.user.signin.component.SignInButtonHolder;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 
 public class SignInFragment extends Fragment {
@@ -24,7 +24,7 @@ public class SignInFragment extends Fragment {
     EditText editId;
     EditText editPassword;
 
-    SignInButton signInButton;
+    SignInButtonHolder signInButtonHolder;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class SignInFragment extends Fragment {
         initEditTexts();
         setNavBtnListeners();
 
-        signInButton = new SignInButton(activity, rootView, editId, editPassword);
+        signInButtonHolder = new SignInButtonHolder(activity, rootView, editId, editPassword);
 
         return rootView;
     }

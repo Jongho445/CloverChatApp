@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.component.recyclerview.chatuser;
+package com.example.cloverchatapp.fragment.chatroom.user.component.item;
 
 import android.view.View;
 import android.widget.TextView;
@@ -14,7 +14,7 @@ public class ChatUserViewHolder extends RecyclerView.ViewHolder {
     public final TextView nickname;
     public final TextView email;
 
-    ChatUserViewHolder(View itemView) {
+    public ChatUserViewHolder(View itemView) {
         super(itemView);
 
         this.card = itemView.findViewById(R.id.user_card_view);

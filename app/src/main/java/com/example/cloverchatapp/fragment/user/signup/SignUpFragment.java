@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.user;
+package com.example.cloverchatapp.fragment.user.signup;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.component.button;
+package com.example.cloverchatapp.fragment.board.create.component;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +12,7 @@ import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.web.domain.board.RequestChatRoomCreateForm;
 import com.example.cloverchatapp.web.domain.board.ChatRoomType;
 
-public class ChatRoomCreateButton {
+public class ChatRoomCreateButtonHolder {
 
     private final MainActivity activity;
 
@@ -22,7 +22,7 @@ public class ChatRoomCreateButton {
 
     private final Button targetButton;
 
-    public ChatRoomCreateButton(MainActivity activity, ViewGroup rootView, EditText inputPassword, EditText inputTitle, CheckBox isPrivateChkBox) {
+    public ChatRoomCreateButtonHolder(MainActivity activity, ViewGroup rootView, EditText inputPassword, EditText inputTitle, CheckBox isPrivateChkBox) {
         this.activity = activity;
         this.inputPassword = inputPassword;
         this.inputTitle = inputTitle;

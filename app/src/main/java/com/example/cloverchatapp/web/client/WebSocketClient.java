@@ -1,9 +1,8 @@
 package com.example.cloverchatapp.web.client;
 
 import com.example.cloverchatapp.MainActivity;
-import com.example.cloverchatapp.component.recyclerview.chatmessage.ChatMessageList;
+import com.example.cloverchatapp.fragment.chatroom.detail.component.ChatMessageList;
 import com.example.cloverchatapp.util.Constants;
-import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
 import com.example.cloverchatapp.web.domain.chat.RequestStompChatMessage;
 import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 import com.google.gson.Gson;

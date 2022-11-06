@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.component.recyclerview.chatuser;
+package com.example.cloverchatapp.fragment.chatroom.detail.component;
 
 import android.view.ViewGroup;
 
@@ -7,34 +7,34 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.web.domain.chat.ResponseChatUser;
+import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatUserList {
+public class ChatMessageList {
 
     private final MainActivity activity;
     private final ViewGroup rootView;
 
     private RecyclerView recyclerView;
-    private ChatUserAdapter adapter;
-    private List<ResponseChatUser> itemList;
+    private ChatMessageAdapter adapter;
+    private List<ResponseStompChatMessage> itemList;
 
-    public ChatUserList(MainActivity activity, ViewGroup rootView, List<ResponseChatUser> chatUsers) {
+    public ChatMessageList(MainActivity activity, ViewGroup rootView, List<ResponseStompChatMessage> chatMessages) {
         this.activity = activity;
         this.rootView = rootView;
 
-        init(chatUsers);
+        init(chatMessages);
     }
 
-    private void init(List<ResponseChatUser> chatUsers) {
+    private void init(List<ResponseStompChatMessage> chatMessages) {
         recyclerView = rootView.findViewById(R.id.rv_list);
 
         itemList = new ArrayList<>();
-        itemList.addAll(chatUsers);
+        itemList.addAll(chatMessages);
 
-        adapter = new ChatUserAdapter(itemList);
+        adapter = new ChatMessageAdapter(itemList, activity);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -43,9 +43,10 @@ public class ChatUserList {
         recyclerView.scrollToPosition(adapter.getItemCount() - 1);
     }
 
-    public void addItem(ResponseChatUser chatUser) {
+    public void addItem(ResponseStompChatMessage chatMessage) {
         activity.runOnUiThread(() -> {
-            itemList.add(chatUser);
+            itemList.add(chatMessage);
+            activity.curChatMessages.add(chatMessage);
             recyclerView.scrollToPosition(adapter.getItemCount() - 1);
         });
     }

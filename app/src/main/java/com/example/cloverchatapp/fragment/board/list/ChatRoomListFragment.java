@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.board;
+package com.example.cloverchatapp.fragment.board.list;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,13 +12,13 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.component.recyclerview.chatroom.ChatRoomList;
+import com.example.cloverchatapp.fragment.board.list.component.ChatRoomList;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
 
 import java.util.List;
 
-public class IndexFragment extends Fragment {
+public class ChatRoomListFragment extends Fragment {
 
     MainActivity activity;
     ViewGroup rootView;

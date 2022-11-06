@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.board;
+package com.example.cloverchatapp.fragment.board.create;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.component.button.ChatRoomCreateButton;
+import com.example.cloverchatapp.fragment.board.create.component.ChatRoomCreateButtonHolder;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 
 public class ChatRoomCreateFragment extends Fragment {
@@ -27,7 +27,7 @@ public class ChatRoomCreateFragment extends Fragment {
     EditText inputTitle;
     CheckBox isPrivateChkBox;
 
-    ChatRoomCreateButton chatRoomCreateButton;
+    ChatRoomCreateButtonHolder createButtonHolder;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class ChatRoomCreateFragment extends Fragment {
         setCreateToIndexBtn();
         setIsPrivateChkBox();
 
-        chatRoomCreateButton = new ChatRoomCreateButton(activity, rootView, inputPassword, inputTitle, isPrivateChkBox);
+        createButtonHolder = new ChatRoomCreateButtonHolder(activity, rootView, inputPassword, inputTitle, isPrivateChkBox);
 
         return rootView;
     }

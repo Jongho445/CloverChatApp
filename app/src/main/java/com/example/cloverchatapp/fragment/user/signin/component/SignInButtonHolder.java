@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.component.button;
+package com.example.cloverchatapp.fragment.user.signin.component;
 
 import android.app.AlertDialog;
 import android.view.ViewGroup;
@@ -10,7 +10,7 @@ import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.web.domain.user.RequestLoginForm;
 
-public class SignInButton {
+public class SignInButtonHolder {
 
     private final MainActivity activity;
     private final EditText editId;
@@ -18,7 +18,7 @@ public class SignInButton {
 
     public final Button targetButton;
 
-    public SignInButton(MainActivity activity, ViewGroup rootView, EditText editId, EditText editPassword) {
+    public SignInButtonHolder(MainActivity activity, ViewGroup rootView, EditText editId, EditText editPassword) {
         this.activity = activity;
         this.editId = editId;
         this.editPassword = editPassword;

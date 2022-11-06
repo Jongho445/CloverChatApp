@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.component.recyclerview.chatroom;
+package com.example.cloverchatapp.fragment.board.list.component;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
+import com.example.cloverchatapp.fragment.board.list.component.item.ChatRoomItemContext;
+import com.example.cloverchatapp.fragment.board.list.component.item.ChatRoomViewHolder;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
 
 import java.util.List;
@@ -36,17 +38,12 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomViewHolder>  {
     @Override
     public void onBindViewHolder(@NonNull ChatRoomViewHolder holder, int position) {
         ResponseChatRoom chatRoom = itemList.get(position);
+        ChatRoomItemContext context = new ChatRoomItemContext(activity, chatRoom, position, itemList, this);
 
-        new ItemViewSetter(activity, holder.itemView, chatRoom, itemList)
-                .setOnClickItemListener();
-
-        new ChatRoomRemoveButtonSetter(activity, holder.removeBtn, chatRoom, position, itemList, this)
-                .setOnClickListener();
-
-        setViewText(holder, chatRoom);
+        holder.init(context);
     }
 
-    private void setViewText(ChatRoomViewHolder holder, ResponseChatRoom chatRoom) {
+    public void setViewText(ChatRoomViewHolder holder, ResponseChatRoom chatRoom) {
         holder.chatRoomTitle.setText(chatRoom.title);
         holder.chatRoomCreateBy.setText(chatRoom.createUser.nickname);
     }

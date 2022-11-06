@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.chatroom;
+package com.example.cloverchatapp.fragment.chatroom.user;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.component.recyclerview.chatuser.ChatUserList;
+import com.example.cloverchatapp.fragment.chatroom.user.component.ChatUserList;
 import com.example.cloverchatapp.web.domain.chat.ResponseChatUser;
 
 import java.io.IOException;

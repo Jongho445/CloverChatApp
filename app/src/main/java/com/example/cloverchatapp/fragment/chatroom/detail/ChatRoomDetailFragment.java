@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.chatroom;
+package com.example.cloverchatapp.fragment.chatroom.detail;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.web.client.WebSocketClient;
-import com.example.cloverchatapp.component.recyclerview.chatmessage.ChatMessageList;
+import com.example.cloverchatapp.fragment.chatroom.detail.component.ChatMessageList;
 
 public class ChatRoomDetailFragment extends Fragment {
 

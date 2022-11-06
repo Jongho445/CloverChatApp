@@ -6,28 +6,28 @@ import androidx.fragment.app.FragmentManager;
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.fragment.FragmentEnum;
-import com.example.cloverchatapp.fragment.board.ChatRoomCreateFragment;
-import com.example.cloverchatapp.fragment.board.IndexFragment;
-import com.example.cloverchatapp.fragment.chatroom.ChatRoomDetailFragment;
-import com.example.cloverchatapp.fragment.chatroom.ChatUserListFragment;
-import com.example.cloverchatapp.fragment.user.SignInFragment;
-import com.example.cloverchatapp.fragment.user.SignUpFragment;
+import com.example.cloverchatapp.fragment.board.create.ChatRoomCreateFragment;
+import com.example.cloverchatapp.fragment.board.list.ChatRoomListFragment;
+import com.example.cloverchatapp.fragment.chatroom.detail.ChatRoomDetailFragment;
+import com.example.cloverchatapp.fragment.chatroom.user.ChatUserListFragment;
+import com.example.cloverchatapp.fragment.user.signin.SignInFragment;
+import com.example.cloverchatapp.fragment.user.signup.SignUpFragment;
 
 public class Navigator {
 
     private final MainActivity activity;
 
-    private IndexFragment indexFragment;
-    private ChatRoomCreateFragment chatRoomCreateFragment;
-    private ChatRoomDetailFragment chatRoomDetailFragment;
-    private ChatUserListFragment chatUserListFragment;
-    private SignInFragment signInFragment;
-    private SignUpFragment signUpFragment;
+    private final ChatRoomListFragment chatRoomListFragment;
+    private final ChatRoomCreateFragment chatRoomCreateFragment;
+    private final ChatRoomDetailFragment chatRoomDetailFragment;
+    private final ChatUserListFragment chatUserListFragment;
+    private final SignInFragment signInFragment;
+    private final SignUpFragment signUpFragment;
 
     public Navigator(MainActivity activity) {
         this.activity = activity;
 
-        indexFragment = new IndexFragment();
+        chatRoomListFragment = new ChatRoomListFragment();
         signInFragment = new SignInFragment();
         chatRoomCreateFragment = new ChatRoomCreateFragment();
         chatRoomDetailFragment = new ChatRoomDetailFragment();
@@ -38,7 +38,7 @@ public class Navigator {
     public void navigate(FragmentEnum fragment) {
         switch (fragment) {
             case INDEX:
-                navigate(indexFragment, FragmentEnum.INDEX); break;
+                navigate(chatRoomListFragment, FragmentEnum.INDEX); break;
             case CHAT_ROOM_CREATE:
                 navigate(chatRoomCreateFragment, FragmentEnum.CHAT_ROOM_CREATE); break;
             case CHAT_ROOM_DETAIL:
@@ -64,7 +64,7 @@ public class Navigator {
         FragmentManager fm = activity.getSupportFragmentManager();
 
         fm.beginTransaction()
-                .add(R.id.action_container, indexFragment)
+                .add(R.id.action_container, chatRoomListFragment)
                 .commit();
     }
 

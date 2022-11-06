@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.component.recyclerview.chatmessage;
+package com.example.cloverchatapp.fragment.chatroom.detail.component.item;
 
 import android.view.View;
 import android.widget.TextView;
@@ -15,7 +15,7 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
     public final TextView contents;
     public final TextView time;
 
-    ChatMessageViewHolder(View itemView) {
+    public ChatMessageViewHolder(View itemView) {
         super(itemView);
 
         this.card = itemView.findViewById(R.id.chat_card_view);
