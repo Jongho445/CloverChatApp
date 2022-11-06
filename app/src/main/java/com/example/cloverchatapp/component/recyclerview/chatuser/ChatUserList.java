@@ -17,9 +17,9 @@ public class ChatUserList {
     private final MainActivity activity;
     private final ViewGroup rootView;
 
-    RecyclerView recyclerView;
-    ChatUserAdapter adapter;
-    List<ResponseChatUser> itemList;
+    private RecyclerView recyclerView;
+    private ChatUserAdapter adapter;
+    private List<ResponseChatUser> itemList;
 
     public ChatUserList(MainActivity activity, ViewGroup rootView, List<ResponseChatUser> chatUsers) {
         this.activity = activity;

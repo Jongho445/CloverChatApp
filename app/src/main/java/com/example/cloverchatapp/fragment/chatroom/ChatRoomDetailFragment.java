@@ -55,6 +55,7 @@ public class ChatRoomDetailFragment extends Fragment {
 
         sendBtn.setOnClickListener(view -> {
             activity.webSocketClient.send(editText.getText().toString());
+            editText.setText(null);
         });
     }
 }

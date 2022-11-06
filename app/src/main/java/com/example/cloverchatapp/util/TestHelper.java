@@ -13,7 +13,7 @@ public class TestHelper {
     }
 
     public void login(Runnable callback) {
-        RequestLoginForm requestLoginForm = new RequestLoginForm("user2@gmail.com", "1234");
+        RequestLoginForm requestLoginForm = new RequestLoginForm("user1@gmail.com", "1234");
         activity.httpClient.login(requestLoginForm, res -> {
             if (!res.isSuccessful()) {
                 callback.run();

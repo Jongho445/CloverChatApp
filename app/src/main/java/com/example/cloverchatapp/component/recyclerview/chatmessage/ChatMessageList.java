@@ -17,9 +17,9 @@ public class ChatMessageList {
     private final MainActivity activity;
     private final ViewGroup rootView;
 
-    RecyclerView recyclerView;
-    ChatMessageAdapter adapter;
-    List<ResponseStompChatMessage> itemList;
+    private RecyclerView recyclerView;
+    private ChatMessageAdapter adapter;
+    private List<ResponseStompChatMessage> itemList;
 
     public ChatMessageList(MainActivity activity, ViewGroup rootView, List<ResponseStompChatMessage> chatMessages) {
         this.activity = activity;
