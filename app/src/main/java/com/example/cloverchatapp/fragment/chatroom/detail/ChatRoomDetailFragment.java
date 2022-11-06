@@ -13,32 +13,43 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
+import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.client.WebSocketClient;
 import com.example.cloverchatapp.fragment.chatroom.detail.component.ChatMessageList;
+import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
+import com.google.gson.Gson;
+
+import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class ChatRoomDetailFragment extends Fragment {
 
-    private MainActivity activity;
+    private GlobalContext global;
     private ViewGroup rootView;
 
     private ChatMessageList chatMessageList;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) getActivity();
+        MainActivity activity = (MainActivity) getActivity();
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_detail, container, false);
+        global = activity.global;
 
-        activity.menu.findItem(R.id.chatUsersBtn).setVisible(true);
+        global.menu.findItem(R.id.chatUsersBtn).setVisible(true);
 
-        chatMessageList = new ChatMessageList(activity, rootView, activity.curChatMessages);
+        chatMessageList = new ChatMessageList(activity, rootView, global.chat.curChatMessages);
         setSendBtnListener();
 
-        if (activity.webSocketClient != null) {
-            activity.webSocketClient.disconnect();
+        if (global.ws != null) {
+            global.ws.disconnect();
         }
 
-        activity.webSocketClient = new WebSocketClient(activity, chatMessageList);
-        activity.webSocketClient.connect();
+        global.ws = new WebSocketClient(activity);
+        global.ws.connect();
+        global.ws.subscribeChatRoom((StompMessage topicMessage) -> {
+            ResponseStompChatMessage chatMsg = new Gson().fromJson(topicMessage.getPayload(), ResponseStompChatMessage.class);
+
+            chatMessageList.addItem(chatMsg);
+        });
 
         return rootView;
     }
@@ -54,7 +65,7 @@ public class ChatRoomDetailFragment extends Fragment {
         Button sendBtn = rootView.findViewById(R.id.btn_send);
 
         sendBtn.setOnClickListener(view -> {
-            activity.webSocketClient.send(editText.getText().toString());
+            global.ws.send(editText.getText().toString());
             editText.setText(null);
         });
     }

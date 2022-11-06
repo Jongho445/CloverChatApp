@@ -9,12 +9,14 @@ import android.widget.EditText;
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.fragment.FragmentEnum;
+import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.board.RequestChatRoomCreateForm;
 import com.example.cloverchatapp.web.domain.board.ChatRoomType;
 
 public class ChatRoomCreateButtonHolder {
 
     private final MainActivity activity;
+    private final GlobalContext global;
 
     private final EditText inputPassword;
     private final EditText inputTitle;
@@ -24,6 +26,7 @@ public class ChatRoomCreateButtonHolder {
 
     public ChatRoomCreateButtonHolder(MainActivity activity, ViewGroup rootView, EditText inputPassword, EditText inputTitle, CheckBox isPrivateChkBox) {
         this.activity = activity;
+        this.global = activity.global;
         this.inputPassword = inputPassword;
         this.inputTitle = inputTitle;
         this.isPrivateChkBox = isPrivateChkBox;
@@ -36,14 +39,14 @@ public class ChatRoomCreateButtonHolder {
     private void setOnClickListener() {
         targetButton.setOnClickListener((View v) -> {
             RequestChatRoomCreateForm requestChatRoomCreateForm = new RequestChatRoomCreateForm(
-                    activity.authStorage.me.id,
+                    global.auth.me.id,
                     getPassword(),
                     inputTitle.getText().toString(),
                     getCurChatRoomType()
             );
 
-            activity.httpClient.createChatRoom(requestChatRoomCreateForm, res -> {
-                activity.navigator.navigate(FragmentEnum.INDEX);
+            global.http.createChatRoom(requestChatRoomCreateForm, res -> {
+                activity.navigator.navigate(FragmentEnum.CHAT_ROOM_LIST);
             });
         });
     }

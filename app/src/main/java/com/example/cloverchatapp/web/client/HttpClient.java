@@ -3,7 +3,7 @@ package com.example.cloverchatapp.web.client;
 import androidx.core.util.Consumer;
 import androidx.core.util.Supplier;
 
-import com.example.cloverchatapp.util.AuthStorage;
+import com.example.cloverchatapp.global.AuthContext;
 import com.example.cloverchatapp.web.domain.board.RequestChatRoomCreateForm;
 import com.example.cloverchatapp.web.domain.chat.RequestChatMessagesReadForm;
 import com.example.cloverchatapp.web.domain.chat.ResponseChatUser;
@@ -23,8 +23,8 @@ public class HttpClient {
 
     private final RetrofitClient retrofitClient;
 
-    public HttpClient(AuthStorage authStorage) {
-        this.retrofitClient = new RetrofitClient(authStorage);
+    public HttpClient(AuthContext authContext) {
+        this.retrofitClient = new RetrofitClient(authContext);
     }
 
     public void login(RequestLoginForm requestLoginForm, Consumer<Response<ResponseUser>> onResponse) {

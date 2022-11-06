@@ -29,7 +29,7 @@ public class ChatRoomRemoveButtonHolder {
     }
 
     private void requestDelete() {
-        context.activity.httpClient.deleteChatRoom(context.chatRoom.id, res -> {
+        context.global.http.deleteChatRoom(context.chatRoom.id, res -> {
             if (!res.isSuccessful()) {
                 showAlertDialog("채팅방 생성자가 아닙니다");
                 return;

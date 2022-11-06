@@ -1,6 +1,6 @@
 package com.example.cloverchatapp.web.client;
 
-import com.example.cloverchatapp.util.AuthStorage;
+import com.example.cloverchatapp.global.AuthContext;
 import com.example.cloverchatapp.util.Constants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,10 +11,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private final AuthStorage authStorage;
+    private final AuthContext authContext;
 
-    public RetrofitClient(AuthStorage authStorage) {
-        this.authStorage = authStorage;
+    public RetrofitClient(AuthContext authContext) {
+        this.authContext = authContext;
     }
 
     public RetrofitService getApiService(){
@@ -33,7 +33,7 @@ public class RetrofitClient {
 
     private OkHttpClient provideOkHttpClient() {
         return new OkHttpClient.Builder()
-                .addInterceptor(new HttpInterceptor(authStorage))
+                .addInterceptor(new HttpInterceptor(authContext))
                 .build();
     }
 }

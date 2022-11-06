@@ -1,26 +1,26 @@
 package com.example.cloverchatapp.util;
 
 import com.example.cloverchatapp.MainActivity;
-import com.example.cloverchatapp.web.client.HttpClient;
+import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.user.RequestLoginForm;
 
 public class TestHelper {
 
-    private final MainActivity activity;
+    private final GlobalContext global;
 
     public TestHelper(MainActivity activity) {
-        this.activity = activity;
+        this.global = activity.global;
     }
 
     public void login(Runnable callback) {
         RequestLoginForm requestLoginForm = new RequestLoginForm("user1@gmail.com", "1234");
-        activity.httpClient.login(requestLoginForm, res -> {
+        global.http.login(requestLoginForm, res -> {
             if (!res.isSuccessful()) {
                 callback.run();
                 return;
             }
 
-            activity.authStorage.storeData(res);
+            global.auth.storeData(res);
             callback.run();
         });
     }

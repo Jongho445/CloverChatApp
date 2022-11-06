@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.fragment.chatroom.user.component.ChatUserList;
+import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.chat.ResponseChatUser;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.util.List;
 public class ChatUserListFragment extends Fragment {
 
     MainActivity activity;
+    GlobalContext global;
     ViewGroup rootView;
 
     ChatUserList chatUserList;
@@ -28,8 +30,9 @@ public class ChatUserListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) getActivity();
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_user_list, container, false);
+        global = activity.global;
 
-        activity.menu.findItem(R.id.chatUsersBtn).setVisible(false);
+        global.menu.findItem(R.id.chatUsersBtn).setVisible(false);
 
         getChatUserList();
 
@@ -43,7 +46,7 @@ public class ChatUserListFragment extends Fragment {
     }
 
     public void getChatUserList() {
-        activity.httpClient.getChatUserList(activity.curChatRoom.id, res -> {
+        global.http.getChatUserList(global.chat.curChatRoom.id, res -> {
             if (!res.isSuccessful()) {
                 try {
                     String string = res.errorBody().string();

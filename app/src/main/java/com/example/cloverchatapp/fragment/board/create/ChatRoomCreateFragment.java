@@ -66,7 +66,7 @@ public class ChatRoomCreateFragment extends Fragment {
     private void setCreateToIndexBtn() {
         Button createToIndexBtn = rootView.findViewById(R.id.createToIndexBtn);
         createToIndexBtn.setOnClickListener((View v) -> {
-            activity.navigator.navigate(FragmentEnum.INDEX);
+            activity.navigator.navigate(FragmentEnum.CHAT_ROOM_LIST);
         });
     }
 

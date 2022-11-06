@@ -1,16 +1,16 @@
-package com.example.cloverchatapp.util;
+package com.example.cloverchatapp.global;
 
 import com.example.cloverchatapp.web.domain.user.ResponseUser;
 
 import okhttp3.Headers;
 import retrofit2.Response;
 
-public class AuthStorage {
+public class AuthContext {
 
     public String sessionId;
     public ResponseUser me;
 
-    public AuthStorage() {}
+    public AuthContext() {}
 
     public void storeData(Response<ResponseUser> response) {
         ResponseUser responseUser = response.body();

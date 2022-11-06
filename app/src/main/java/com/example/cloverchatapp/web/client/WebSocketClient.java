@@ -1,10 +1,9 @@
 package com.example.cloverchatapp.web.client;
 
 import com.example.cloverchatapp.MainActivity;
-import com.example.cloverchatapp.fragment.chatroom.detail.component.ChatMessageList;
+import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.util.Constants;
 import com.example.cloverchatapp.web.domain.chat.RequestStompChatMessage;
-import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -17,8 +16,7 @@ import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class WebSocketClient {
 
-    private final MainActivity activity;
-    private final ChatMessageList chatMessageList;
+    private final GlobalContext global;
 
     public StompClient stompClient;
 
@@ -27,14 +25,13 @@ public class WebSocketClient {
     private final String sendPath;
     private final String jSessionValue;
 
-    public WebSocketClient(MainActivity activity, ChatMessageList chatMessageList) {
-        this.activity = activity;
-        this.chatMessageList = chatMessageList;
+    public WebSocketClient(MainActivity activity) {
+        this.global = activity.global;
 
         this.wsRequestUrl = Constants.SERVER_URL + "/stomp/websocket";
-        this.subPath = "/sub/" + activity.curChatRoom.id;
-        this.sendPath = "/pub/" + activity.curChatRoom.id;
-        this.jSessionValue = "JSESSIONID=" + activity.authStorage.sessionId;
+        this.subPath = "/sub/" + global.chat.curChatRoom.id;
+        this.sendPath = "/pub/" + global.chat.curChatRoom.id;
+        this.jSessionValue = "JSESSIONID=" + global.auth.sessionId;
     }
 
     public void connect() {
@@ -45,18 +42,20 @@ public class WebSocketClient {
 
         setLifecycleListener();
         stompClient.connect();
-
-        subscribeChatRoom();
     }
 
     public void disconnect() {
         stompClient.disconnect();
     }
 
+    public void subscribeChatRoom(Consumer<StompMessage> handle) {
+        stompClient.topic(subPath).subscribe(handle);
+    }
+
     public void send(String content) {
         RequestStompChatMessage requestStompChatMessage = new RequestStompChatMessage(
-                activity.curChatRoom.id,
-                activity.authStorage.me.id,
+                global.chat.curChatRoom.id,
+                global.auth.me.id,
                 content
         );
 
@@ -65,8 +64,7 @@ public class WebSocketClient {
     }
 
     private void setLifecycleListener() {
-        stompClient.lifecycle()
-                .subscribe(lifecycleHandle());
+        stompClient.lifecycle().subscribe(lifecycleHandle());
     }
 
     private Consumer<LifecycleEvent> lifecycleHandle() {
@@ -74,32 +72,19 @@ public class WebSocketClient {
             switch (lifecycleEvent.getType()) {
                 case OPENED:
                     System.out.println("opened");
-                    activity.httpClient.createChatUser(activity.curChatRoom.id, res -> {});
+                    global.http.createChatUser(global.chat.curChatRoom.id, res -> {});
                     break;
                 case ERROR:
                     Exception ex = lifecycleEvent.getException();
                     System.out.println(ex.getMessage());
                     ex.printStackTrace();
-                    activity.httpClient.deleteChatUser(res -> {});
+                    global.http.deleteChatUser(res -> {});
                     break;
                 case CLOSED:
                     System.out.println("closed");
-                    activity.httpClient.deleteChatUser(res -> {});
+                    global.http.deleteChatUser(res -> {});
                     break;
             }
-        };
-    }
-
-    private void subscribeChatRoom() {
-        stompClient.topic(subPath)
-                .subscribe(subscribeHandle());
-    }
-
-    private Consumer<StompMessage> subscribeHandle() {
-        return (StompMessage topicMessage) -> {
-            ResponseStompChatMessage chatMsg = new Gson().fromJson(topicMessage.getPayload(), ResponseStompChatMessage.class);
-
-            chatMessageList.addItem(chatMsg);
         };
     }
 }

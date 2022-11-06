@@ -11,18 +11,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.fragment.chatroom.detail.component.item.ChatMessageViewHolder;
+import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 
 import java.util.List;
 
 public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageViewHolder> {
 
+    private final GlobalContext global;
     private final List<ResponseStompChatMessage> itemList;
-    private final MainActivity activity;
 
-    public ChatMessageAdapter(List<ResponseStompChatMessage> itemList, MainActivity activity) {
+    public ChatMessageAdapter(MainActivity activity, List<ResponseStompChatMessage> itemList) {
+        this.global = activity.global;
         this.itemList = itemList;
-        this.activity = activity;
     }
 
     @NonNull
@@ -37,7 +38,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageViewHold
     @Override
     public void onBindViewHolder(@NonNull ChatMessageViewHolder holder, int position) {
         ResponseStompChatMessage chatMessage = itemList.get(position);
-        String myNickname = activity.authStorage.me.nickname;
+        String myNickname = global.auth.me.nickname;
 
         if (myNickname.equals(chatMessage.createUser.nickname)) {
             holder.card.setCardBackgroundColor(Color.parseColor("#FFf176"));

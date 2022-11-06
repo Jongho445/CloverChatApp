@@ -7,37 +7,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.cloverchatapp.fragment.FragmentEnum;
-import com.example.cloverchatapp.util.AuthStorage;
+import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.util.Navigator;
 import com.example.cloverchatapp.util.TestHelper;
-import com.example.cloverchatapp.web.client.HttpClient;
-import com.example.cloverchatapp.web.client.WebSocketClient;
-import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
-import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public HttpClient httpClient;
-    public WebSocketClient webSocketClient = null;
-
-    public AuthStorage authStorage;
-    public FragmentEnum mainFragment;
+    public GlobalContext global = new GlobalContext();
     public Navigator navigator;
-    public Menu menu;
-
-    public ResponseChatRoom curChatRoom;
-    public List<ResponseStompChatMessage> curChatMessages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        navigator = new Navigator(this);
-        authStorage = new AuthStorage();
-        httpClient = new HttpClient(authStorage);
+        this.navigator = new Navigator(this);
 
         if (BuildConfig.BUILD_TYPE == "debug") {
             TestHelper testHelper = new TestHelper(this);
@@ -51,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         menu.findItem(R.id.chatUsersBtn).setVisible(false);
-        this.menu = menu;
+        global.menu = menu;
 
         return true;
     }
@@ -72,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        switch (mainFragment) {
-            case INDEX:
+        switch (global.mainFragment) {
+            case CHAT_ROOM_LIST:
             case SIGN_IN:
                 super.onBackPressed(); break;
             case SIGN_UP:
@@ -82,12 +66,12 @@ public class MainActivity extends AppCompatActivity {
                 navigator.navigate(FragmentEnum.CHAT_ROOM_DETAIL); break;
             case CHAT_ROOM_CREATE:
             case CHAT_ROOM_DETAIL:
-                navigator.navigate(FragmentEnum.INDEX); break;
+                navigator.navigate(FragmentEnum.CHAT_ROOM_LIST); break;
         }
     }
 
     private void init() {
-        if (authStorage.me == null) {
+        if (global.auth.me == null) {
             setTitle("로그인");
             navigator.goToLogin();
         } else {
@@ -98,14 +82,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setTitle(FragmentEnum fragment) {
         switch (fragment) {
-            case INDEX:
+            case CHAT_ROOM_LIST:
                 setTitle("채팅방 리스트"); break;
             case CHAT_ROOM_CREATE:
                 setTitle("채팅방 만들기"); break;
             case CHAT_ROOM_DETAIL:
-                setTitle("채팅방: " + curChatRoom.title); break;
+                setTitle("채팅방: " + global.chat.curChatRoom.title); break;
             case CHAT_USER_LIST:
-                setTitle("유저 목록: " + curChatRoom.title); break;
+                setTitle("유저 목록: " + global.chat.curChatRoom.title); break;
             case SIGN_IN:
                 setTitle("로그인"); break;
             case SIGN_UP:

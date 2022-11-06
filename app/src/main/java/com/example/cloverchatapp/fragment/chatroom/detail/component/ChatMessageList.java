@@ -34,7 +34,7 @@ public class ChatMessageList {
         itemList = new ArrayList<>();
         itemList.addAll(chatMessages);
 
-        adapter = new ChatMessageAdapter(itemList, activity);
+        adapter = new ChatMessageAdapter(activity, itemList);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -46,7 +46,7 @@ public class ChatMessageList {
     public void addItem(ResponseStompChatMessage chatMessage) {
         activity.runOnUiThread(() -> {
             itemList.add(chatMessage);
-            activity.curChatMessages.add(chatMessage);
+            activity.global.chat.curChatMessages.add(chatMessage);
             recyclerView.scrollToPosition(adapter.getItemCount() - 1);
         });
     }

@@ -14,6 +14,7 @@ import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.fragment.board.list.component.ChatRoomList;
 import com.example.cloverchatapp.fragment.FragmentEnum;
+import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
 
 import java.util.List;
@@ -21,36 +22,40 @@ import java.util.List;
 public class ChatRoomListFragment extends Fragment {
 
     MainActivity activity;
-    ViewGroup rootView;
+    GlobalContext global;
 
     ChatRoomList chatRoomList;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) getActivity();
         //(사용할 자원, 자원을 담을 곳, T/F)
         //메인에 직접 들어가면 True, 프래그먼트에 있으면 False
-        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_index, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_index, container, false);
+        activity = (MainActivity) getActivity();
+        global = activity.global;
 
-        activity.menu.findItem(R.id.chatUsersBtn).setVisible(false);
+        setIndexToWriteBtn(rootView);
 
-        setIndexToWriteBtn();
-
-        activity.httpClient.getChatRoomList(res -> {
+        global.http.getChatRoomList(res -> {
             List<ResponseChatRoom> chatRooms = res.body();
 
             chatRoomList = new ChatRoomList(activity, rootView, chatRooms);
 
-            if (activity.webSocketClient != null) {
-                activity.webSocketClient.disconnect();
-                activity.webSocketClient = null;
+            if (global.ws != null) {
+                global.ws.disconnect();
+                global.ws = null;
             }
         });
 
         return rootView;
     }
 
-    private void setIndexToWriteBtn() {
+    public void onResume() {
+        super.onResume();
+        global.menu.findItem(R.id.chatUsersBtn).setVisible(false);
+    }
+
+    private void setIndexToWriteBtn(ViewGroup rootView) {
         Button indexToCreateBtn = rootView.findViewById(R.id.indexToCreateBtn);
         indexToCreateBtn.setOnClickListener(view -> {
             chatRoomList.clearList();

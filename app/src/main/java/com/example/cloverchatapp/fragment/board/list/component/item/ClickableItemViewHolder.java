@@ -47,14 +47,14 @@ public class ClickableItemViewHolder {
     }
 
     private void request(RequestChatMessagesReadForm form) {
-        context.activity.httpClient.getChatMessageList(form, res -> {
+        context.global.http.getChatMessageList(form, res -> {
             if (!res.isSuccessful()) {
                 showFailureAlertDialog();
                 return;
             }
 
-            context.activity.curChatMessages = res.body();
-            context.activity.curChatRoom = context.chatRoom;
+            context.global.chat.curChatMessages = res.body();
+            context.global.chat.curChatRoom = context.chatRoom;
 
             context.itemList.clear();
             context.activity.navigator.navigate(FragmentEnum.CHAT_ROOM_DETAIL);

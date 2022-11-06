@@ -14,11 +14,13 @@ import androidx.fragment.app.Fragment;
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.fragment.FragmentEnum;
+import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.user.RequestUserCreateForm;
 
 public class SignUpFragment extends Fragment {
 
     MainActivity activity;
+    GlobalContext global;
     ViewGroup rootView;
 
     EditText editId;
@@ -29,6 +31,7 @@ public class SignUpFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         activity = (MainActivity) getActivity();
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_sign_up, container, false);
+        global = activity.global;
 
         initEditTexts();
         setSignUpBtnListener();
@@ -49,7 +52,7 @@ public class SignUpFragment extends Fragment {
         Button signUpBtn = rootView.findViewById(R.id.signUpBtn);
         signUpBtn.setOnClickListener(view -> {
             RequestUserCreateForm requestUserCreateForm = new RequestUserCreateForm(editId.getText().toString(), editPassword.getText().toString(), editNickname.getText().toString());
-            activity.httpClient.register(requestUserCreateForm, res -> {
+            global.http.register(requestUserCreateForm, res -> {
                 activity.navigator.navigate(FragmentEnum.SIGN_IN);
             });
         });

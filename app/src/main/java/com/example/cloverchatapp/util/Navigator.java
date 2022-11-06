@@ -37,8 +37,8 @@ public class Navigator {
 
     public void navigate(FragmentEnum fragment) {
         switch (fragment) {
-            case INDEX:
-                navigate(chatRoomListFragment, FragmentEnum.INDEX); break;
+            case CHAT_ROOM_LIST:
+                navigate(chatRoomListFragment, FragmentEnum.CHAT_ROOM_LIST); break;
             case CHAT_ROOM_CREATE:
                 navigate(chatRoomCreateFragment, FragmentEnum.CHAT_ROOM_CREATE); break;
             case CHAT_ROOM_DETAIL:
@@ -69,7 +69,7 @@ public class Navigator {
     }
 
     private void navigate(Fragment fragment, FragmentEnum fragmentEnum) {
-        activity.mainFragment = fragmentEnum;
+        activity.global.mainFragment = fragmentEnum;
         activity.setTitle(fragmentEnum);
 
         activity.getSupportFragmentManager()
