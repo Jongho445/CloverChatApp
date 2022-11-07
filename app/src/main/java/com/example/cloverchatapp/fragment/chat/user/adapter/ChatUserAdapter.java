@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.chat.user.component;
+package com.example.cloverchatapp.fragment.chat.user.adapter;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.fragment.chat.user.component.item.ChatUserViewHolder;
 import com.example.cloverchatapp.web.domain.chat.ResponseChatUser;
 
 import java.util.List;

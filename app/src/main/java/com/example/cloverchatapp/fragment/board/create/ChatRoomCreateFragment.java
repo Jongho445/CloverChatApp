@@ -15,19 +15,16 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.fragment.board.create.component.ChatRoomCreateButtonHolder;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 
 public class ChatRoomCreateFragment extends Fragment {
 
-    MainActivity activity;
-    ViewGroup rootView;
+    private MainActivity activity;
+    private ViewGroup rootView;
 
-    EditText inputPassword;
-    EditText inputTitle;
-    CheckBox isPrivateChkBox;
-
-    ChatRoomCreateButtonHolder createButtonHolder;
+    private EditText inputPassword;
+    private EditText inputTitle;
+    private CheckBox isPrivateChkBox;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,8 +35,7 @@ public class ChatRoomCreateFragment extends Fragment {
 
         setCreateToIndexBtn();
         setIsPrivateChkBox();
-
-        createButtonHolder = new ChatRoomCreateButtonHolder(activity, rootView, inputPassword, inputTitle, isPrivateChkBox);
+        setCreateBtnListener();
 
         return rootView;
     }
@@ -61,6 +57,12 @@ public class ChatRoomCreateFragment extends Fragment {
         inputPassword.setText(null);
         inputTitle.setText(null);
         isPrivateChkBox.setChecked(false);
+    }
+
+    private void setCreateBtnListener() {
+        ChatRoomCreateButtonViewModel viewModel = new ChatRoomCreateButtonViewModel(activity, inputPassword, inputTitle, isPrivateChkBox);
+        Button createBtn = rootView.findViewById(R.id.createChatRoomBtn);
+        createBtn.setOnClickListener(view -> viewModel.create());
     }
 
     private void setCreateToIndexBtn() {

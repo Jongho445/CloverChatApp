@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.board.list.component.item;
+package com.example.cloverchatapp.fragment.board.list.adapter;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -11,31 +11,17 @@ import com.example.cloverchatapp.web.domain.board.ChatRoomType;
 import com.example.cloverchatapp.web.domain.chat.RequestChatMessagesReadForm;
 import com.example.cloverchatapp.web.http.chat.ChatHttpClient;
 
-public class ClickableItemViewHolder {
+public class ClickableItemViewModel {
 
-    private final View itemView;
+    private final ChatRoomItemContext context;
+    private final ChatHttpClient chatHttpClient;
 
-    private ChatRoomItemContext context;
-    private ChatHttpClient chatHttpClient;
-
-    public ClickableItemViewHolder(View itemView) {
-        this.itemView = itemView;
-    }
-
-    public void init(ChatRoomItemContext context) {
+    public ClickableItemViewModel(ChatRoomItemContext context) {
         this.context = context;
         this.chatHttpClient = new ChatHttpClient(context.global.auth);
-
-        setOnClickItemListener();
     }
 
-    private void setOnClickItemListener() {
-        itemView.setOnClickListener(view -> {
-            goToChatRoomDetailFragment();
-        });
-    }
-
-    private void goToChatRoomDetailFragment() {
+    public void goToChatRoomDetailFragment() {
         if (context.chatRoom.type == ChatRoomType.PUBLIC) {
             request(new RequestChatMessagesReadForm(context.chatRoom.id, context.chatRoom.type, null));
             return;

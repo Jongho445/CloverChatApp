@@ -1,35 +1,23 @@
-package com.example.cloverchatapp.fragment.board.list.component.item;
+package com.example.cloverchatapp.fragment.board.list.adapter;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.view.View;
-import android.widget.Button;
 
-import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.web.http.board.BoardHttpClient;
 
-public class ChatRoomRemoveButtonHolder {
+public class ChatRoomRemoveButtonModel {
 
-    private final Button targetButton;
-    private ChatRoomItemContext context;
+    private final ChatRoomItemContext context;
+    private final BoardHttpClient boardHttpClient;
 
-    private BoardHttpClient boardHttpClient;
-
-    public ChatRoomRemoveButtonHolder(View itemView) {
-        this.targetButton = itemView.findViewById(R.id.removeBtn);;
-    }
-
-    public void init(ChatRoomItemContext context) {
+    public ChatRoomRemoveButtonModel(ChatRoomItemContext context) {
         this.context = context;
         this.boardHttpClient = new BoardHttpClient(context.global.auth);
 
-        setOnClickListener();
     }
 
-    private void setOnClickListener() {
-        targetButton.setOnClickListener(view -> {
-            showConfirmDialog((DialogInterface dialogInterface, int i) -> requestDelete());
-        });
+    public void remove() {
+        showConfirmDialog((DialogInterface dialogInterface, int i) -> requestDelete());
     }
 
     private void requestDelete() {

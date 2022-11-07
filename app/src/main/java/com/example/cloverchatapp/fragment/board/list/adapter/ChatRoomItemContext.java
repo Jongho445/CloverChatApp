@@ -1,7 +1,6 @@
-package com.example.cloverchatapp.fragment.board.list.component.item;
+package com.example.cloverchatapp.fragment.board.list.adapter;
 
 import com.example.cloverchatapp.MainActivity;
-import com.example.cloverchatapp.fragment.board.list.component.ChatRoomAdapter;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
 

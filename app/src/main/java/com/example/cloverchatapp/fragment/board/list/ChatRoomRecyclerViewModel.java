@@ -1,44 +1,39 @@
-package com.example.cloverchatapp.fragment.board.list.component;
-
-import android.view.ViewGroup;
+package com.example.cloverchatapp.fragment.board.list;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
-import com.example.cloverchatapp.R;
+import com.example.cloverchatapp.fragment.board.list.adapter.ChatRoomAdapter;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatRoomList {
+public class ChatRoomRecyclerViewModel {
 
     private final MainActivity activity;
-    private final ViewGroup rootView;
 
-    RecyclerView chatRoomListView;
-    ChatRoomAdapter adapter;
-    List<ResponseChatRoom> itemList;
+    private final RecyclerView recyclerView;
+    private ChatRoomAdapter adapter;
+    private List<ResponseChatRoom> itemList;
 
-    public ChatRoomList(MainActivity activity, ViewGroup rootView, List<ResponseChatRoom> chatRooms) {
+    public ChatRoomRecyclerViewModel(MainActivity activity, RecyclerView recyclerView, List<ResponseChatRoom> chatRooms) {
         this.activity = activity;
-        this.rootView = rootView;
+        this.recyclerView = recyclerView;
 
         init(chatRooms);
     }
 
     private void init(List<ResponseChatRoom> chatRooms) {
-        chatRoomListView = rootView.findViewById(R.id.chatRoomListView);
-
         itemList = new ArrayList<>();
         itemList.addAll(chatRooms);
 
         adapter = new ChatRoomAdapter(activity, itemList);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
-        chatRoomListView.setLayoutManager(layoutManager);
-        chatRoomListView.setAdapter(adapter);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
     }
 
     public void addItem(ResponseChatRoom chatRoom) {

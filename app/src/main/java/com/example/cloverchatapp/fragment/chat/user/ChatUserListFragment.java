@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.fragment.chat.user.component.ChatUserRecyclerViewHolder;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.chat.ResponseChatUser;
 import com.example.cloverchatapp.web.http.chat.ChatHttpClient;
@@ -24,17 +24,19 @@ public class ChatUserListFragment extends Fragment {
     private MainActivity activity;
     private GlobalContext global;
 
-    private ViewGroup rootView;
-    private ChatUserRecyclerViewHolder chatUserRecyclerViewHolder;
+    private RecyclerView recyclerView;
+    private ChatUserRecyclerViewModel chatUserRecyclerViewModel;
 
     private ChatHttpClient chatHttpClient;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.activity = (MainActivity) getActivity();
-        this.rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_user_list, container, false);
         this.global = activity.global;
         this.chatHttpClient = new ChatHttpClient(global.auth);
+
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_user_list, container, false);
+        this.recyclerView = rootView.findViewById(R.id.rv_list);
 
         this.global.menu.findItem(R.id.chatUsersBtn).setVisible(false);
 
@@ -46,7 +48,7 @@ public class ChatUserListFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        chatUserRecyclerViewHolder.clearList();
+        chatUserRecyclerViewModel.clearList();
     }
 
     public void getChatUserList() {
@@ -62,7 +64,7 @@ public class ChatUserListFragment extends Fragment {
             }
 
             List<ResponseChatUser> chatUsers = res.body();
-            chatUserRecyclerViewHolder = new ChatUserRecyclerViewHolder(activity, rootView, chatUsers);
+            chatUserRecyclerViewModel = new ChatUserRecyclerViewModel(activity, recyclerView, chatUsers);
 
         });
     }

@@ -1,36 +1,31 @@
-package com.example.cloverchatapp.fragment.chat.detail.component;
-
-import android.view.ViewGroup;
+package com.example.cloverchatapp.fragment.chat.detail;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
-import com.example.cloverchatapp.R;
+import com.example.cloverchatapp.fragment.chat.detail.adapter.ChatMessageAdapter;
 import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatMessageList {
+public class ChatMessageRecyclerViewModel {
 
     private final MainActivity activity;
-    private final ViewGroup rootView;
 
-    private RecyclerView recyclerView;
+    private final RecyclerView recyclerView;
     private ChatMessageAdapter adapter;
     private List<ResponseStompChatMessage> itemList;
 
-    public ChatMessageList(MainActivity activity, ViewGroup rootView, List<ResponseStompChatMessage> chatMessages) {
+    public ChatMessageRecyclerViewModel(MainActivity activity, RecyclerView recyclerView, List<ResponseStompChatMessage> chatMessages) {
         this.activity = activity;
-        this.rootView = rootView;
+        this.recyclerView = recyclerView;
 
         init(chatMessages);
     }
 
     private void init(List<ResponseStompChatMessage> chatMessages) {
-        recyclerView = rootView.findViewById(R.id.rv_list);
-
         itemList = new ArrayList<>();
         itemList.addAll(chatMessages);
 

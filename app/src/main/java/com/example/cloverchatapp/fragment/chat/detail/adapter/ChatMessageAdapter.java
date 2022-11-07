@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.chat.detail.component;
+package com.example.cloverchatapp.fragment.chat.detail.adapter;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.fragment.chat.detail.component.item.ChatMessageViewHolder;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 

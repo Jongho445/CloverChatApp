@@ -9,10 +9,10 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.fragment.board.list.component.ChatRoomList;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
@@ -25,7 +25,8 @@ public class ChatRoomListFragment extends Fragment {
     private MainActivity activity;
     private GlobalContext global;
 
-    private ChatRoomList chatRoomList;
+    private RecyclerView recyclerView;
+    private ChatRoomRecyclerViewModel chatRoomRecyclerViewModel;
 
     private BoardHttpClient boardHttpClient;
 
@@ -37,13 +38,14 @@ public class ChatRoomListFragment extends Fragment {
         this.activity = (MainActivity) getActivity();
         this.global = activity.global;
         this.boardHttpClient = new BoardHttpClient(global.auth);
+        this.recyclerView = rootView.findViewById(R.id.chatRoomListView);
 
         setIndexToWriteBtn(rootView);
 
         boardHttpClient.getChatRoomList(res -> {
             List<ResponseChatRoom> chatRooms = res.body();
 
-            chatRoomList = new ChatRoomList(activity, rootView, chatRooms);
+            chatRoomRecyclerViewModel = new ChatRoomRecyclerViewModel(activity, recyclerView, chatRooms);
 
             if (global.ws.messageSession != null) {
                 global.ws.messageSession.disconnect();
@@ -54,6 +56,7 @@ public class ChatRoomListFragment extends Fragment {
         return rootView;
     }
 
+    @Override
     public void onResume() {
         super.onResume();
         global.menu.findItem(R.id.chatUsersBtn).setVisible(false);
@@ -62,7 +65,7 @@ public class ChatRoomListFragment extends Fragment {
     private void setIndexToWriteBtn(ViewGroup rootView) {
         Button indexToCreateBtn = rootView.findViewById(R.id.indexToCreateBtn);
         indexToCreateBtn.setOnClickListener(view -> {
-            chatRoomList.clearList();
+            chatRoomRecyclerViewModel.clearList();
             activity.navigator.navigate(FragmentEnum.CHAT_ROOM_CREATE);
         });
     }

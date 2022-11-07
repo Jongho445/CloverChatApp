@@ -1,18 +1,15 @@
-package com.example.cloverchatapp.fragment.user.signin.component;
+package com.example.cloverchatapp.fragment.user.signin;
 
 import android.app.AlertDialog;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.cloverchatapp.MainActivity;
-import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.user.RequestLoginForm;
 import com.example.cloverchatapp.web.http.user.UserHttpClient;
 
-public class SignInButtonHolder {
+public class SignInButtonViewModel {
 
     private final MainActivity activity;
     private final GlobalContext global;
@@ -20,24 +17,18 @@ public class SignInButtonHolder {
     private final EditText editId;
     private final EditText editPassword;
 
-    public final Button targetButton;
-
     private final UserHttpClient userHttpClient;
 
-    public SignInButtonHolder(MainActivity activity, ViewGroup rootView, EditText editId, EditText editPassword) {
+    public SignInButtonViewModel(MainActivity activity, EditText editId, EditText editPassword) {
         this.activity = activity;
         this.global = activity.global;
         this.editId = editId;
         this.editPassword = editPassword;
 
         this.userHttpClient = new UserHttpClient(global.auth);
-
-        this.targetButton = rootView.findViewById(R.id.signInBtn);
-
-        targetButton.setOnClickListener(view -> login());
     }
 
-    private void login() {
+    public void login() {
         RequestLoginForm requestLoginForm = new RequestLoginForm(editId.getText().toString(), editPassword.getText().toString());
         userHttpClient.login(requestLoginForm, res -> {
             if (!res.isSuccessful()) {
@@ -50,10 +41,10 @@ public class SignInButtonHolder {
         });
     }
 
-    private void showAlertDialog(String msg) {
+    private void showAlertDialog(String message) {
         new AlertDialog.Builder(activity)
                 .setTitle("알림")
-                .setMessage(msg)
+                .setMessage(message)
                 .setPositiveButton("확인", null)
                 .show();
     }

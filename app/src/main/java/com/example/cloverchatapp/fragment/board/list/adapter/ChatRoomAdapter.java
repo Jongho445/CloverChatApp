@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.board.list.component;
+package com.example.cloverchatapp.fragment.board.list.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.fragment.board.list.component.item.ChatRoomItemContext;
-import com.example.cloverchatapp.fragment.board.list.component.item.ChatRoomViewHolder;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
 
 import java.util.List;
@@ -41,11 +39,6 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomViewHolder>  {
         ChatRoomItemContext context = new ChatRoomItemContext(activity, chatRoom, position, itemList, this);
 
         holder.init(context);
-    }
-
-    public void setViewText(ChatRoomViewHolder holder, ResponseChatRoom chatRoom) {
-        holder.chatRoomTitle.setText(chatRoom.title);
-        holder.chatRoomCreateBy.setText(chatRoom.createUser.nickname);
     }
 
     @Override

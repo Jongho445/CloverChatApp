@@ -10,12 +10,12 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.websocket.ChatMessageSession;
-import com.example.cloverchatapp.fragment.chat.detail.component.ChatMessageList;
 import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 import com.google.gson.Gson;
 
@@ -26,18 +26,19 @@ public class ChatRoomDetailFragment extends Fragment {
     private GlobalContext global;
     private ViewGroup rootView;
 
-    private ChatMessageList chatMessageList;
+    private RecyclerView recyclerView;
+    private ChatMessageRecyclerViewModel chatMessageRecyclerViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         MainActivity activity = (MainActivity) getActivity();
-        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_detail, container, false);
-        global = activity.global;
+        this.rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_detail, container, false);
+        this.global = activity.global;
+        this.recyclerView = rootView.findViewById(R.id.rv_list);
+        this.chatMessageRecyclerViewModel = new ChatMessageRecyclerViewModel(activity, recyclerView, global.chat.curChatMessages);
 
-        global.menu.findItem(R.id.chatUsersBtn).setVisible(true);
-
-        chatMessageList = new ChatMessageList(activity, rootView, global.chat.curChatMessages);
         setSendBtnListener();
+        global.menu.findItem(R.id.chatUsersBtn).setVisible(true);
 
         if (global.ws.messageSession != null) {
             global.ws.messageSession.disconnect();
@@ -48,7 +49,7 @@ public class ChatRoomDetailFragment extends Fragment {
         global.ws.messageSession.subscribeChatRoom((StompMessage topicMessage) -> {
             ResponseStompChatMessage chatMsg = new Gson().fromJson(topicMessage.getPayload(), ResponseStompChatMessage.class);
 
-            chatMessageList.addItem(chatMsg);
+            chatMessageRecyclerViewModel.addItem(chatMsg);
         });
 
         return rootView;
@@ -57,7 +58,7 @@ public class ChatRoomDetailFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        chatMessageList.clearList();
+        chatMessageRecyclerViewModel.clearList();
     }
 
     private void setSendBtnListener() {
