@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.chatroom.detail.component.item;
+package com.example.cloverchatapp.fragment.chat.detail.component.item;
 
 import android.view.View;
 import android.widget.TextView;

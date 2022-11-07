@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.chatroom.user.component;
+package com.example.cloverchatapp.fragment.chat.user.component;
 
 import android.view.ViewGroup;
 
@@ -12,7 +12,7 @@ import com.example.cloverchatapp.web.domain.chat.ResponseChatUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatUserList {
+public class ChatUserRecyclerViewHolder {
 
     private final MainActivity activity;
     private final ViewGroup rootView;
@@ -21,7 +21,7 @@ public class ChatUserList {
     private ChatUserAdapter adapter;
     private List<ResponseChatUser> itemList;
 
-    public ChatUserList(MainActivity activity, ViewGroup rootView, List<ResponseChatUser> chatUsers) {
+    public ChatUserRecyclerViewHolder(MainActivity activity, ViewGroup rootView, List<ResponseChatUser> chatUsers) {
         this.activity = activity;
         this.rootView = rootView;
 

@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.web.client;
+package com.example.cloverchatapp.web.http;
 
 import com.example.cloverchatapp.global.AuthContext;
 import com.example.cloverchatapp.util.Constants;
@@ -9,29 +9,21 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClient {
+public class RetrofitClientBuilder {
 
-    private final AuthContext authContext;
-
-    public RetrofitClient(AuthContext authContext) {
-        this.authContext = authContext;
-    }
-
-    public RetrofitService getApiService(){
-        return getInstance().create(RetrofitService.class);
-    }
-
-    private Retrofit getInstance(){
+    public static <T extends RetrofitClient> T getRetrofitClient(AuthContext authContext, Class<T> clientClass){
         Gson gson = new GsonBuilder().setLenient().create();
 
-        return new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.SERVER_URL)
-                .client(provideOkHttpClient())
+                .client(provideOkHttpClient(authContext))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
+
+        return retrofit.create(clientClass);
     }
 
-    private OkHttpClient provideOkHttpClient() {
+    private static OkHttpClient provideOkHttpClient(AuthContext authContext) {
         return new OkHttpClient.Builder()
                 .addInterceptor(new HttpInterceptor(authContext))
                 .build();

@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        if (global.auth.me == null) {
+        if (global.auth.myInfo == null) {
             setTitle("로그인");
             navigator.goToLogin();
         } else {

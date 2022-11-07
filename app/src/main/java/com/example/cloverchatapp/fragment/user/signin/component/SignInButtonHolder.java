@@ -10,6 +10,7 @@ import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.user.RequestLoginForm;
+import com.example.cloverchatapp.web.http.user.UserHttpClient;
 
 public class SignInButtonHolder {
 
@@ -21,11 +22,15 @@ public class SignInButtonHolder {
 
     public final Button targetButton;
 
+    private final UserHttpClient userHttpClient;
+
     public SignInButtonHolder(MainActivity activity, ViewGroup rootView, EditText editId, EditText editPassword) {
         this.activity = activity;
         this.global = activity.global;
         this.editId = editId;
         this.editPassword = editPassword;
+
+        this.userHttpClient = new UserHttpClient(global.auth);
 
         this.targetButton = rootView.findViewById(R.id.signInBtn);
 
@@ -34,7 +39,7 @@ public class SignInButtonHolder {
 
     private void login() {
         RequestLoginForm requestLoginForm = new RequestLoginForm(editId.getText().toString(), editPassword.getText().toString());
-        global.http.login(requestLoginForm, res -> {
+        userHttpClient.login(requestLoginForm, res -> {
             if (!res.isSuccessful()) {
                 showAlertDialog("회원 정보가 잘못되었습니다.");
                 return;

@@ -6,11 +6,14 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.cloverchatapp.R;
+import com.example.cloverchatapp.web.http.board.BoardHttpClient;
 
 public class ChatRoomRemoveButtonHolder {
 
     private final Button targetButton;
     private ChatRoomItemContext context;
+
+    private BoardHttpClient boardHttpClient;
 
     public ChatRoomRemoveButtonHolder(View itemView) {
         this.targetButton = itemView.findViewById(R.id.removeBtn);;
@@ -18,6 +21,7 @@ public class ChatRoomRemoveButtonHolder {
 
     public void init(ChatRoomItemContext context) {
         this.context = context;
+        this.boardHttpClient = new BoardHttpClient(context.global.auth);
 
         setOnClickListener();
     }
@@ -29,7 +33,7 @@ public class ChatRoomRemoveButtonHolder {
     }
 
     private void requestDelete() {
-        context.global.http.deleteChatRoom(context.chatRoom.id, res -> {
+        boardHttpClient.deleteChatRoom(context.chatRoom.id, res -> {
             if (!res.isSuccessful()) {
                 showAlertDialog("채팅방 생성자가 아닙니다");
                 return;

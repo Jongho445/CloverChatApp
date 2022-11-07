@@ -8,8 +8,8 @@ import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.fragment.board.create.ChatRoomCreateFragment;
 import com.example.cloverchatapp.fragment.board.list.ChatRoomListFragment;
-import com.example.cloverchatapp.fragment.chatroom.detail.ChatRoomDetailFragment;
-import com.example.cloverchatapp.fragment.chatroom.user.ChatUserListFragment;
+import com.example.cloverchatapp.fragment.chat.detail.ChatRoomDetailFragment;
+import com.example.cloverchatapp.fragment.chat.user.ChatUserListFragment;
 import com.example.cloverchatapp.fragment.user.signin.SignInFragment;
 import com.example.cloverchatapp.fragment.user.signup.SignUpFragment;
 

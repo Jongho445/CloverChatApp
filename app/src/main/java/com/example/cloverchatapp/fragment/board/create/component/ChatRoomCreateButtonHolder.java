@@ -12,6 +12,7 @@ import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.board.RequestChatRoomCreateForm;
 import com.example.cloverchatapp.web.domain.board.ChatRoomType;
+import com.example.cloverchatapp.web.http.board.BoardHttpClient;
 
 public class ChatRoomCreateButtonHolder {
 
@@ -24,6 +25,8 @@ public class ChatRoomCreateButtonHolder {
 
     private final Button targetButton;
 
+    private final BoardHttpClient boardHttpClient;
+
     public ChatRoomCreateButtonHolder(MainActivity activity, ViewGroup rootView, EditText inputPassword, EditText inputTitle, CheckBox isPrivateChkBox) {
         this.activity = activity;
         this.global = activity.global;
@@ -31,6 +34,7 @@ public class ChatRoomCreateButtonHolder {
         this.inputTitle = inputTitle;
         this.isPrivateChkBox = isPrivateChkBox;
 
+        this.boardHttpClient = new BoardHttpClient(global.auth);
         this.targetButton = rootView.findViewById(R.id.createChatRoomBtn);
 
         setOnClickListener();
@@ -39,13 +43,13 @@ public class ChatRoomCreateButtonHolder {
     private void setOnClickListener() {
         targetButton.setOnClickListener((View v) -> {
             RequestChatRoomCreateForm requestChatRoomCreateForm = new RequestChatRoomCreateForm(
-                    global.auth.me.id,
+                    global.auth.myInfo.id,
                     getPassword(),
                     inputTitle.getText().toString(),
                     getCurChatRoomType()
             );
 
-            global.http.createChatRoom(requestChatRoomCreateForm, res -> {
+            boardHttpClient.createChatRoom(requestChatRoomCreateForm, res -> {
                 activity.navigator.navigate(FragmentEnum.CHAT_ROOM_LIST);
             });
         });

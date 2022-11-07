@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.chatroom.detail.component;
+package com.example.cloverchatapp.fragment.chat.detail.component;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.fragment.chatroom.detail.component.item.ChatMessageViewHolder;
+import com.example.cloverchatapp.fragment.chat.detail.component.item.ChatMessageViewHolder;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 
@@ -38,7 +38,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageViewHold
     @Override
     public void onBindViewHolder(@NonNull ChatMessageViewHolder holder, int position) {
         ResponseStompChatMessage chatMessage = itemList.get(position);
-        String myNickname = global.auth.me.nickname;
+        String myNickname = global.auth.myInfo.nickname;
 
         if (myNickname.equals(chatMessage.createUser.nickname)) {
             holder.card.setCardBackgroundColor(Color.parseColor("#FFf176"));

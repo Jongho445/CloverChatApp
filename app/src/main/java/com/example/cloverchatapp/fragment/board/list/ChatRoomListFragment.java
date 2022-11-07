@@ -16,34 +16,38 @@ import com.example.cloverchatapp.fragment.board.list.component.ChatRoomList;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
+import com.example.cloverchatapp.web.http.board.BoardHttpClient;
 
 import java.util.List;
 
 public class ChatRoomListFragment extends Fragment {
 
-    MainActivity activity;
-    GlobalContext global;
+    private MainActivity activity;
+    private GlobalContext global;
 
-    ChatRoomList chatRoomList;
+    private ChatRoomList chatRoomList;
+
+    private BoardHttpClient boardHttpClient;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //(사용할 자원, 자원을 담을 곳, T/F)
         //메인에 직접 들어가면 True, 프래그먼트에 있으면 False
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_index, container, false);
-        activity = (MainActivity) getActivity();
-        global = activity.global;
+        this.activity = (MainActivity) getActivity();
+        this.global = activity.global;
+        this.boardHttpClient = new BoardHttpClient(global.auth);
 
         setIndexToWriteBtn(rootView);
 
-        global.http.getChatRoomList(res -> {
+        boardHttpClient.getChatRoomList(res -> {
             List<ResponseChatRoom> chatRooms = res.body();
 
             chatRoomList = new ChatRoomList(activity, rootView, chatRooms);
 
-            if (global.ws != null) {
-                global.ws.disconnect();
-                global.ws = null;
+            if (global.ws.messageSession != null) {
+                global.ws.messageSession.disconnect();
+                global.ws.messageSession = null;
             }
         });
 

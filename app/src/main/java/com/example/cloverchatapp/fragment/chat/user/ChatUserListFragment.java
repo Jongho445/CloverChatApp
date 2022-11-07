@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.chatroom.user;
+package com.example.cloverchatapp.fragment.chat.user;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,28 +11,32 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.fragment.chatroom.user.component.ChatUserList;
+import com.example.cloverchatapp.fragment.chat.user.component.ChatUserRecyclerViewHolder;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.chat.ResponseChatUser;
+import com.example.cloverchatapp.web.http.chat.ChatHttpClient;
 
 import java.io.IOException;
 import java.util.List;
 
 public class ChatUserListFragment extends Fragment {
 
-    MainActivity activity;
-    GlobalContext global;
-    ViewGroup rootView;
+    private MainActivity activity;
+    private GlobalContext global;
 
-    ChatUserList chatUserList;
+    private ViewGroup rootView;
+    private ChatUserRecyclerViewHolder chatUserRecyclerViewHolder;
+
+    private ChatHttpClient chatHttpClient;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) getActivity();
-        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_user_list, container, false);
-        global = activity.global;
+        this.activity = (MainActivity) getActivity();
+        this.rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_user_list, container, false);
+        this.global = activity.global;
+        this.chatHttpClient = new ChatHttpClient(global.auth);
 
-        global.menu.findItem(R.id.chatUsersBtn).setVisible(false);
+        this.global.menu.findItem(R.id.chatUsersBtn).setVisible(false);
 
         getChatUserList();
 
@@ -42,11 +46,11 @@ public class ChatUserListFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        chatUserList.clearList();
+        chatUserRecyclerViewHolder.clearList();
     }
 
     public void getChatUserList() {
-        global.http.getChatUserList(global.chat.curChatRoom.id, res -> {
+        chatHttpClient.getChatUserList(global.chat.curChatRoom.id, res -> {
             if (!res.isSuccessful()) {
                 try {
                     String string = res.errorBody().string();
@@ -58,7 +62,7 @@ public class ChatUserListFragment extends Fragment {
             }
 
             List<ResponseChatUser> chatUsers = res.body();
-            chatUserList = new ChatUserList(activity, rootView, chatUsers);
+            chatUserRecyclerViewHolder = new ChatUserRecyclerViewHolder(activity, rootView, chatUsers);
 
         });
     }

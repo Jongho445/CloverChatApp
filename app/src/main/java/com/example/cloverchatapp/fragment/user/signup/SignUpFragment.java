@@ -16,22 +16,26 @@ import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.user.RequestUserCreateForm;
+import com.example.cloverchatapp.web.http.user.UserHttpClient;
 
 public class SignUpFragment extends Fragment {
 
-    MainActivity activity;
-    GlobalContext global;
-    ViewGroup rootView;
+    private MainActivity activity;
+    private GlobalContext global;
+    private ViewGroup rootView;
 
-    EditText editId;
-    EditText editPassword;
-    EditText editNickname;
+    private EditText editId;
+    private EditText editPassword;
+    private EditText editNickname;
+
+    private UserHttpClient userHttpClient;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) getActivity();
-        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_sign_up, container, false);
-        global = activity.global;
+        this.activity = (MainActivity) getActivity();
+        this.rootView = (ViewGroup) inflater.inflate(R.layout.fragment_sign_up, container, false);
+        this.global = activity.global;
+        this.userHttpClient = new UserHttpClient(global.auth);
 
         initEditTexts();
         setSignUpBtnListener();
@@ -52,7 +56,7 @@ public class SignUpFragment extends Fragment {
         Button signUpBtn = rootView.findViewById(R.id.signUpBtn);
         signUpBtn.setOnClickListener(view -> {
             RequestUserCreateForm requestUserCreateForm = new RequestUserCreateForm(editId.getText().toString(), editPassword.getText().toString(), editNickname.getText().toString());
-            global.http.register(requestUserCreateForm, res -> {
+            userHttpClient.register(requestUserCreateForm, res -> {
                 activity.navigator.navigate(FragmentEnum.SIGN_IN);
             });
         });

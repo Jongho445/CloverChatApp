@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.chatroom.detail;
+package com.example.cloverchatapp.fragment.chat.detail;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,8 +14,8 @@ import androidx.fragment.app.Fragment;
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.global.GlobalContext;
-import com.example.cloverchatapp.web.client.WebSocketClient;
-import com.example.cloverchatapp.fragment.chatroom.detail.component.ChatMessageList;
+import com.example.cloverchatapp.web.websocket.ChatMessageSession;
+import com.example.cloverchatapp.fragment.chat.detail.component.ChatMessageList;
 import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 import com.google.gson.Gson;
 
@@ -39,13 +39,13 @@ public class ChatRoomDetailFragment extends Fragment {
         chatMessageList = new ChatMessageList(activity, rootView, global.chat.curChatMessages);
         setSendBtnListener();
 
-        if (global.ws != null) {
-            global.ws.disconnect();
+        if (global.ws.messageSession != null) {
+            global.ws.messageSession.disconnect();
         }
 
-        global.ws = new WebSocketClient(activity);
-        global.ws.connect();
-        global.ws.subscribeChatRoom((StompMessage topicMessage) -> {
+        global.ws.messageSession = new ChatMessageSession(activity);
+        global.ws.messageSession.connect();
+        global.ws.messageSession.subscribeChatRoom((StompMessage topicMessage) -> {
             ResponseStompChatMessage chatMsg = new Gson().fromJson(topicMessage.getPayload(), ResponseStompChatMessage.class);
 
             chatMessageList.addItem(chatMsg);
@@ -65,7 +65,7 @@ public class ChatRoomDetailFragment extends Fragment {
         Button sendBtn = rootView.findViewById(R.id.btn_send);
 
         sendBtn.setOnClickListener(view -> {
-            global.ws.send(editText.getText().toString());
+            global.ws.messageSession.sendChatMessage(editText.getText().toString());
             editText.setText(null);
         });
     }

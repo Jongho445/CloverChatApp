@@ -8,7 +8,7 @@ import retrofit2.Response;
 public class AuthContext {
 
     public String sessionId;
-    public ResponseUser me;
+    public ResponseUser myInfo;
 
     public AuthContext() {}
 
@@ -17,7 +17,7 @@ public class AuthContext {
         String jSessionId = getJSessionId(response.headers());
 
         sessionId = jSessionId;
-        me = responseUser;
+        myInfo = responseUser;
     }
 
     private String getJSessionId(Headers headers) {

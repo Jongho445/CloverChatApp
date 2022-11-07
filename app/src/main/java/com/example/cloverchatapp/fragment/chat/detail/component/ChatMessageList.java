@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.fragment.chatroom.detail.component;
+package com.example.cloverchatapp.fragment.chat.detail.component;
 
 import android.view.ViewGroup;
 

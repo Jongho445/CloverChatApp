@@ -9,11 +9,14 @@ import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.fragment.FragmentEnum;
 import com.example.cloverchatapp.web.domain.board.ChatRoomType;
 import com.example.cloverchatapp.web.domain.chat.RequestChatMessagesReadForm;
+import com.example.cloverchatapp.web.http.chat.ChatHttpClient;
 
 public class ClickableItemViewHolder {
 
     private final View itemView;
+
     private ChatRoomItemContext context;
+    private ChatHttpClient chatHttpClient;
 
     public ClickableItemViewHolder(View itemView) {
         this.itemView = itemView;
@@ -21,6 +24,7 @@ public class ClickableItemViewHolder {
 
     public void init(ChatRoomItemContext context) {
         this.context = context;
+        this.chatHttpClient = new ChatHttpClient(context.global.auth);
 
         setOnClickItemListener();
     }
@@ -47,7 +51,7 @@ public class ClickableItemViewHolder {
     }
 
     private void request(RequestChatMessagesReadForm form) {
-        context.global.http.getChatMessageList(form, res -> {
+        chatHttpClient.getChatMessageList(form, res -> {
             if (!res.isSuccessful()) {
                 showFailureAlertDialog();
                 return;

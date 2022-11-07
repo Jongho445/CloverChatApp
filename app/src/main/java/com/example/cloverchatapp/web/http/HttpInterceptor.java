@@ -1,4 +1,4 @@
-package com.example.cloverchatapp.web.client;
+package com.example.cloverchatapp.web.http;
 
 import androidx.annotation.NonNull;
 
