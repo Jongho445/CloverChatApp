@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.cloverchatapp.fragment.FragmentEnum;
+import com.example.cloverchatapp.page.FragmentEnum;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.util.Navigator;
 import com.example.cloverchatapp.util.TestHelper;

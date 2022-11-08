@@ -14,35 +14,27 @@ import ua.naiksoftware.stomp.dto.StompMessage;
 
 abstract public class AbstractStompSession {
 
-    protected final GlobalContext global;
-
     private final StompClient stompClient;
 
-    private final String wsRequestUrl;
+    protected final GlobalContext global;
+
     private final String subPath;
     private final String sendPath;
-    private final String jSessionValue;
 
     public AbstractStompSession(MainActivity activity) {
         this.global = activity.global;
 
-        this.wsRequestUrl = Constants.SERVER_URL + "/stomp/websocket";
-        this.subPath = "/sub/" + global.chat.curChatRoom.id;
-        this.sendPath = "/pub/" + global.chat.curChatRoom.id;
-        this.jSessionValue = "JSESSIONID=" + global.auth.sessionId;
+        this.subPath = getSubPath();
+        this.sendPath = getPubPath();
 
         HashMap<String, String> headers = new HashMap<>();
-        headers.put("Cookie", jSessionValue);
+        headers.put("Cookie", "JSESSIONID=" + global.auth.sessionId);
 
+        String wsRequestUrl = Constants.SERVER_URL + getEndpoint();
         this.stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, wsRequestUrl, headers);
+
         setLifecycleListener();
     }
-
-    private void setLifecycleListener() {
-        stompClient.lifecycle().subscribe(lifecycleHandle());
-    }
-
-    abstract protected Consumer<LifecycleEvent> lifecycleHandle();
 
     public void connect() {
         stompClient.connect();
@@ -52,11 +44,23 @@ abstract public class AbstractStompSession {
         stompClient.disconnect();
     }
 
-    protected void send(String msg) {
-        stompClient.send(sendPath, msg).subscribe();
+    private void setLifecycleListener() {
+        stompClient.lifecycle().subscribe(lifecycleHandle());
     }
 
-    protected void subscribeTopic(Consumer<StompMessage> handle) {
-        stompClient.topic(subPath).subscribe(handle);
+    abstract protected Consumer<LifecycleEvent> lifecycleHandle();
+
+    protected void send(String message) {
+        stompClient.send(sendPath, message).subscribe();
     }
+
+    public void subscribe() {
+        stompClient.topic(subPath).subscribe(subscribeHandle());
+    }
+
+    abstract protected Consumer<StompMessage> subscribeHandle();
+
+    abstract protected String getEndpoint();
+    abstract protected String getSubPath();
+    abstract protected String getPubPath();
 }

@@ -13,9 +13,12 @@ public class ChatMessageSession extends AbstractStompSession {
 
     private final ChatHttpClient chatHttpClient;
 
-    public ChatMessageSession(MainActivity activity) {
+    private final Consumer<StompMessage> subscribeHandle;
+
+    public ChatMessageSession(MainActivity activity, Consumer<StompMessage> subscribeHandle) {
         super(activity);
 
+        this.subscribeHandle = subscribeHandle;
         this.chatHttpClient = new ChatHttpClient(activity.global.auth);
     }
 
@@ -30,8 +33,9 @@ public class ChatMessageSession extends AbstractStompSession {
         super.send(json);
     }
 
-    public void subscribeChatRoom(Consumer<StompMessage> handle) {
-        super.subscribeTopic(handle);
+    @Override
+    protected Consumer<StompMessage> subscribeHandle() {
+        return subscribeHandle;
     }
 
     @Override
@@ -54,5 +58,20 @@ public class ChatMessageSession extends AbstractStompSession {
                     break;
             }
         };
+    }
+
+    @Override
+    protected String getEndpoint() {
+        return "/stomp/websocket";
+    }
+
+    @Override
+    protected String getSubPath() {
+        return "/sub/" + global.chat.curChatRoom.id;
+    }
+
+    @Override
+    protected String getPubPath() {
+        return "/pub/" + global.chat.curChatRoom.id;
     }
 }

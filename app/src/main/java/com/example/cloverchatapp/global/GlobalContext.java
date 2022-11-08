@@ -2,7 +2,7 @@ package com.example.cloverchatapp.global;
 
 import android.view.Menu;
 
-import com.example.cloverchatapp.fragment.FragmentEnum;
+import com.example.cloverchatapp.page.FragmentEnum;
 
 public class GlobalContext {
 

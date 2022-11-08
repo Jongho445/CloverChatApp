@@ -5,13 +5,13 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
-import com.example.cloverchatapp.fragment.FragmentEnum;
-import com.example.cloverchatapp.fragment.board.create.ChatRoomCreateFragment;
-import com.example.cloverchatapp.fragment.board.list.ChatRoomListFragment;
-import com.example.cloverchatapp.fragment.chat.detail.ChatRoomDetailFragment;
-import com.example.cloverchatapp.fragment.chat.user.ChatUserListFragment;
-import com.example.cloverchatapp.fragment.user.signin.SignInFragment;
-import com.example.cloverchatapp.fragment.user.signup.SignUpFragment;
+import com.example.cloverchatapp.page.FragmentEnum;
+import com.example.cloverchatapp.page.board.create.ChatRoomCreateFragment;
+import com.example.cloverchatapp.page.board.list.ChatRoomListFragment;
+import com.example.cloverchatapp.page.chat.detail.ChatRoomDetailFragment;
+import com.example.cloverchatapp.page.chat.user.ChatUserListFragment;
+import com.example.cloverchatapp.page.user.signin.SignInFragment;
+import com.example.cloverchatapp.page.user.signup.SignUpFragment;
 
 public class Navigator {
 
