@@ -34,6 +34,9 @@ public class ChatRoomRecyclerViewHolder {
         adapter = new ChatRoomAdapter(activity, itemList);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
     }
@@ -41,8 +44,30 @@ public class ChatRoomRecyclerViewHolder {
     public void addItem(ResponseChatRoom chatRoom) {
         activity.runOnUiThread(() -> {
             itemList.add(chatRoom);
+
+            adapter.notifyItemInserted(adapter.getItemCount() - 1);
+            recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+        });
+    }
+
+    public void removeItem(ResponseChatRoom chatRoom) {
+        activity.runOnUiThread(() -> {
+            int idx = findChatRoom(chatRoom.id);
+            itemList.remove(idx);
+
             adapter.notifyDataSetChanged();
         });
+    }
+
+    private int findChatRoom(Long chatRoomId) {
+        int result = -1;
+        for (int i = 0; i < itemList.size(); i++) {
+            if (itemList.get(i).id == chatRoomId) {
+                result = i;
+            }
+        }
+
+        return result;
     }
 
     public void clearList() {

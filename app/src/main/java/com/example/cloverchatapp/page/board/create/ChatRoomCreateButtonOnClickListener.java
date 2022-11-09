@@ -7,8 +7,10 @@ import android.widget.EditText;
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.page.FragmentEnum;
 import com.example.cloverchatapp.global.GlobalContext;
+import com.example.cloverchatapp.util.MethodType;
 import com.example.cloverchatapp.web.domain.board.RequestChatRoomCreateForm;
 import com.example.cloverchatapp.web.domain.board.ChatRoomType;
+import com.example.cloverchatapp.web.domain.board.StompUpdateChatRoom;
 import com.example.cloverchatapp.web.http.board.BoardHttpClient;
 
 public class ChatRoomCreateButtonOnClickListener implements View.OnClickListener {
@@ -19,7 +21,6 @@ public class ChatRoomCreateButtonOnClickListener implements View.OnClickListener
     private final EditText inputPassword;
     private final EditText inputTitle;
     private final CheckBox isPrivateChkBox;
-
 
     private final BoardHttpClient boardHttpClient;
 
@@ -43,6 +44,9 @@ public class ChatRoomCreateButtonOnClickListener implements View.OnClickListener
         );
 
         boardHttpClient.createChatRoom(requestChatRoomCreateForm, res -> {
+            StompUpdateChatRoom stompForm = new StompUpdateChatRoom(MethodType.CREATE, res.body());
+            global.ws.chatRoomSession.sendChatChatRoom(stompForm);
+
             activity.navigator.navigate(FragmentEnum.CHAT_ROOM_LIST);
         });
     }

@@ -14,10 +14,14 @@ import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.page.chat.user.recyclerview.ChatUserRecyclerViewHolder;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.chat.ResponseChatUser;
+import com.example.cloverchatapp.web.domain.chat.StompUpdateChatUser;
 import com.example.cloverchatapp.web.http.chat.ChatHttpClient;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.List;
+
+import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class ChatUserListFragment extends Fragment {
 
@@ -63,6 +67,30 @@ public class ChatUserListFragment extends Fragment {
 
             List<ResponseChatUser> chatUsers = res.body();
             this.rvHolder = new ChatUserRecyclerViewHolder(activity, rootView, chatUsers);
+
+            setListener();
+        });
+    }
+
+    private void setListener() {
+        if (global.ws.chatUserSession == null) {
+            return;
+        }
+
+        global.ws.chatUserSession.subscribeChatUser((StompMessage topicMessage) -> {
+            StompUpdateChatUser stompForm = new Gson().fromJson(
+                    topicMessage.getPayload(),
+                    StompUpdateChatUser.class
+            );
+
+            switch (stompForm.type) {
+                case CREATE:
+                    rvHolder.addItem(stompForm.chatUser); break;
+                case UPDATE:
+                    break;
+                case DELETE:
+                    rvHolder.removeItem(stompForm.chatUser); break;
+            }
         });
     }
 }

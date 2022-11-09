@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.View;
 
+import com.example.cloverchatapp.util.MethodType;
+import com.example.cloverchatapp.web.domain.board.StompUpdateChatRoom;
 import com.example.cloverchatapp.web.http.board.BoardHttpClient;
 
 public class ChatRoomRemoveButtonOnClickListener implements View.OnClickListener {
@@ -29,9 +31,8 @@ public class ChatRoomRemoveButtonOnClickListener implements View.OnClickListener
             }
 
             showAlertDialog("삭제되었습니다.");
-
-            context.itemList.remove(context.position);
-            context.adapter.notifyDataSetChanged();
+            StompUpdateChatRoom stompForm = new StompUpdateChatRoom(MethodType.DELETE, res.body());
+            context.global.ws.chatRoomSession.sendChatChatRoom(stompForm);
         });
     }
 

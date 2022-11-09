@@ -4,6 +4,7 @@ import androidx.core.util.Consumer;
 
 import com.example.cloverchatapp.global.AuthContext;
 import com.example.cloverchatapp.web.domain.chat.RequestChatMessagesReadForm;
+import com.example.cloverchatapp.web.domain.chat.RequestStompChatMessage;
 import com.example.cloverchatapp.web.domain.chat.ResponseChatUser;
 import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 import com.example.cloverchatapp.web.http.AbstractHttpClient;
@@ -23,6 +24,10 @@ public class ChatHttpClient extends AbstractHttpClient {
 
     public void getChatMessageList(RequestChatMessagesReadForm form, Consumer<Response<List<ResponseStompChatMessage>>> onResponse) {
         templateCallback(() -> retrofitClient.getChatMessageList(form), onResponse);
+    }
+
+    public void createChatMessage(Long chatRoomId, RequestStompChatMessage form, Consumer<Response<ResponseStompChatMessage>> onResponse) {
+        templateCallback(() -> retrofitClient.createChatMessage(chatRoomId, form), onResponse);
     }
 
     public void getChatUserList(Long chatRoomId, Consumer<Response<List<ResponseChatUser>>> onResponse) {

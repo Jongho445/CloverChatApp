@@ -47,6 +47,26 @@ public class ChatUserRecyclerViewHolder {
         });
     }
 
+    public void removeItem(ResponseChatUser chatUser) {
+        activity.runOnUiThread(() -> {
+            int idx = findChatUser(chatUser.id);
+            itemList.remove(idx);
+
+            adapter.notifyDataSetChanged();
+        });
+    }
+
+    private int findChatUser(Long chatUserId) {
+        int result = -1;
+        for (int i = 0; i < itemList.size(); i++) {
+            if (itemList.get(i).id == chatUserId) {
+                result = i;
+            }
+        }
+
+        return result;
+    }
+
     public void clearList() {
         itemList.clear();
     }

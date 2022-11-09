@@ -1,25 +1,25 @@
 package com.example.cloverchatapp.web.websocket;
 
 import com.example.cloverchatapp.MainActivity;
-import com.example.cloverchatapp.web.domain.board.StompUpdateChatRoom;
+import com.example.cloverchatapp.web.domain.chat.StompUpdateChatUser;
 import com.google.gson.Gson;
 
 import io.reactivex.functions.Consumer;
 import ua.naiksoftware.stomp.dto.LifecycleEvent;
 import ua.naiksoftware.stomp.dto.StompMessage;
 
-public class ChatRoomSession extends AbstractStompSession {
+public class ChatUserSession extends AbstractStompSession {
 
-    public ChatRoomSession(MainActivity activity) {
+    public ChatUserSession(MainActivity activity) {
         super(activity);
     }
 
-    public void subscribeChatRoom(Consumer<StompMessage> handle) {
+    public void subscribeChatUser(Consumer<StompMessage> handle) {
         super.subscribe(handle);
     }
 
-    public void sendChatChatRoom(StompUpdateChatRoom stompUpdateChatRoom) {
-        String json = new Gson().toJson(stompUpdateChatRoom);
+    public void sendChatChatUser(StompUpdateChatUser stompUpdateChatUser) {
+        String json = new Gson().toJson(stompUpdateChatUser);
 
         super.send(json);
     }
@@ -29,7 +29,7 @@ public class ChatRoomSession extends AbstractStompSession {
         return (LifecycleEvent lifecycleEvent) -> {
             switch (lifecycleEvent.getType()) {
                 case OPENED:
-                    System.out.println("opened chatRoomSession");
+                    System.out.println("opened ChatUserSession");
                     break;
                 case ERROR:
                     Exception ex = lifecycleEvent.getException();
@@ -37,7 +37,7 @@ public class ChatRoomSession extends AbstractStompSession {
                     ex.printStackTrace();
                     break;
                 case CLOSED:
-                    System.out.println("closed chatRoomSession");
+                    System.out.println("closed ChatUserSession");
                     break;
             }
         };
@@ -45,11 +45,11 @@ public class ChatRoomSession extends AbstractStompSession {
 
     @Override
     protected String getSubPath() {
-        return "/sub/room";
+        return "/user/sub/user/" + global.chat.curChatRoom.id;
     }
 
     @Override
     protected String getPubPath() {
-        return "/pub/room";
+        return "/pub/user/" + global.chat.curChatRoom.id;
     }
 }

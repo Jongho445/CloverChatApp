@@ -1,6 +1,7 @@
 package com.example.cloverchatapp.web.http.chat;
 
 import com.example.cloverchatapp.web.domain.chat.RequestChatMessagesReadForm;
+import com.example.cloverchatapp.web.domain.chat.RequestStompChatMessage;
 import com.example.cloverchatapp.web.domain.chat.ResponseChatUser;
 import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 import com.example.cloverchatapp.web.http.RetrofitClient;
@@ -19,6 +20,9 @@ public interface ChatRetrofitClient extends RetrofitClient {
     // /chat/message/**
     @POST("/chat/message/list")
     Call<List<ResponseStompChatMessage>> getChatMessageList(@Body RequestChatMessagesReadForm form);
+
+    @POST("/chat/message/create/{chatRoomId}")
+    Call<ResponseStompChatMessage> createChatMessage(@Path("chatRoomId") Long chatRoomId, @Body RequestStompChatMessage form);
 
     // /chat/user/**
     @GET("/chat/user/list/{chatRoomId}")

@@ -44,6 +44,8 @@ public class ChatMessageRecyclerViewHolder {
         activity.runOnUiThread(() -> {
             itemList.add(chatMessage);
             activity.global.chat.curChatMessages.add(chatMessage);
+
+            adapter.notifyItemInserted(adapter.getItemCount() - 1);
             recyclerView.scrollToPosition(adapter.getItemCount() - 1);
         });
     }
