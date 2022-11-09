@@ -32,7 +32,7 @@ public class ChatRoomRemoveButtonOnClickListener implements View.OnClickListener
 
             showAlertDialog("삭제되었습니다.");
             StompUpdateChatRoom stompForm = new StompUpdateChatRoom(MethodType.DELETE, res.body());
-            context.global.ws.chatRoomSession.sendChatChatRoom(stompForm);
+            context.global.ws.chatRoomSession.sendChatRoom(stompForm);
         });
     }
 

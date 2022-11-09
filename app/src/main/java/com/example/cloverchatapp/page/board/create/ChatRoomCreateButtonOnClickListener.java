@@ -44,8 +44,12 @@ public class ChatRoomCreateButtonOnClickListener implements View.OnClickListener
         );
 
         boardHttpClient.createChatRoom(requestChatRoomCreateForm, res -> {
+            if (!res.isSuccessful()) {
+                return;
+            }
+
             StompUpdateChatRoom stompForm = new StompUpdateChatRoom(MethodType.CREATE, res.body());
-            global.ws.chatRoomSession.sendChatChatRoom(stompForm);
+            global.ws.chatRoomSession.sendChatRoom(stompForm);
 
             activity.navigator.navigate(FragmentEnum.CHAT_ROOM_LIST);
         });

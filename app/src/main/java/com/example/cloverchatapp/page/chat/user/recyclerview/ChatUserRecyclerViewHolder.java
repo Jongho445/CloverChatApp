@@ -43,6 +43,8 @@ public class ChatUserRecyclerViewHolder {
     public void addItem(ResponseChatUser chatUser) {
         activity.runOnUiThread(() -> {
             itemList.add(chatUser);
+
+            adapter.notifyItemInserted(adapter.getItemCount() - 1);
             recyclerView.scrollToPosition(adapter.getItemCount() - 1);
         });
     }

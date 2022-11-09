@@ -55,6 +55,10 @@ public class ChatRoomListFragment extends Fragment {
         setIndexToWriteBtn(rootView);
 
         boardHttpClient.getChatRoomList(res -> {
+            if (!res.isSuccessful()) {
+                return;
+            }
+
             List<ResponseChatRoom> chatRooms = res.body();
 
             rvHolder = new ChatRoomRecyclerViewHolder(activity, rootView, chatRooms);
@@ -79,11 +83,15 @@ public class ChatRoomListFragment extends Fragment {
 
     private void deleteChatUser() {
         chatHttpClient.deleteChatUser(res -> {
+            if (!res.isSuccessful()) {
+                return;
+            }
+
             List<ResponseChatUser> deletedChatUsers = res.body();
 
             for (ResponseChatUser deletedChatUser : deletedChatUsers) {
                 StompUpdateChatUser stompForm = new StompUpdateChatUser(MethodType.DELETE, deletedChatUser);
-                global.ws.chatUserSession.sendChatChatUser(stompForm);
+                global.ws.chatUserSession.sendChatUser(stompForm);
             }
 
             if (ws.chatUserSession != null) {

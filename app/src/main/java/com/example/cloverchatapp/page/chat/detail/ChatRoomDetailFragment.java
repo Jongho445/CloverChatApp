@@ -51,6 +51,7 @@ public class ChatRoomDetailFragment extends Fragment {
         setSendBtnListener();
         initChatMessageSession(activity);
         initChatUserSession(activity);
+        createChatUser();
 
         return rootView;
     }
@@ -87,14 +88,16 @@ public class ChatRoomDetailFragment extends Fragment {
         ws.chatUserSession = new ChatUserSession(activity);
 
         ws.chatUserSession.connect();
-
-        requestStompCreateChatUser();
     }
 
-    private void requestStompCreateChatUser() {
+    private void createChatUser() {
         chatHttpClient.createChatUser(global.chat.curChatRoom.id, res -> {
+            if (!res.isSuccessful()) {
+                return;
+            }
+
             StompUpdateChatUser stompForm = new StompUpdateChatUser(MethodType.CREATE, res.body());
-            global.ws.chatUserSession.sendChatChatUser(stompForm);
+            global.ws.chatUserSession.sendChatUser(stompForm);
         });
     }
 
@@ -110,6 +113,10 @@ public class ChatRoomDetailFragment extends Fragment {
             );
 
             chatHttpClient.createChatMessage(global.chat.curChatRoom.id, form, res -> {
+                if (!res.isSuccessful()) {
+                    return;
+                }
+
                 ws.messageSession.sendChatMessage(res.body());
                 editText.setText(null);
             });

@@ -18,7 +18,7 @@ public class ChatUserSession extends AbstractStompSession {
         super.subscribe(handle);
     }
 
-    public void sendChatChatUser(StompUpdateChatUser stompUpdateChatUser) {
+    public void sendChatUser(StompUpdateChatUser stompUpdateChatUser) {
         String json = new Gson().toJson(stompUpdateChatUser);
 
         super.send(json);
