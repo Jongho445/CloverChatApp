@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
+import com.example.cloverchatapp.global.WebSocketSessionContext;
 import com.example.cloverchatapp.page.chat.detail.recyclerview.ChatMessageRecyclerViewHolder;
 import com.example.cloverchatapp.web.websocket.ChatMessageSession;
 import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
@@ -26,27 +27,27 @@ public class ChatRoomDetailFragment extends Fragment {
 
     private ChatMessageRecyclerViewHolder rvHolder;
 
-    private ChatMessageSession session;
+    private WebSocketSessionContext ws;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         MainActivity activity = (MainActivity) getActivity();
         this.rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_detail, container, false);
-        this.session = activity.global.ws.messageSession;
+        this.ws = activity.global.ws;
 
         this.rvHolder = new ChatMessageRecyclerViewHolder(activity, rootView, activity.global.chat.curChatMessages);
 
         setSendBtnListener();
         activity.global.menu.findItem(R.id.chatUsersBtn).setVisible(true);
 
-        if (session != null) {
-            session.disconnect();
+        if (ws.messageSession != null) {
+            ws.messageSession.disconnect();
         }
 
-        session = new ChatMessageSession(activity);
+        ws.messageSession = new ChatMessageSession(activity);
 
-        session.connect();
-        session.subscribeMessage((StompMessage topicMessage) -> {
+        ws.messageSession.connect();
+        ws.messageSession.subscribeMessage((StompMessage topicMessage) -> {
             ResponseStompChatMessage chatMsg = new Gson().fromJson(
                     topicMessage.getPayload(),
                     ResponseStompChatMessage.class
@@ -69,7 +70,7 @@ public class ChatRoomDetailFragment extends Fragment {
         Button sendBtn = rootView.findViewById(R.id.btn_send);
 
         sendBtn.setOnClickListener(view -> {
-            session.sendChatMessage(editText.getText().toString());
+            ws.messageSession.sendChatMessage(editText.getText().toString());
             editText.setText(null);
         });
     }
