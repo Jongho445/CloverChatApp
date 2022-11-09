@@ -21,7 +21,7 @@ abstract public class AbstractStompSession {
     private final String subPath;
     private final String sendPath;
 
-    public AbstractStompSession(MainActivity activity) {
+    protected AbstractStompSession(MainActivity activity) {
         this.global = activity.global;
 
         this.subPath = getSubPath();
@@ -36,6 +36,14 @@ abstract public class AbstractStompSession {
         setLifecycleListener();
     }
 
+    abstract protected String getSubPath();
+    abstract protected String getPubPath();
+    abstract protected Consumer<LifecycleEvent> lifecycleHandle();
+
+    protected String getEndpoint() {
+        return "/stomp/websocket";
+    }
+
     public void connect() {
         stompClient.connect();
     }
@@ -48,19 +56,11 @@ abstract public class AbstractStompSession {
         stompClient.lifecycle().subscribe(lifecycleHandle());
     }
 
-    abstract protected Consumer<LifecycleEvent> lifecycleHandle();
-
     protected void send(String message) {
         stompClient.send(sendPath, message).subscribe();
     }
 
-    public void subscribe() {
-        stompClient.topic(subPath).subscribe(subscribeHandle());
+    protected void subscribe(Consumer<StompMessage> handle) {
+        stompClient.topic(subPath).subscribe(handle);
     }
-
-    abstract protected Consumer<StompMessage> subscribeHandle();
-
-    abstract protected String getEndpoint();
-    abstract protected String getSubPath();
-    abstract protected String getPubPath();
 }
