@@ -27,10 +27,4 @@ public interface ChatRetrofitClient extends RetrofitClient {
     // /chat/user/**
     @GET("/chat/user/list/{chatRoomId}")
     Call<List<ResponseChatUser>> getChatUserList(@Path("chatRoomId") Long chatRoomId);
-
-    @POST("/chat/user/create/{chatRoomId}")
-    Call<ResponseChatUser> createChatUser(@Path("chatRoomId") Long chatRoomId);
-
-    @DELETE("/chat/user/delete")
-    Call<List<ResponseChatUser>> deleteChatUser();
 }

@@ -54,7 +54,8 @@ public class ChatUserRecyclerViewHolder {
             int idx = findChatUser(chatUser.id);
             itemList.remove(idx);
 
-            adapter.notifyDataSetChanged();
+            adapter.notifyItemRemoved(idx);
+            adapter.notifyItemRangeChanged(idx, adapter.getItemCount());
         });
     }
 

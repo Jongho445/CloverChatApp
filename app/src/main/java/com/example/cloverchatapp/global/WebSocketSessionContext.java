@@ -9,4 +9,5 @@ public class WebSocketSessionContext {
     public ChatRoomSession chatRoomSession;
     public ChatMessageSession messageSession;
     public ChatUserSession chatUserSession;
+
 }

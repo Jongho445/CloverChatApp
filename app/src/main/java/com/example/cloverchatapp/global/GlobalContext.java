@@ -8,7 +8,6 @@ public class GlobalContext {
 
     public final AuthContext auth = new AuthContext();
     public final ChatContext chat = new ChatContext();
-
     public final WebSocketSessionContext ws = new WebSocketSessionContext();
 
     public FragmentEnum mainFragment;

@@ -50,7 +50,9 @@ public class ChatUserListFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        rvHolder.clearList();
+        if (rvHolder != null) {
+            rvHolder.clearList();
+        }
     }
 
     public void getChatUserList() {
@@ -68,11 +70,11 @@ public class ChatUserListFragment extends Fragment {
             List<ResponseChatUser> chatUsers = res.body();
             this.rvHolder = new ChatUserRecyclerViewHolder(activity, rootView, chatUsers);
 
-            setListener();
+            setChatUserSessionListener();
         });
     }
 
-    private void setListener() {
+    private void setChatUserSessionListener() {
         if (global.ws.chatUserSession == null) {
             return;
         }

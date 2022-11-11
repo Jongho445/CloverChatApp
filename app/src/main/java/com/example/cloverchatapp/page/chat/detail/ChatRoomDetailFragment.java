@@ -16,9 +16,7 @@ import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.global.WebSocketSessionContext;
 import com.example.cloverchatapp.page.chat.detail.recyclerview.ChatMessageRecyclerViewHolder;
-import com.example.cloverchatapp.util.MethodType;
 import com.example.cloverchatapp.web.domain.chat.RequestStompChatMessage;
-import com.example.cloverchatapp.web.domain.chat.StompUpdateChatUser;
 import com.example.cloverchatapp.web.http.chat.ChatHttpClient;
 import com.example.cloverchatapp.web.websocket.ChatMessageSession;
 import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
@@ -51,7 +49,6 @@ public class ChatRoomDetailFragment extends Fragment {
         setSendBtnListener();
         initChatMessageSession(activity);
         initChatUserSession(activity);
-        createChatUser();
 
         return rootView;
     }
@@ -88,17 +85,6 @@ public class ChatRoomDetailFragment extends Fragment {
         ws.chatUserSession = new ChatUserSession(activity);
 
         ws.chatUserSession.connect();
-    }
-
-    private void createChatUser() {
-        chatHttpClient.createChatUser(global.chat.curChatRoom.id, res -> {
-            if (!res.isSuccessful()) {
-                return;
-            }
-
-            StompUpdateChatUser stompForm = new StompUpdateChatUser(MethodType.CREATE, res.body());
-            global.ws.chatUserSession.sendChatUser(stompForm);
-        });
     }
 
     private void setSendBtnListener() {

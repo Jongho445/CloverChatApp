@@ -1,8 +1,6 @@
 package com.example.cloverchatapp.web.websocket;
 
 import com.example.cloverchatapp.MainActivity;
-import com.example.cloverchatapp.web.domain.chat.StompUpdateChatUser;
-import com.google.gson.Gson;
 
 import io.reactivex.functions.Consumer;
 import ua.naiksoftware.stomp.dto.LifecycleEvent;
@@ -16,12 +14,6 @@ public class ChatUserSession extends AbstractStompSession {
 
     public void subscribeChatUser(Consumer<StompMessage> handle) {
         super.subscribe(handle);
-    }
-
-    public void sendChatUser(StompUpdateChatUser stompUpdateChatUser) {
-        String json = new Gson().toJson(stompUpdateChatUser);
-
-        super.send(json);
     }
 
     @Override

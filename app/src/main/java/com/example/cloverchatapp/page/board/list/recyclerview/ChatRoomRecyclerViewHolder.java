@@ -55,7 +55,8 @@ public class ChatRoomRecyclerViewHolder {
             int idx = findChatRoom(chatRoom.id);
             itemList.remove(idx);
 
-            adapter.notifyDataSetChanged();
+            adapter.notifyItemRemoved(idx);
+            adapter.notifyItemRangeChanged(idx, adapter.getItemCount());
         });
     }
 

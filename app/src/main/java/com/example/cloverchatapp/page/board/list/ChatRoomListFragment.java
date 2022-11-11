@@ -68,7 +68,11 @@ public class ChatRoomListFragment extends Fragment {
                 ws.messageSession = null;
             }
 
-            deleteChatUser();
+            if (ws.chatUserSession != null) {
+                ws.chatUserSession.disconnect();
+                ws.chatUserSession = null;
+            }
+
             initWebSocketSession(activity);
         });
 
@@ -81,33 +85,13 @@ public class ChatRoomListFragment extends Fragment {
         global.menu.findItem(R.id.chatUsersBtn).setVisible(false);
     }
 
-    private void deleteChatUser() {
-        chatHttpClient.deleteChatUser(res -> {
-            if (!res.isSuccessful()) {
-                return;
-            }
-
-            List<ResponseChatUser> deletedChatUsers = res.body();
-
-            for (ResponseChatUser deletedChatUser : deletedChatUsers) {
-                StompUpdateChatUser stompForm = new StompUpdateChatUser(MethodType.DELETE, deletedChatUser);
-                global.ws.chatUserSession.sendChatUser(stompForm);
-            }
-
-            if (ws.chatUserSession != null) {
-                ws.chatUserSession.disconnect();
-                ws.chatUserSession = null;
-            }
-        });
-    }
 
     private void initWebSocketSession(MainActivity activity) {
         if (ws.chatRoomSession != null) {
-            ws.chatRoomSession.disconnect();
+            return;
         }
 
         ws.chatRoomSession = new ChatRoomSession(activity);
-
         ws.chatRoomSession.connect();
         ws.chatRoomSession.subscribeChatRoom((StompMessage topicMessage) -> {
             StompUpdateChatRoom stompForm = new Gson().fromJson(

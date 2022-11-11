@@ -33,12 +33,4 @@ public class ChatHttpClient extends AbstractHttpClient {
     public void getChatUserList(Long chatRoomId, Consumer<Response<List<ResponseChatUser>>> onResponse) {
         templateCallback(() -> retrofitClient.getChatUserList(chatRoomId), onResponse);
     }
-
-    public void createChatUser(Long chatRoomId, Consumer<Response<ResponseChatUser>> onResponse) {
-        templateCallback(() -> retrofitClient.createChatUser(chatRoomId), onResponse);
-    }
-
-    public void deleteChatUser(Consumer<Response<List<ResponseChatUser>>> onResponse) {
-        templateCallback(() -> retrofitClient.deleteChatUser(), onResponse);
-    }
 }
