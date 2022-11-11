@@ -10,12 +10,17 @@ import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class ChatMessageSession extends AbstractStompSession {
 
-    public ChatMessageSession(MainActivity activity) {
+    public final Long chatRoomId;
+
+    public ChatMessageSession(MainActivity activity, Long chatRoomId) {
         super(activity);
+
+        this.chatRoomId = chatRoomId;
     }
 
     public void subscribeMessage(Consumer<StompMessage> handle) {
         super.subscribe(handle);
+        super.isSubscribe = true;
     }
 
     public void sendChatMessage(ResponseStompChatMessage responseStompChatMessage) {

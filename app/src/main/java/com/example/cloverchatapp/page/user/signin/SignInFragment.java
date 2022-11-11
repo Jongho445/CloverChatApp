@@ -25,11 +25,8 @@ public class SignInFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) getActivity();
-        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_sign_in, container, false);
 
-        editId = rootView.findViewById(R.id.signInId);
-        editPassword = rootView.findViewById(R.id.signInPassword);
+        initFields(inflater, container);
 
         setNavBtnListeners();
         setRemoveBtnListener();
@@ -45,10 +42,17 @@ public class SignInFragment extends Fragment {
         }
     }
 
-    private void setRemoveBtnListener() {
-        Button signIpButton = rootView.findViewById(R.id.signInBtn);
+    private void initFields(LayoutInflater inflater, ViewGroup container) {
+        this.activity = (MainActivity) getActivity();
+        this.rootView = (ViewGroup) inflater.inflate(R.layout.fragment_sign_in, container, false);
 
-        signIpButton.setOnClickListener(new SignInButtonOnClickListener(activity, editId, editPassword));
+        this.editId = rootView.findViewById(R.id.signInId);
+        this.editPassword = rootView.findViewById(R.id.signInPassword);
+    }
+
+    private void clearInputs() {
+        editId.setText(null);
+        editPassword.setText(null);
     }
 
     private void setNavBtnListeners() {
@@ -58,8 +62,9 @@ public class SignInFragment extends Fragment {
         });
     }
 
-    private void clearInputs() {
-        editId.setText(null);
-        editPassword.setText(null);
+    private void setRemoveBtnListener() {
+        Button signIpButton = rootView.findViewById(R.id.signInBtn);
+
+        signIpButton.setOnClickListener(new SignInButtonOnClickListener(activity, editId, editPassword));
     }
 }

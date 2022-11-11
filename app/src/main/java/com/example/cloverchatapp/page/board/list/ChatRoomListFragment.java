@@ -2,6 +2,7 @@ package com.example.cloverchatapp.page.board.list;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,75 +17,78 @@ import com.example.cloverchatapp.global.WebSocketSessionContext;
 import com.example.cloverchatapp.page.FragmentEnum;
 import com.example.cloverchatapp.page.board.list.recyclerview.ChatRoomRecyclerViewHolder;
 import com.example.cloverchatapp.global.GlobalContext;
-import com.example.cloverchatapp.util.MethodType;
-import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
+import com.example.cloverchatapp.util.DialogRenderer;
 import com.example.cloverchatapp.web.domain.board.StompUpdateChatRoom;
-import com.example.cloverchatapp.web.domain.chat.ResponseChatUser;
-import com.example.cloverchatapp.web.domain.chat.StompUpdateChatUser;
 import com.example.cloverchatapp.web.http.board.BoardHttpClient;
-import com.example.cloverchatapp.web.http.chat.ChatHttpClient;
 import com.example.cloverchatapp.web.websocket.ChatRoomSession;
 import com.google.gson.Gson;
-
-import java.util.List;
 
 import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class ChatRoomListFragment extends Fragment {
 
     private MainActivity activity;
+    private ViewGroup rootView;
     private GlobalContext global;
 
     private ChatRoomRecyclerViewHolder rvHolder;
 
     private BoardHttpClient boardHttpClient;
-    private ChatHttpClient chatHttpClient;
     private WebSocketSessionContext ws;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //(사용할 자원, 자원을 담을 곳, T/F)
-        //메인에 직접 들어가면 True, 프래그먼트에 있으면 False
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_index, container, false);
-        this.activity = (MainActivity) getActivity();
-        this.global = activity.global;
-        this.ws = global.ws;
-        this.boardHttpClient = new BoardHttpClient(global.auth);
-        this.chatHttpClient = new ChatHttpClient(global.auth);
 
-        setIndexToWriteBtn(rootView);
+        initFields(inflater, container);
 
-        boardHttpClient.getChatRoomList(res -> {
-            if (!res.isSuccessful()) {
-                return;
-            }
+        setChatUserBtnToInvisible();
+        setIndexToWriteBtn();
 
-            List<ResponseChatRoom> chatRooms = res.body();
-
-            rvHolder = new ChatRoomRecyclerViewHolder(activity, rootView, chatRooms);
-
-            if (ws.messageSession != null) {
-                ws.messageSession.disconnect();
-                ws.messageSession = null;
-            }
-
-            if (ws.chatUserSession != null) {
-                ws.chatUserSession.disconnect();
-                ws.chatUserSession = null;
-            }
-
-            initWebSocketSession(activity);
-        });
+        getChatRoomList();
 
         return rootView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        global.menu.findItem(R.id.chatUsersBtn).setVisible(false);
+    private void initFields(LayoutInflater inflater, ViewGroup container) {
+        this.rootView = (ViewGroup) inflater.inflate(R.layout.fragment_index, container, false);
+        this.activity = (MainActivity) getActivity();
+
+        this.global = activity.global;
+        this.ws = global.ws;
+
+        this.boardHttpClient = new BoardHttpClient(global.auth);
     }
 
+    private void setChatUserBtnToInvisible() {
+        MenuItem menuItem = this.global.menu.findItem(R.id.chatUsersBtn);
+        menuItem.setVisible(false);
+    }
+
+    private void getChatRoomList() {
+        boardHttpClient.getChatRoomList(res -> {
+            if (!res.isSuccessful()) {
+                DialogRenderer.showAlertDialog(activity, "에러입니다");
+                return;
+            }
+
+            rvHolder = new ChatRoomRecyclerViewHolder(activity, rootView, res.body());
+
+            disconnectSessions();
+            initWebSocketSession(activity);
+        });
+    }
+
+    private void disconnectSessions() {
+        if (ws.messageSession != null) {
+            ws.messageSession.disconnect();
+            ws.messageSession = null;
+        }
+
+        if (ws.chatUserSession != null) {
+            ws.chatUserSession.disconnect();
+            ws.chatUserSession = null;
+        }
+    }
 
     private void initWebSocketSession(MainActivity activity) {
         if (ws.chatRoomSession != null) {
@@ -93,11 +97,9 @@ public class ChatRoomListFragment extends Fragment {
 
         ws.chatRoomSession = new ChatRoomSession(activity);
         ws.chatRoomSession.connect();
+
         ws.chatRoomSession.subscribeChatRoom((StompMessage topicMessage) -> {
-            StompUpdateChatRoom stompForm = new Gson().fromJson(
-                    topicMessage.getPayload(),
-                    StompUpdateChatRoom.class
-            );
+            StompUpdateChatRoom stompForm = new Gson().fromJson(topicMessage.getPayload(), StompUpdateChatRoom.class);
 
             switch (stompForm.type) {
                 case CREATE:
@@ -110,7 +112,7 @@ public class ChatRoomListFragment extends Fragment {
         });
     }
 
-    private void setIndexToWriteBtn(ViewGroup rootView) {
+    private void setIndexToWriteBtn() {
         Button indexToCreateBtn = rootView.findViewById(R.id.indexToCreateBtn);
         indexToCreateBtn.setOnClickListener(view -> {
             rvHolder.clearList();

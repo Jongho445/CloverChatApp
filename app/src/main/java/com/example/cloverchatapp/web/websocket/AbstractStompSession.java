@@ -14,8 +14,9 @@ import ua.naiksoftware.stomp.dto.StompMessage;
 
 abstract public class AbstractStompSession {
 
-    private final StompClient stompClient;
+    public boolean isSubscribe;
 
+    private final StompClient stompClient;
     protected final GlobalContext global;
 
     private final String subPath;
@@ -26,6 +27,8 @@ abstract public class AbstractStompSession {
 
         this.subPath = getSubPath();
         this.sendPath = getPubPath();
+
+        this.isSubscribe = false;
 
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Cookie", "JSESSIONID=" + global.auth.sessionId);

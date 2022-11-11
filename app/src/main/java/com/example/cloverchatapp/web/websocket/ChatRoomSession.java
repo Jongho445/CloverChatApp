@@ -16,6 +16,7 @@ public class ChatRoomSession extends AbstractStompSession {
 
     public void subscribeChatRoom(Consumer<StompMessage> handle) {
         super.subscribe(handle);
+        super.isSubscribe = true;
     }
 
     public void sendChatRoom(StompUpdateChatRoom stompUpdateChatRoom) {

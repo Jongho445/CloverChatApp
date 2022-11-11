@@ -7,9 +7,11 @@ import android.widget.EditText;
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.page.FragmentEnum;
 import com.example.cloverchatapp.global.GlobalContext;
+import com.example.cloverchatapp.util.DialogRenderer;
 import com.example.cloverchatapp.util.MethodType;
 import com.example.cloverchatapp.web.domain.board.RequestChatRoomCreateForm;
 import com.example.cloverchatapp.web.domain.board.ChatRoomType;
+import com.example.cloverchatapp.web.domain.board.ResponseChatRoom;
 import com.example.cloverchatapp.web.domain.board.StompUpdateChatRoom;
 import com.example.cloverchatapp.web.http.board.BoardHttpClient;
 
@@ -30,7 +32,6 @@ public class ChatRoomCreateButtonOnClickListener implements View.OnClickListener
         this.inputPassword = inputPassword;
         this.inputTitle = inputTitle;
         this.isPrivateChkBox = isPrivateChkBox;
-
         this.boardHttpClient = new BoardHttpClient(global.auth);
     }
 
@@ -45,14 +46,19 @@ public class ChatRoomCreateButtonOnClickListener implements View.OnClickListener
 
         boardHttpClient.createChatRoom(requestChatRoomCreateForm, res -> {
             if (!res.isSuccessful()) {
+                DialogRenderer.showAlertDialog(activity, "에러입니다");
                 return;
             }
 
-            StompUpdateChatRoom stompForm = new StompUpdateChatRoom(MethodType.CREATE, res.body());
-            global.ws.chatRoomSession.sendChatRoom(stompForm);
+            sendMessageToWs(res.body());
 
             activity.navigator.navigate(FragmentEnum.CHAT_ROOM_LIST);
         });
+    }
+
+    private void sendMessageToWs(ResponseChatRoom chatRoom) {
+        StompUpdateChatRoom stompForm = new StompUpdateChatRoom(MethodType.CREATE, chatRoom);
+        global.ws.chatRoomSession.sendChatRoom(stompForm);
     }
 
     private String getPassword() {

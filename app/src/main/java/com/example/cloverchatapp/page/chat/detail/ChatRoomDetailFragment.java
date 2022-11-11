@@ -2,6 +2,7 @@ package com.example.cloverchatapp.page.chat.detail;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,6 +17,7 @@ import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.global.WebSocketSessionContext;
 import com.example.cloverchatapp.page.chat.detail.recyclerview.ChatMessageRecyclerViewHolder;
+import com.example.cloverchatapp.util.DialogRenderer;
 import com.example.cloverchatapp.web.domain.chat.RequestStompChatMessage;
 import com.example.cloverchatapp.web.http.chat.ChatHttpClient;
 import com.example.cloverchatapp.web.websocket.ChatMessageSession;
@@ -27,7 +29,11 @@ import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class ChatRoomDetailFragment extends Fragment {
 
+    private MainActivity activity;
     private ViewGroup rootView;
+
+    private EditText editText;
+    private Button sendBtn;
 
     private ChatMessageRecyclerViewHolder rvHolder;
     private GlobalContext global;
@@ -37,18 +43,14 @@ public class ChatRoomDetailFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        MainActivity activity = (MainActivity) getActivity();
-        this.rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_detail, container, false);
-        this.global = activity.global;
-        this.ws = activity.global.ws;
-        this.chatHttpClient = new ChatHttpClient(global.auth);
 
-        this.rvHolder = new ChatMessageRecyclerViewHolder(activity, rootView, global.chat.curChatMessages);
-        this.global.menu.findItem(R.id.chatUsersBtn).setVisible(true);
+        initFields(inflater, container);
 
+        setChatUserBtnToVisible();
         setSendBtnListener();
-        initChatMessageSession(activity);
-        initChatUserSession(activity);
+
+        initChatMessageSession();
+        initChatUserSession();
 
         return rootView;
     }
@@ -56,41 +58,33 @@ public class ChatRoomDetailFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        rvHolder.clearList();
+        clearInput();
     }
 
-    private void initChatMessageSession(MainActivity activity) {
-        if (ws.messageSession != null) {
-            ws.messageSession.disconnect();
-        }
+    private void initFields(LayoutInflater inflater, ViewGroup container) {
+        this.activity = (MainActivity) getActivity();
+        this.rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_detail, container, false);
 
-        ws.messageSession = new ChatMessageSession(activity);
+        this.editText = rootView.findViewById(R.id.et_chatting);
+        this.sendBtn = rootView.findViewById(R.id.btn_send);
 
-        ws.messageSession.connect();
-        ws.messageSession.subscribeMessage((StompMessage topicMessage) -> {
-            ResponseStompChatMessage chatMsg = new Gson().fromJson(
-                    topicMessage.getPayload(),
-                    ResponseStompChatMessage.class
-            );
+        this.global = activity.global;
+        this.ws = activity.global.ws;
 
-            rvHolder.addItem(chatMsg);
-        });
+        this.chatHttpClient = new ChatHttpClient(global.auth);
+        this.rvHolder = new ChatMessageRecyclerViewHolder(activity, rootView, global.chat.curChatMessages);
     }
 
-    private void initChatUserSession(MainActivity activity) {
-        if (ws.chatUserSession != null) {
-            ws.chatUserSession.disconnect();
-        }
+    private void setChatUserBtnToVisible() {
+        MenuItem menuItem = this.global.menu.findItem(R.id.chatUsersBtn);
+        menuItem.setVisible(true);
+    }
 
-        ws.chatUserSession = new ChatUserSession(activity);
-
-        ws.chatUserSession.connect();
+    private void clearInput() {
+        editText.setText(null);
     }
 
     private void setSendBtnListener() {
-        EditText editText = rootView.findViewById(R.id.et_chatting);
-        Button sendBtn = rootView.findViewById(R.id.btn_send);
-
         sendBtn.setOnClickListener(view -> {
             RequestStompChatMessage form = new RequestStompChatMessage(
                     global.chat.curChatRoom.id,
@@ -100,6 +94,7 @@ public class ChatRoomDetailFragment extends Fragment {
 
             chatHttpClient.createChatMessage(global.chat.curChatRoom.id, form, res -> {
                 if (!res.isSuccessful()) {
+                    DialogRenderer.showAlertDialog(activity, "에러입니다");
                     return;
                 }
 
@@ -107,5 +102,44 @@ public class ChatRoomDetailFragment extends Fragment {
                 editText.setText(null);
             });
         });
+    }
+
+    private void initChatMessageSession() {
+        // 세션을 재연결할 필요가 없는 상황
+        if (ws.messageSession != null && ws.messageSession.chatRoomId == global.chat.curChatRoom.id) {
+            return;
+        }
+
+        // 다른 방의 세션이 이미 연결되어있는 상황
+        if (ws.messageSession != null) {
+            ws.messageSession.disconnect();
+        }
+
+        // 새로운 세션 생성 -> 연결
+        ws.messageSession = new ChatMessageSession(activity, global.chat.curChatRoom.id);
+        ws.messageSession.connect();
+
+        // subscribe 리스너 등록
+        ws.messageSession.subscribeMessage((StompMessage topicMessage) -> {
+            ResponseStompChatMessage chatMsg = new Gson().fromJson(topicMessage.getPayload(), ResponseStompChatMessage.class);
+
+            rvHolder.addItem(chatMsg);
+        });
+    }
+
+    private void initChatUserSession() {
+        // 세션을 재연결할 필요가 없는 상황
+        if (ws.chatUserSession != null && ws.chatUserSession.chatRoomId == global.chat.curChatRoom.id) {
+            return;
+        }
+
+        // 다른 방의 세션이 이미 연결되어있는 상황
+        if (ws.chatUserSession != null) {
+            ws.chatUserSession.disconnect();
+        }
+
+        // 새로운 세션 생성 -> 연결
+        ws.chatUserSession = new ChatUserSession(activity, global.chat.curChatRoom.id);
+        ws.chatUserSession.connect();
     }
 }

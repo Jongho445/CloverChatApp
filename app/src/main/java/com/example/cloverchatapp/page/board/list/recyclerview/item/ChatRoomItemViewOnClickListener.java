@@ -7,9 +7,13 @@ import android.widget.EditText;
 
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.page.FragmentEnum;
+import com.example.cloverchatapp.util.DialogRenderer;
 import com.example.cloverchatapp.web.domain.board.ChatRoomType;
 import com.example.cloverchatapp.web.domain.chat.RequestChatMessagesReadForm;
+import com.example.cloverchatapp.web.domain.chat.ResponseStompChatMessage;
 import com.example.cloverchatapp.web.http.chat.ChatHttpClient;
+
+import java.util.List;
 
 public class ChatRoomItemViewOnClickListener implements View.OnClickListener {
 
@@ -44,16 +48,20 @@ public class ChatRoomItemViewOnClickListener implements View.OnClickListener {
     private void request(RequestChatMessagesReadForm form) {
         chatHttpClient.getChatMessageList(form, res -> {
             if (!res.isSuccessful()) {
-                showFailureAlertDialog();
+                DialogRenderer.showAlertDialog(context.activity, "비밀번호가 틀립니다");
                 return;
             }
 
-            context.global.chat.curChatMessages = res.body();
-            context.global.chat.curChatRoom = context.chatRoom;
+            setGlobalContext(res.body());
 
             context.itemList.clear();
             context.activity.navigator.navigate(FragmentEnum.CHAT_ROOM_DETAIL);
         });
+    }
+
+    private void setGlobalContext(List<ResponseStompChatMessage> chatMessages) {
+        context.global.chat.curChatMessages = chatMessages;
+        context.global.chat.curChatRoom = context.chatRoom;
     }
 
     private void showPasswordInputDialog(View dialogView, DialogInterface.OnClickListener callback) {
@@ -62,14 +70,6 @@ public class ChatRoomItemViewOnClickListener implements View.OnClickListener {
                 .setView(dialogView)
                 .setPositiveButton("확인", callback)
                 .setNegativeButton("취소", null)
-                .show();
-    }
-
-    private void showFailureAlertDialog() {
-        new AlertDialog.Builder(context.activity)
-                .setTitle("알림")
-                .setMessage("비밀번호가 틀립니다")
-                .setPositiveButton("확인", null)
                 .show();
     }
 }

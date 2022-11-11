@@ -28,13 +28,12 @@ public class ChatRoomCreateFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) getActivity();
-        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_create, container, false);
 
-        initEditTexts();
+        initFields(inflater, container);
 
         setCreateToIndexBtn();
         setIsPrivateChkBox();
+
         setCreateBtnListener();
 
         return rootView;
@@ -48,20 +47,18 @@ public class ChatRoomCreateFragment extends Fragment {
         }
     }
 
-    private void initEditTexts() {
-        inputPassword = rootView.findViewById(R.id.inputPassword);
-        inputTitle = rootView.findViewById(R.id.inputTitle);
+    private void initFields(LayoutInflater inflater, ViewGroup container) {
+        this.activity = (MainActivity) getActivity();
+        this.rootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat_room_create, container, false);
+
+        this.inputPassword = rootView.findViewById(R.id.inputPassword);
+        this.inputTitle = rootView.findViewById(R.id.inputTitle);
     }
 
     private void clearInputs() {
         inputPassword.setText(null);
         inputTitle.setText(null);
         isPrivateChkBox.setChecked(false);
-    }
-
-    private void setCreateBtnListener() {
-        Button createBtn = rootView.findViewById(R.id.createChatRoomBtn);
-        createBtn.setOnClickListener(new ChatRoomCreateButtonOnClickListener(activity, inputPassword, inputTitle, isPrivateChkBox));
     }
 
     private void setCreateToIndexBtn() {
@@ -76,5 +73,12 @@ public class ChatRoomCreateFragment extends Fragment {
         isPrivateChkBox.setOnCheckedChangeListener((CompoundButton compoundButton, boolean isChecked) -> {
             inputPassword.setEnabled(isChecked);
         });
+    }
+
+    private void setCreateBtnListener() {
+        Button createBtn = rootView.findViewById(R.id.createChatRoomBtn);
+        createBtn.setOnClickListener(new ChatRoomCreateButtonOnClickListener(
+                activity, inputPassword, inputTitle, isPrivateChkBox
+        ));
     }
 }

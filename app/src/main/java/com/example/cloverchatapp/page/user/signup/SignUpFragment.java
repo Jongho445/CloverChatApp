@@ -14,14 +14,12 @@ import androidx.fragment.app.Fragment;
 import com.example.cloverchatapp.MainActivity;
 import com.example.cloverchatapp.R;
 import com.example.cloverchatapp.page.FragmentEnum;
-import com.example.cloverchatapp.global.GlobalContext;
 import com.example.cloverchatapp.web.domain.user.RequestUserCreateForm;
 import com.example.cloverchatapp.web.http.user.UserHttpClient;
 
 public class SignUpFragment extends Fragment {
 
     private MainActivity activity;
-    private GlobalContext global;
     private ViewGroup rootView;
 
     private EditText editId;
@@ -32,12 +30,10 @@ public class SignUpFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.activity = (MainActivity) getActivity();
-        this.rootView = (ViewGroup) inflater.inflate(R.layout.fragment_sign_up, container, false);
-        this.global = activity.global;
-        this.userHttpClient = new UserHttpClient(global.auth);
 
+        initFields(inflater, container);
         initEditTexts();
+
         setSignUpBtnListener();
         setNavBtnListeners();
 
@@ -50,6 +46,23 @@ public class SignUpFragment extends Fragment {
         if (rootView != null) {
             clearInputs();
         }
+    }
+
+    private void initFields(LayoutInflater inflater, ViewGroup container) {
+        this.activity = (MainActivity) getActivity();
+        this.rootView = (ViewGroup) inflater.inflate(R.layout.fragment_sign_up, container, false);
+        this.userHttpClient = new UserHttpClient(activity.global.auth);
+    }
+
+    private void initEditTexts() {
+        editId = rootView.findViewById(R.id.signUpId);
+        editPassword = rootView.findViewById(R.id.signUpPassword);
+        editNickname = rootView.findViewById(R.id.signUpNickname);
+    }
+
+    private void clearInputs() {
+        editId.setText(null);
+        editPassword.setText(null);
     }
 
     private void setSignUpBtnListener() {
@@ -67,16 +80,5 @@ public class SignUpFragment extends Fragment {
         signUpToSignInBtn.setOnClickListener((View v) -> {
             activity.navigator.navigate(FragmentEnum.SIGN_IN);
         });
-    }
-
-    private void initEditTexts() {
-        editId = rootView.findViewById(R.id.signUpId);
-        editPassword = rootView.findViewById(R.id.signUpPassword);
-        editNickname = rootView.findViewById(R.id.signUpNickname);
-    }
-
-    private void clearInputs() {
-        editId.setText(null);
-        editPassword.setText(null);
     }
 }
