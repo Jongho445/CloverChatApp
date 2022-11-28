@@ -34,7 +34,6 @@ public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserItemViewHolder
     public void onBindViewHolder(@NonNull ChatUserItemViewHolder holder, int position) {
         ResponseChatUser chatUser = itemList.get(position);
 
-        holder.card.setCardBackgroundColor(Color.parseColor("#d3d3d3"));
         holder.nickname.setText(chatUser.user.nickname);
         holder.email.setText(chatUser.user.email);
     }
