@@ -92,7 +92,7 @@ public class ChatRoomListFragment extends Fragment {
 
     private void initWebSocketSession(MainActivity activity) {
         if (ws.chatRoomSession != null) {
-            return;
+            ws.chatRoomSession.disconnect();
         }
 
         ws.chatRoomSession = new ChatRoomSession(activity);
