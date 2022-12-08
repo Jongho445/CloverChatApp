@@ -23,12 +23,13 @@ public class MainActivity extends AppCompatActivity {
 
         this.navigator = new Navigator(this);
 
-        if (BuildConfig.BUILD_TYPE == "debug") {
-            TestHelper testHelper = new TestHelper(this);
-            testHelper.login(this::init);
-        } else {
-            init();
-        }
+//        if (BuildConfig.BUILD_TYPE == "debug") {
+//            TestHelper testHelper = new TestHelper(this);
+//            testHelper.login(this::init);
+//        } else {
+//            init();
+//        }
+        init();
     }
 
     @Override
